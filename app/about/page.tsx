@@ -1,0 +1,83 @@
+// ============================================
+// ABOUT PAGE - app/about/page.tsx
+// URL: hirecarhub.com/about
+// ============================================
+
+import Navbar from '../components/Navbar'
+
+export default function About() {
+  return (
+    <main className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* Hero */}
+      <section style={{backgroundColor: '#232e4e'}} className="text-white py-20 px-6 text-center">
+        <h1 className="text-5xl font-bold mb-4">About Hire Car Hub</h1>
+        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          We're on a mission to make car hire simple, transparent and affordable for everyone.
+        </p>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-2" style={{color: '#232e4e'}}>Why Choose Hire Car Hub?</h2>
+          <p className="text-center text-gray-500 mb-12">We're not just another comparison site — here's what makes us different</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="card text-center">
+              <div className="text-5xl mb-4">🔍</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>We Do the Hard Work</h3>
+              <p className="text-gray-500">We compare hundreds of car hire deals from trusted suppliers so you don't have to. Find the best price in seconds.</p>
+            </div>
+            <div className="card text-center">
+              <div className="text-5xl mb-4">💬</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>No Hidden Surprises</h3>
+              <p className="text-gray-500">We believe in total transparency. The price you see is the price you pay — no nasty surprises at the checkout.</p>
+            </div>
+            <div className="card text-center">
+              <div className="text-5xl mb-4">🌍</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Wherever You're Headed</h3>
+              <p className="text-gray-500">From a weekend city break to a month-long road trip, we've got car hire covered in over 100 countries worldwide.</p>
+            </div>
+            <div className="card text-center">
+              <div className="text-5xl mb-4">⚡</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Instant Results</h3>
+              <p className="text-gray-500">No waiting around. Our search pulls up live availability and pricing in real time so you can book with confidence.</p>
+            </div>
+            <div className="card text-center">
+              <div className="text-5xl mb-4">🛡️</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Free Cancellation</h3>
+              <p className="text-gray-500">Plans change and we get it. Most of our deals come with free cancellation so you can book now and adjust later.</p>
+            </div>
+            <div className="card text-center">
+              <div className="text-5xl mb-4">⭐</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Trusted Suppliers Only</h3>
+              <p className="text-gray-500">We only work with reputable, well-reviewed car hire companies so you can travel with complete peace of mind.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section style={{backgroundColor: '#232e4e'}} className="py-16 px-6 text-center text-white">
+        <h2 className="text-3xl font-bold mb-4">Ready to Find Your Perfect Car?</h2>
+        <p className="text-gray-300 mb-8 text-lg">Search thousands of deals and hit the road today</p>
+        <a href="/" className="btn-primary inline-block">Search Cars Now</a>
+      </section>
+
+      {/* Footer */}
+      <footer style={{backgroundColor: '#232e4e'}} className="text-gray-400 text-center py-8 px-6 border-t border-gray-700">
+        <p className="text-white font-bold text-lg mb-2">Hire Car Hub</p>
+        <div className="flex justify-center gap-6 text-sm mb-4">
+          <a href="/about" className="hover:text-white transition">About</a>
+          <a href="/contact" className="hover:text-white transition">Contact</a>
+          <a href="/blog" className="hover:text-white transition">Blog</a>
+          <a href="/locations" className="hover:text-white transition">Locations</a>
+        </div>
+        <p className="text-sm">© 2026 Hire Car Hub. All rights reserved.</p>
+      </footer>
+
+    </main>
+  )
+}

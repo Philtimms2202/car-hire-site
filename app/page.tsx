@@ -29,7 +29,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section style={{backgroundColor: '#232e4e'}} className="text-white py-24 px-6 text-center">
-        <h1 className="text-5xl font-bold mb-4">Find Your Perfect Hire Car</h1>
+        <h1 className="text-5xl font-bold mb-4">Compare Thousands of Hire Car Deals Globally</h1>
         <p className="text-xl mb-10 text-gray-300">Compare thousands of car hire deals worldwide — instant results, best prices</p>
 
         {/* Search Bar */}
