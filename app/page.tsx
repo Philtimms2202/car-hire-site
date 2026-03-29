@@ -3,7 +3,6 @@
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { useState } from 'react'
-import { searchCars } from '../lib/discovercars'
 
 export default function Home() {
   const [pickupLocation, setPickupLocation] = useState('')
@@ -13,13 +12,20 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (!pickupLocation || !pickupDate || !dropoffDate) return
-    setLoading(true)
-    setSearched(true)
-    const data = await searchCars({ pickupLocation, pickupDate, dropoffDate })
-    setResults(data.results)
-    setLoading(false)
+
+    // TODO: Replace YOURAFFILIATETOKEN with your real affiliate code when approved
+    const affiliateCode = 'YOURAFFILIATETOKEN'
+
+    // Format dates to YYYY-MM-DD
+    const formattedPickup = pickupDate
+    const formattedDropoff = dropoffDate
+
+    // Build the referral URL - swap this URL for your chosen partner when ready
+    const url = `https://www.rentalcars.com/?affiliateCode=${affiliateCode}&preflocation=${encodeURIComponent(pickupLocation)}&puDay=${formattedPickup}&doDay=${formattedDropoff}`
+
+    window.open(url, '_blank')
   }
 
   return (
@@ -151,7 +157,33 @@ export default function Home() {
         </section>
       )}
 
+      {/* How It Works */}
+<section className="py-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-2" style={{color: '#232e4e'}}>How It Works</h2>
+          <p className="text-center text-gray-500 mb-12">Finding your perfect hire car has never been easier</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4" style={{backgroundColor: '#2f797c'}}>1</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Search</h3>
+              <p className="text-gray-500 leading-7">Enter your pick-up location and travel dates into our search tool above. We search thousands of deals in seconds.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4" style={{backgroundColor: '#2f797c'}}>2</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Compare</h3>
+              <p className="text-gray-500 leading-7">Browse results from the world's leading car hire suppliers all in one place. Filter by price, car type and more.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4" style={{backgroundColor: '#2f797c'}}>3</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Book</h3>
+              <p className="text-gray-500 leading-7">Choose the deal that suits you and book directly with the supplier. Most deals include free cancellation for complete peace of mind.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Us */}
+      
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div>
@@ -168,6 +200,57 @@ export default function Home() {
             <div className="text-4xl mb-3">🛡️</div>
             <h3 className="font-bold text-lg mb-1" style={{color: '#232e4e'}}>Flexible Bookings</h3>
             <p className="text-gray-500 text-sm">Plans change - we get it</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Bar */}
+      <section style={{backgroundColor: '#232e4e'}} className="py-12 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div>
+            <p className="text-4xl font-bold mb-1" style={{color: '#03989e'}}>500+</p>
+            <p className="text-gray-300 text-sm">Car Options</p>
+          </div>
+          <div>
+            <p className="text-4xl font-bold mb-1" style={{color: '#03989e'}}>100+</p>
+            <p className="text-gray-300 text-sm">Countries Covered</p>
+          </div>
+          <div>
+            <p className="text-4xl font-bold mb-1" style={{color: '#03989e'}}>1000+</p>
+            <p className="text-gray-300 text-sm">Cars Driving Today</p>
+          </div>
+          <div>
+            <p className="text-4xl font-bold mb-1" style={{color: '#03989e'}}>24/7</p>
+            <p className="text-gray-300 text-sm">Customer Support</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Destinations */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-2" style={{color: '#232e4e'}}>Popular Destinations</h2>
+          <p className="text-center text-gray-500 mb-10">Some of our most searched car hire locations</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { city: 'London', emoji: '🏙️', slug: 'london' },
+              { city: 'Manchester', emoji: '🐝', slug: 'manchester' },
+              { city: 'Edinburgh', emoji: '🏰', slug: 'edinburgh' },
+              { city: 'Barcelona', emoji: '⛪', slug: 'barcelona' },
+              { city: 'Dubai', emoji: '✈️', slug: 'dubai' },
+              { city: 'New York', emoji: '🗽', slug: 'new-york' },
+              { city: 'Orlando', emoji: '🎢', slug: 'orlando' },
+              { city: 'Sydney', emoji: '🦘', slug: 'sydney' },
+            ].map((dest) => (
+              <a key={dest.city} href={`/locations/${dest.slug}`} className="card text-center hover:shadow-xl transition cursor-pointer">
+                <div className="text-4xl mb-2">{dest.emoji}</div>
+                <p className="font-semibold text-sm" style={{color: '#232e4e'}}>{dest.city}</p>
+                <p className="text-xs mt-1" style={{color: '#2f797c'}}>Search cars</p>
+              </a>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <a href="/locations" className="btn-primary inline-block">View All Destinations</a>
           </div>
         </div>
       </section>
