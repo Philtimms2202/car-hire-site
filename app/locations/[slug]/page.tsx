@@ -7,8 +7,7 @@ import Navbar from '../../components/Navbar'
 import { client } from '../../../sanity/lib/client'
 import { locationQuery } from '../../../sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
-import Footer from '../components/Footer'
-
+import Footer from '../../components/Footer'
 
 export const revalidate = 60
 
