@@ -1,6 +1,7 @@
 'use client'
 
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import { useState } from 'react'
 import { searchCars } from '../lib/discovercars'
 
@@ -29,7 +30,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section style={{backgroundColor: '#232e4e'}} className="text-white py-24 px-6 text-center">
-        <h1 className="text-5xl font-bold mb-4">Compare Thousands of Hire Car Deals Globally</h1>
+        <h1 className="text-5xl font-bold mb-4">Compare Thousands of Hire Car Deals Globally 🌍</h1>
         <p className="text-xl mb-10 text-gray-300">Compare thousands of car hire deals worldwide - instant results, best prices!</p>
 
         {/* Search Bar */}
@@ -172,16 +173,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer style={{backgroundColor: '#232e4e'}} className="text-gray-400 text-center py-8 px-6">
-        <p className="text-white font-bold text-lg mb-2">Hire Car Hub</p>
-        <div className="flex justify-center gap-6 text-sm mb-4">
-          <a href="/about" className="hover:text-white transition">About</a>
-          <a href="/contact" className="hover:text-white transition">Contact</a>
-          <a href="/blog" className="hover:text-white transition">Blog</a>
-          <a href="/locations" className="hover:text-white transition">Locations</a>
-        </div>
-        <p className="text-sm">© 2026 Hire Car Hub. All rights reserved.</p>
-      </footer>
+      <Footer />
 
     </main>
   )

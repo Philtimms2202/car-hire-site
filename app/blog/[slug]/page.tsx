@@ -4,9 +4,12 @@
 // ============================================
 
 import Navbar from '../../components/Navbar'
+import Footer from '../../components/Footer'
 import { PortableText } from '@portabletext/react'
 import { client } from '../../../sanity/lib/client'
 import { postQuery } from '../../../sanity/lib/queries'
+
+
 
 export const revalidate = 60
 
@@ -107,16 +110,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* Footer */}
-      <footer style={{backgroundColor: '#232e4e'}} className="text-gray-400 text-center py-8 px-6 border-t border-gray-700">
-        <p className="text-white font-bold text-lg mb-2">Hire Car Hub</p>
-        <div className="flex justify-center gap-6 text-sm mb-4">
-          <a href="/about" className="hover:text-white transition">About</a>
-          <a href="/contact" className="hover:text-white transition">Contact</a>
-          <a href="/blog" className="hover:text-white transition">Blog</a>
-          <a href="/locations" className="hover:text-white transition">Locations</a>
-        </div>
-        <p className="text-sm">© 2026 Hire Car Hub. All rights reserved.</p>
-      </footer>
+      <Footer />
 
     </main>
   )

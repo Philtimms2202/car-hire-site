@@ -4,6 +4,8 @@
 // ============================================
 
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+
 
 export default function PrivacyPolicy() {
   return (
@@ -97,17 +99,7 @@ export default function PrivacyPolicy() {
       </section>
 
       {/* Footer */}
-      <footer style={{backgroundColor: '#232e4e'}} className="text-gray-400 text-center py-8 px-6 border-t border-gray-700">
-        <p className="text-white font-bold text-lg mb-2">Hire Car Hub</p>
-        <div className="flex justify-center gap-6 text-sm mb-4">
-          <a href="/about" className="hover:text-white transition">About</a>
-          <a href="/contact" className="hover:text-white transition">Contact</a>
-          <a href="/privacy-policy" className="hover:text-white transition">Privacy Policy</a>
-          <a href="/terms-and-conditions" className="hover:text-white transition">Terms</a>
-          <a href="/cookie-policy" className="hover:text-white transition">Cookie Policy</a>
-        </div>
-        <p className="text-sm">© 2026 Hire Car Hub. All rights reserved.</p>
-      </footer>
+      <Footer />
 
     </main>
   )
