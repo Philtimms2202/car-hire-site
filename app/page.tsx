@@ -30,7 +30,7 @@ export default function Home() {
       {/* Hero Section */}
       <section style={{backgroundColor: '#232e4e'}} className="text-white py-24 px-6 text-center">
         <h1 className="text-5xl font-bold mb-4">Compare Thousands of Hire Car Deals Globally</h1>
-        <p className="text-xl mb-10 text-gray-300">Compare thousands of car hire deals worldwide — instant results, best prices</p>
+        <p className="text-xl mb-10 text-gray-300">Compare thousands of car hire deals worldwide - instant results, best prices!</p>
 
         {/* Search Bar */}
         <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl">
@@ -165,7 +165,7 @@ export default function Home() {
           </div>
           <div>
             <div className="text-4xl mb-3">🛡️</div>
-            <h3 className="font-bold text-lg mb-1" style={{color: '#232e4e'}}>Free Cancellation</h3>
+            <h3 className="font-bold text-lg mb-1" style={{color: '#232e4e'}}>Flexible Bookings</h3>
             <p className="text-gray-500 text-sm">Plans change - we get it</p>
           </div>
         </div>
