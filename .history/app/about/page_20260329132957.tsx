@@ -6,16 +6,6 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-export const metadata = {
-  title: {
-    default: "Tiimms Travel | About Us",
-    template: "Tiimms Travel |",
-  },
-  description: "Discover amazing experiences around the world.",
-  icons: {
-    icon: "/favicon.ico",
-  },
-}
 
 export default function About() {
   return (

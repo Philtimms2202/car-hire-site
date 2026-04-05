@@ -8,8 +8,8 @@ import Footer from '../components/Footer'
 
 export const metadata = {
   title: {
-    default: "Tiimms Travel | Locations",
-    template: "Tiimms Travel |",
+    default: "Timms Travel",
+    template: "%s | Timms Travel",
   },
   description: "Discover amazing experiences around the world.",
   icons: {

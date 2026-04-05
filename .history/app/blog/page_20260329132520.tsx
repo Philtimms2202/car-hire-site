@@ -12,17 +12,6 @@ import { postsQuery } from '../../sanity/lib/queries'
 
 export const revalidate = 60
 
-export const metadata = {
-  title: {
-    default: "Tiimms Travel | Blog",
-    template: "Tiimms Travel |",
-  },
-  description: "Discover amazing experiences around the world.",
-  icons: {
-    icon: "/favicon.ico",
-  },
-}
-
 async function getPosts() {
   try {
     const posts = await client.fetch(postsQuery)

@@ -2,37 +2,8 @@ import Navbar from '../../../../components/Navbar'
 import Footer from '../../../../components/Footer'
 import { client } from '../../../../../sanity/lib/client'
 import { PortableText } from '@portabletext/react'
-import CitySearchBar from '../../../../components/Search/CitySearchBar'
 
 export const revalidate = 60
-export async function generateMetadata({ params }: any) {
-  const resolved = await params
-  const { continent, country, city } = resolved
-
-  // Fetch the REAL city + country names from Sanity
-  const cityData = await client.fetch(
-    `*[_type == "location" 
-      && continentSlug.current == $continent
-      && countrySlug.current == $country
-      && slug.current == $city][0]{
-        city,
-        country,
-        description
-      }`,
-    { continent, country, city }
-  )
-
-  const cityName = cityData?.city || city
-  const countryName = cityData?.country || country
-  const desc =
-    cityData?.description ||
-    `Discover the best tours, attractions, and experiences in ${cityName}, ${countryName}.`
-
-  return {
-    title: `Things to do in ${cityName}`,
-    description: desc,
-  }
-}
 
 // -----------------------------
 // Fetch City Data
@@ -112,20 +83,25 @@ export default async function CityPage({
         className="text-white py-20 px-6 text-center"
       >
         <div className="text-6xl mb-4">{cityData.emoji}</div>
-
-        <h1 className="text-5xl font-bold mb-4">
-          Explore {cityData.city}
-        </h1>
-
+        <h1 className="text-5xl font-bold mb-4">Explore {cityData.city}</h1>
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
           Discover amazing experiences in {cityData.city}, {cityData.country}.
         </p>
-
-        {/* City Search Bar */}
-        <div className="mt-10">
-          <CitySearchBar defaultCity={cityData.city} />
-        </div>
       </section>
+
+      <section
+  style={{ backgroundColor: '#232e4e' }}
+  className="text-white py-20 px-6 text-center"
+>
+  <div className="text-6xl mb-4">{cityData.emoji}</div>
+  <h1 className="text-5xl font-bold mb-4">Explore {cityData.city}</h1>
+  <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+    Discover amazing experiences in {cityData.city}, {cityData.country}.
+  </p>
+
+  {/* ⭐ Add this */}
+  <CitySearchBar defaultCity={cityData.city} />
+</section>
 
       {/* Content */}
       <section className="py-16 px-6">
@@ -139,7 +115,7 @@ export default async function CityPage({
               `Explore top attractions, tours, and activities in ${cityData.city}.`}
           </p>
 
-          {/* Main Content */}
+          {/* ⭐ Main Content from Sanity */}
           {cityData.mainContent && (
             <div className="prose max-w-none mt-8">
               <PortableText value={cityData.mainContent} />

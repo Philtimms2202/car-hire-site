@@ -9,26 +9,6 @@ import { client } from '../../../sanity/lib/client'
 import { countriesByContinentQuery } from '../../../sanity/lib/queries'
 
 export const revalidate = 60
-export async function generateMetadata({ params }: any) {
-  const resolved = await params
-  const { continent } = resolved
-
-  // Fetch one city to get the REAL continent name from Sanity
-  const cities = await client.fetch(
-    `*[_type == "location" && continentSlug.current == $continent][0]{
-      continent
-    }`,
-    { continent }
-  )
-
-  const continentName = cities?.continent || continent
-
-  return {
-    title: `Things to do in ${continentName}`,
-    description: `Discover top attractions, tours, and activities across ${continentName}.`,
-  }
-}
-
 
 async function getCountries(continentSlug: string) {
   try {

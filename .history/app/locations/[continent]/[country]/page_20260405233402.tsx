@@ -3,19 +3,6 @@ import Footer from '../../../components/Footer'
 import { client } from '../../../../sanity/lib/client'
 
 export const revalidate = 60
-export async function generateMetadata({ params }: any) {
-  const resolved = await params
-  const { continent, country } = resolved
-
-  // Fetch cities to get the REAL country name from Sanity
-  const cities = await getCities(continent, country)
-  const countryName = cities[0]?.country || country
-
-  return {
-    title: `Things to do in ${countryName}`,
-    description: `Discover the best experiences, attractions, and adventures across ${countryName}.`,
-  }
-}
 
 async function getCities(continentSlug: string, countrySlug: string) {
   try {

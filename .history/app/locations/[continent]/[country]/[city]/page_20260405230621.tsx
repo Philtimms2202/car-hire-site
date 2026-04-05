@@ -2,37 +2,9 @@ import Navbar from '../../../../components/Navbar'
 import Footer from '../../../../components/Footer'
 import { client } from '../../../../../sanity/lib/client'
 import { PortableText } from '@portabletext/react'
-import CitySearchBar from '../../../../components/Search/CitySearchBar'
+import CitySearchBar from '../../../../components/search/CitySearchBar'
 
 export const revalidate = 60
-export async function generateMetadata({ params }: any) {
-  const resolved = await params
-  const { continent, country, city } = resolved
-
-  // Fetch the REAL city + country names from Sanity
-  const cityData = await client.fetch(
-    `*[_type == "location" 
-      && continentSlug.current == $continent
-      && countrySlug.current == $country
-      && slug.current == $city][0]{
-        city,
-        country,
-        description
-      }`,
-    { continent, country, city }
-  )
-
-  const cityName = cityData?.city || city
-  const countryName = cityData?.country || country
-  const desc =
-    cityData?.description ||
-    `Discover the best tours, attractions, and experiences in ${cityName}, ${countryName}.`
-
-  return {
-    title: `Things to do in ${cityName}`,
-    description: desc,
-  }
-}
 
 // -----------------------------
 // Fetch City Data

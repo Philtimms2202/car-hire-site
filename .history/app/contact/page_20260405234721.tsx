@@ -25,7 +25,7 @@ export default function Contact() {
     },
     {
       question: "What documents do I need to hire a car?",
-      answer: "You'll typically need a full valid driving licence, a credit or debit card in the driver's name, and a passport or photo ID. Some countries may have additional requirements - we'll let you know at the time of booking."
+      answer: "You'll typically need a full valid driving licence, a credit or debit card in the driver's name, and a passport or photo ID. Some countries may have additional requirements — we'll let you know at the time of booking."
     },
     {
       question: "Is insurance included in the price?",
@@ -41,7 +41,7 @@ export default function Contact() {
     },
     {
       question: "Do I need to fill up the car before returning it?",
-      answer: "Most car hire deals operate on a full-to-full fuel policy - you'll collect the car with a full tank and return it full. We'll always make this clear before you book."
+      answer: "Most car hire deals operate on a full-to-full fuel policy — you'll collect the car with a full tank and return it full. We'll always make this clear before you book."
     },
   ]
 
@@ -53,7 +53,7 @@ export default function Contact() {
       <section style={{backgroundColor: '#232e4e'}} className="text-white py-20 px-6 text-center">
         <h1 className="text-5xl font-bold mb-4">Get in Touch</h1>
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          Got a question about a booking or just want to know more about what we do? We'd love to hear from you - we're a friendly bunch and always happy to help.
+          Got a question about a booking or just want to know more about what we do? We'd love to hear from you — we're a friendly bunch and always happy to help.
         </p>
       </section>
 
@@ -64,7 +64,7 @@ export default function Contact() {
           {/* Contact Form */}
           <div>
             <h2 className="text-2xl font-bold mb-2" style={{color: '#232e4e'}}>Send Us a Message</h2>
-            <p className="text-gray-500 mb-6">Fill in the form below and we'll get back to you as soon as we can, usually within 24 hours.</p>
+            <p className="text-gray-500 mb-6">Fill in the form below and we'll get back to you as soon as we can — usually within 24 hours.</p>
 
             <div className="flex flex-col gap-4">
               <div>

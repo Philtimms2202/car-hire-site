@@ -6,6 +6,30 @@ export const revalidate = 60
 export async function generateMetadata({ params }: any) {
   const resolved = await params
   const { continent, country } = resolved
+  
+  export async function generateMetadata({ params }: any) {
+    const resolved = await params
+    const { continent, country, city } = resolved
+  
+    const cityData = await client.fetch(
+      `*[_type == "location" 
+        && continentSlug.current == $continent
+        && countrySlug.current == $country
+        && slug.current == $city][0]{
+          city,
+          country
+        }`,
+      { continent, country, city }
+    )
+  
+    const cityName = cityData?.city || city
+    const countryName = cityData?.country || country
+  
+    return {
+      title: `Things to do in ${cityName}`,
+      description: `Find the best tours, activities, and experiences in ${cityName}, ${countryName}.`,
+    }
+  }
 
   // Fetch cities to get the REAL country name from Sanity
   const cities = await getCities(continent, country)
