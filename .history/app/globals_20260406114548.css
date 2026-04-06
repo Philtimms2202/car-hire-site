@@ -61,7 +61,6 @@
 /* Force readable date input text on iOS Safari */
 input[type="date"] {
   color: #111 !important;
-  -webkit-text-fill-color: #111 !important; /* iOS fix */
   background-color: #fff !important;
 }
 

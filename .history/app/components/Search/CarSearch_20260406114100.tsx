@@ -2,7 +2,7 @@
 
 export default function CarSearch() {
   const carUrl =
-    "https://www.trip.com/carhire/?Allianceid=8052073&SID=304662590&trip_sub1=&trip_sub3=D15170094&locale=en_gb&curr=GBP"
+    "https://www.trip.com/carhire/?Allianceid=8052073&SID=304662590&trip_sub1=&trip_sub3=D15170094&locale=en_gb"
 
   return (
     <div className="w-full flex justify-center px-4 py-6">
