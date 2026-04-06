@@ -92,9 +92,9 @@ export default function Home() {
 
         {/* Trust indicators */}
         <div className="flex justify-center gap-8 mt-8 text-sm text-gray-300">
-          <span>Fully Bespoke Offers</span>
-          <span>No hidden fees</span>
-          <span>Competitive price guarantee</span>
+          <span>✓ Fully Bespoke Offers</span>
+          <span>✓ No hidden fees</span>
+          <span>✓ Competitive price guarantee</span>
         </div>
       </section>
 

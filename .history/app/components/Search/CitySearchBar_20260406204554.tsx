@@ -81,9 +81,9 @@ export default function CitySearchBar({ defaultCity }: { defaultCity: string }) 
 
       {/* TRUST INDICATORS */}
       <div className="flex justify-center gap-8 mt-8 text-sm text-gray-300">
-        <span>Fully Bespoke Offers</span>
-        <span>No hidden fees</span>
-        <span>Best price guarantee</span>
+        <span>✓ Fully Bespoke Offers</span>
+        <span>✓ No hidden fees</span>
+        <span>✓ Best price guarantee</span>
       </div>
 
       {/* CAR RESULTS */}
