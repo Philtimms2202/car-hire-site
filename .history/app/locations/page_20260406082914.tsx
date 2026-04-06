@@ -5,6 +5,7 @@
 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { createClient } from '@sanity/client'
 
 export const metadata = {
   title: {
@@ -17,7 +18,28 @@ export const metadata = {
   },
 }
 
-export default function Locations() {
+const client = createClient({
+  projectId: '6ogv1wx8',
+  dataset: 'production',
+  apiVersion: '2024-01-01',
+  useCdn: true,
+})
+
+export default async function Locations() {
+  const countries = await client.fetch(`
+    *[_type == "country"]{
+      continent,
+      continentSlug,
+      continentEmoji
+    }
+  `)
+
+  const continents = Array.from(
+    new Map(
+      countries.map((c: any) => [c.continentSlug, c])
+    ).values()
+  )
+
   const ukDestinations = [
     {
       city: 'London',
@@ -274,6 +296,39 @@ export default function Locations() {
         </div>
       </section>
 
+      {/* Explore by Continent */}
+      <section className="py-16 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2
+            className="text-3xl font-bold mb-2"
+            style={{ color: '#232e4e' }}
+          >
+            Explore by Continent
+          </h2>
+          <p className="text-gray-500 mb-10">
+            Choose a continent to browse all countries and cities we cover.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {continents.map((continent: any) => (
+              <a
+                key={continent.continentSlug}
+                href={`/locations/${continent.continentSlug}`}
+                className="p-6 border rounded-lg hover:shadow-lg transition cursor-pointer"
+              >
+                <div className="text-4xl mb-3">{continent.continentEmoji}</div>
+                <h3
+                  className="font-bold text-xl mb-1"
+                  style={{ color: '#232e4e' }}
+                >
+                  {continent.continent}
+                </h3>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section
         style={{ backgroundColor: '#232e4e' }}
@@ -284,7 +339,7 @@ export default function Locations() {
           We cover thousands of locations worldwide. Search above and we'll find
           the best deals wherever you're headed.
         </p>
-        <a href="/locations/continents" className="btn-primary inline-block">
+        <a href="/" className="btn-primary inline-block">
           Search All Locations
         </a>
       </section>

@@ -6,6 +6,7 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
+
 export const metadata = {
   title: {
     default: "Tiimms Travel | Locations",
@@ -163,6 +164,7 @@ export default function Locations() {
       slug: 'cancun',
     },
   ]
+  
 
   return (
     <main className="min-h-screen bg-white">
@@ -284,7 +286,7 @@ export default function Locations() {
           We cover thousands of locations worldwide. Search above and we'll find
           the best deals wherever you're headed.
         </p>
-        <a href="/locations/continents" className="btn-primary inline-block">
+        <a href="/" className="btn-primary inline-block">
           Search All Locations
         </a>
       </section>

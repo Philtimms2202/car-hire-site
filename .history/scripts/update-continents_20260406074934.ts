@@ -1,9 +1,5 @@
 import { createClient } from '@sanity/client'
-import dotenv from 'dotenv'
-
-dotenv.config({ path: '.env.local' })
-
-console.log("Token loaded:", process.env.SANITY_WRITE_TOKEN ? "YES" : "NO")
+import 'dotenv/config'
 
 const client = createClient({
   projectId: '6ogv1wx8',
