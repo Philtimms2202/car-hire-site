@@ -149,10 +149,15 @@ export default async function CityPage({
         <div className="max-w-100% mx-auto">
           <h2
             className="text-3xl font-bold mb-4"
-            style={{ color: '#03989e' }}
+            style={{ color: '#232e4e' }}
           >
             About {cityData.city}
           </h2>
+
+          <p className="text-gray-600 leading-relaxed">
+            {cityData.description ||
+              `Explore top attractions, tours, and activities in ${cityData.city}.`}
+          </p>
 
           {cityData.mainContent && (
             <div className="prose max-w-none mt-8">

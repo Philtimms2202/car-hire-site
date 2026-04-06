@@ -1,6 +1,5 @@
 // ============================================
 // LOCATIONS PAGE - app/locations/page.tsx
-// URL: timmstravel.com/locations
 // ============================================
 
 import Navbar from '../components/Navbar'
@@ -19,149 +18,18 @@ export const metadata = {
 
 export default function Locations() {
   const ukDestinations = [
-    {
-      city: 'London',
-      airport: 'Heathrow Airport',
-      emoji: '🏙️',
-      description:
-        'Explore the capital with ease. From the West End to the Cotswolds, having a car opens up a whole new side of London.',
-      continent: 'europe',
-      country: 'united-kingdom',
-      slug: 'london',
-    },
-    {
-      city: 'Manchester',
-      airport: 'Manchester Airport',
-      emoji: '🐝',
-      description:
-        'The heart of the North. Perfect for exploring the Peak District, Lake District and everything in between.',
-      continent: 'europe',
-      country: 'united-kingdom',
-      slug: 'manchester',
-    },
-    {
-      city: 'Edinburgh',
-      airport: 'Edinburgh Airport',
-      emoji: '🏰',
-      description:
-        "Scotland's stunning capital. Hire a car and discover the Highlands, lochs and castles at your own pace.",
-      continent: 'europe',
-      country: 'united-kingdom',
-      slug: 'edinburgh',
-    },
-    {
-      city: 'Birmingham',
-      airport: 'Birmingham Airport',
-      emoji: '🏭',
-      description:
-        'Central location makes Birmingham the ideal base for exploring the Midlands and beyond.',
-      continent: 'europe',
-      country: 'united-kingdom',
-      slug: 'birmingham',
-    },
-    {
-      city: 'Bristol',
-      airport: 'Bristol Airport',
-      emoji: '🌉',
-      description:
-        'Gateway to the South West. Drive down to Cornwall, Bath or the Jurassic Coast in comfort.',
-      continent: 'europe',
-      country: 'united-kingdom',
-      slug: 'bristol',
-    },
-    {
-      city: 'Glasgow',
-      airport: 'Glasgow Airport',
-      emoji: '🎶',
-      description:
-        "Scotland's biggest city with easy access to Loch Lomond and the Trossachs National Park.",
-      continent: 'europe',
-      country: 'united-kingdom',
-      slug: 'glasgow',
-    },
+    // ... unchanged
   ]
 
   const worldDestinations = [
-    {
-      city: 'Barcelona',
-      country: 'Spain',
-      emoji: '🇪🇸',
-      description:
-        'Hire a car and explore beyond the city — the Costa Brava, Montserrat and the Pyrenees are all within easy reach.',
-      continent: 'europe',
-      countrySlug: 'spain',
-      slug: 'barcelona',
-    },
-    {
-      city: 'Paris',
-      country: 'France',
-      emoji: '🇫🇷',
-      description:
-        'The Loire Valley, Champagne region and Normandy coast are all just a short drive from the French capital.',
-      continent: 'europe',
-      countrySlug: 'france',
-      slug: 'paris',
-    },
-    {
-      city: 'New York',
-      country: 'USA',
-      emoji: '🇺🇸',
-      description:
-        'Hit the open road and discover the Catskills, the Hamptons or drive the iconic Route 1 up the New England coast.',
-      continent: 'north-america',
-      countrySlug: 'united-states',
-      slug: 'new-york',
-    },
-    {
-      city: 'Dubai',
-      country: 'UAE',
-      emoji: '🇦🇪',
-      description:
-        "Cruise around in style. A hire car is the perfect way to explore Dubai's incredible attractions and desert landscapes.",
-      continent: 'asia',
-      countrySlug: 'united-arab-emirates',
-      slug: 'dubai',
-    },
-    {
-      city: 'Sydney',
-      country: 'Australia',
-      emoji: '🇦🇺',
-      description:
-        'From the Blue Mountains to the Hunter Valley wine region, Sydney is the perfect starting point for an epic road trip.',
-      continent: 'australia',
-      countrySlug: 'australia',
-      slug: 'sydney',
-    },
-    {
-      city: 'Malaga',
-      country: 'Spain',
-      emoji: '🇪🇸',
-      description:
-        'The gateway to the Costa del Sol. Pick up your hire car at the airport and the whole of Andalusia is yours to explore.',
-      continent: 'europe',
-      countrySlug: 'spain',
-      slug: 'malaga',
-    },
-    {
-      city: 'Rome',
-      country: 'Italy',
-      emoji: '🇮🇹',
-      description:
-        'Drive through Tuscany, explore the Amalfi Coast or head south to Sicily — Italy is made for road trips.',
-      continent: 'europe',
-      countrySlug: 'italy',
-      slug: 'rome',
-    },
-    {
-      city: 'Cancun',
-      country: 'Mexico',
-      emoji: '🇲🇽',
-      description:
-        'Hire a car and discover the Yucatan Peninsula — ancient Mayan ruins, cenotes and hidden beaches await.',
-      continent: 'north-america',
-      countrySlug: 'mexico',
-      slug: 'cancun',
-    },
+    // ... unchanged
+  ]
+
+  const continents = [
+    { name: 'Europe', slug: 'europe', emoji: '🇪🇺' },
+    { name: 'North America', slug: 'north-america', emoji: '🌎' },
+    { name: 'Asia', slug: 'asia', emoji: '🌏' },
+    { name: 'Australia', slug: 'australia', emoji: '🇦🇺' },
   ]
 
   return (
@@ -176,8 +44,37 @@ export default function Locations() {
         <h1 className="text-5xl font-bold mb-4">Most Popular Destinations</h1>
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
           Whether you're exploring closer to home or heading somewhere a little
-          more exotic, we've got car hire covered across the UK and worldwide.
+          more exotic, we've got travel covered across the UK and worldwide.
         </p>
+      </section>
+
+      {/* 🌍 CONTINENTS NAV (NEW) */}
+      <section className="py-12 px-6 bg-white border-b">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2
+            className="text-2xl font-bold mb-2"
+            style={{ color: '#232e4e' }}
+          >
+            Explore by Continent
+          </h2>
+          <p className="text-gray-500 mb-8">
+            Start broad, then drill down into countries and cities
+          </p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {continents.map((c) => (
+              <a
+                key={c.slug}
+                href={`/locations/${c.slug}`}
+                className="bg-gray-50 hover:bg-gray-100 border rounded-lg p-4 transition cursor-pointer flex items-center justify-center gap-2 font-semibold"
+                style={{ color: '#232e4e' }}
+              >
+                <span className="text-xl">{c.emoji}</span>
+                {c.name}
+              </a>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* UK Destinations */}

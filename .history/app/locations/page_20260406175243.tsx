@@ -23,7 +23,41 @@ export default function Locations() {
       city: 'London',
       airport: 'Heathrow Airport',
       emoji: '🏙️',
-      description:
+      description:{/* Browse by Continent */}
+<section className="py-16 px-6 bg-white border-b">
+  <div className="max-w-6xl mx-auto text-center">
+    <h2 className="text-2xl font-bold mb-2" style={{ color: '#232e4e' }}>
+      Browse by Continent
+    </h2>
+    <p className="text-gray-500 mb-10">
+      Start broad, then drill down into countries and cities
+    </p>
+
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {[
+        { name: 'Europe', slug: 'europe', emoji: '🇪🇺' },
+        { name: 'Asia', slug: 'asia', emoji: '🌏' },
+        { name: 'Middle East', slug: 'middle-east', emoji: '🕌' },
+        { name: 'North America', slug: 'north-america', emoji: '🌎' },
+        { name: 'South America', slug: 'south-america', emoji: '🌿' },
+        { name: 'Africa', slug: 'africa', emoji: '🌍' },
+        { name: 'Oceania', slug: 'oceania', emoji: '🇦🇺' },
+      ].map((c) => (
+        
+          key={c.slug}
+          href={`/locations/${c.slug}`}
+          className="card hover:shadow-xl transition cursor-pointer text-center group"
+        >
+          <div className="text-5xl mb-3">{c.emoji}</div>
+          <h3 className="font-bold text-lg mb-1" style={{ color: '#232e4e' }}>{c.name}</h3>
+          <p className="text-sm font-semibold group-hover:opacity-75 transition" style={{ color: '#2f797c' }}>
+            Explore {c.name} {'→'}
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
         'Explore the capital with ease. From the West End to the Cotswolds, having a car opens up a whole new side of London.',
       continent: 'europe',
       country: 'united-kingdom',

@@ -20,45 +20,29 @@ export const metadata = {
 export default function Contact() {
   const faqs = [
     {
-      question: "How do I book travel through your site?",
-      answer: "We help you compare and find the best deals across flights, hotels, car hire and experiences. When you select an option, you'll be securely redirected to one of our trusted travel partners to complete your booking."
+      question: "How do I modify or cancel my booking?",
+      answer: "Most of our car hire deals come with free cancellation. Simply get in touch with us using the contact form above and we'll help you make any changes to your booking."
     },
     {
-      question: "Who do I book with?",
-      answer: "All bookings are made directly with our carefully selected partners, including well-known travel brands and providers. We only work with companies that meet strict quality and reliability standards."
+      question: "What documents do I need to hire a car?",
+      answer: "You'll typically need a full valid driving licence, a credit or debit card in the driver's name, and a passport or photo ID. Some countries may have additional requirements - we'll let you know at the time of booking."
     },
     {
-      question: "Can I change or cancel my booking?",
-      answer: "Any changes or cancellations are handled by the provider you booked with. Once you complete your booking, you'll receive confirmation details with instructions on how to manage your trip directly with them."
+      question: "Is insurance included in the price?",
+      answer: "Basic insurance is included with all of our car hire deals. We always recommend checking the excess amount and considering additional cover for complete peace of mind."
     },
     {
-      question: "Do you charge any extra fees?",
-      answer: "No — we don’t add any hidden fees. The price you see is the price set by the travel provider. We aim to be fully transparent so you can book with confidence."
+      question: "Can I add an additional driver?",
+      answer: "Yes! Most suppliers allow you to add additional drivers for a small daily fee. You can request this at the time of booking or when you pick up your car."
     },
     {
-      question: "How do you make money?",
-      answer: "We earn a small commission from our partners when you make a booking through our site. This doesn’t cost you anything extra — it simply helps us keep the site running and continue finding the best travel deals."
+      question: "What happens if I return the car late?",
+      answer: "Late returns are charged at an hourly rate by most suppliers. If you think you're going to be late, give us a call and we'll do our best to help sort it out."
     },
     {
-      question: "Are the prices shown accurate?",
-      answer: "We work hard to display the latest prices, but final prices are confirmed on our partner’s website. Travel prices can change quickly depending on availability and demand."
+      question: "Do I need to fill up the car before returning it?",
+      answer: "Most car hire deals operate on a full-to-full fuel policy - you'll collect the car with a full tank and return it full. We'll always make this clear before you book."
     },
-    {
-      question: "Is my payment secure?",
-      answer: "Yes — all payments are handled directly by our trusted partners using secure, encrypted payment systems. We never store or process your payment details ourselves."
-    },
-    {
-      question: "What if something goes wrong with my booking?",
-      answer: "Since your booking is made with the travel provider, they’ll be your first point of contact for support. However, if you need help finding the right contact details, we’re always here to point you in the right direction."
-    },
-    {
-      question: "Why should I trust your recommendations?",
-      answer: "We focus on working with reputable travel brands, highlighting genuine deals, and being transparent about how we operate. Our goal is to make it easier for you to compare options and book with confidence."
-    },
-    {
-      question: "Do you cover flights, hotels, and experiences?",
-      answer: "Yes — we bring together a wide range of travel options including flights, hotels, car hire, airport transfers, and experiences, so you can plan your entire trip in one place."
-    }
   ]
 
   return (
@@ -110,7 +94,7 @@ export default function Contact() {
           {/* Contact Details */}
           <div>
             <h2 className="text-2xl font-bold mb-2" style={{color: '#232e4e'}}>Other Ways to Reach Us</h2>
-            <p className="text-gray-500 mb-8">We're happy to help.</p>
+            <p className="text-gray-500 mb-8">Prefer to pick up the phone or drop us an email directly? No problem at all.</p>
 
             <div className="flex flex-col gap-6">
               <div className="card flex gap-4 items-start">
@@ -128,7 +112,7 @@ export default function Contact() {
                 <div className="text-3xl">⏱️</div>
                 <div>
                   <h3 className="font-bold text-lg mb-1" style={{color: '#232e4e'}}>Response Times</h3>
-                  <p className="text-gray-500 text-sm">We aim to respond to all enquiries within 24 hours during business days.</p>
+                  <p className="text-gray-500 text-sm">We aim to respond to all enquiries within 24 hours during business days. For urgent booking issues, please give us a call.</p>
                 </div>
               </div>
             </div>

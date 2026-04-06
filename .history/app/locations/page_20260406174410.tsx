@@ -163,6 +163,7 @@ export default function Locations() {
       slug: 'cancun',
     },
   ]
+  
 
   return (
     <main className="min-h-screen bg-white">

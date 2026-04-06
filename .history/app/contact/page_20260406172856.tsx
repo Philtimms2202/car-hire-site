@@ -110,7 +110,7 @@ export default function Contact() {
           {/* Contact Details */}
           <div>
             <h2 className="text-2xl font-bold mb-2" style={{color: '#232e4e'}}>Other Ways to Reach Us</h2>
-            <p className="text-gray-500 mb-8">We're happy to help.</p>
+            <p className="text-gray-500 mb-8">Email us directly.</p>
 
             <div className="flex flex-col gap-6">
               <div className="card flex gap-4 items-start">

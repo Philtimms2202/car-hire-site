@@ -164,6 +164,30 @@ export default function Locations() {
     },
   ]
 
+        {/* CONTINENTS NAV */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-2 text-[#232e4e]">
+            Explore by Continent
+          </h2>
+          <p className="text-gray-500 mb-10">
+            Start broad, then drill down into countries and cities.
+          </p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {continents.map((c) => (
+              <a
+                key={c.slug}
+                href={`/locations/${c.slug}`}
+                className="bg-white rounded-xl p-6 shadow hover:shadow-lg transition font-semibold text-[#232e4e]"
+              >
+                {c.name}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
   return (
     <main className="min-h-screen bg-white">
       <Navbar />

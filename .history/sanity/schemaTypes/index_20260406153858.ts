@@ -6,7 +6,7 @@ import { postType } from './postType'
 import { authorType } from './authorType'
 import { locationType } from './locationType'
 
-// ⭐ Correct imports — all in the same folder
+// ⭐ Correct imports — all inside the same folder
 import continent from './continent'
 import country from './country'
 import city from './city'
@@ -19,7 +19,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     authorType,
     locationType,
 
-    // ⭐ These must NOT be undefined
+    // New structured types
     continent,
     country,
     city

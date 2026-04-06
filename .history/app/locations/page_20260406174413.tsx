@@ -9,7 +9,7 @@ import Footer from '../components/Footer'
 export const metadata = {
   title: {
     default: "Timms Travel | Locations",
-    template: "Timms Travel |",
+    template: "Tiimms Travel |",
   },
   description: "Discover amazing experiences around the world.",
   icons: {

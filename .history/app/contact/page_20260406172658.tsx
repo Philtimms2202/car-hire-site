@@ -61,6 +61,8 @@ export default function Contact() {
     }
   ]
 
+  ]
+
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
@@ -110,7 +112,7 @@ export default function Contact() {
           {/* Contact Details */}
           <div>
             <h2 className="text-2xl font-bold mb-2" style={{color: '#232e4e'}}>Other Ways to Reach Us</h2>
-            <p className="text-gray-500 mb-8">We're happy to help.</p>
+            <p className="text-gray-500 mb-8">Prefer to pick up the phone or drop us an email directly? No problem at all.</p>
 
             <div className="flex flex-col gap-6">
               <div className="card flex gap-4 items-start">
@@ -128,7 +130,7 @@ export default function Contact() {
                 <div className="text-3xl">⏱️</div>
                 <div>
                   <h3 className="font-bold text-lg mb-1" style={{color: '#232e4e'}}>Response Times</h3>
-                  <p className="text-gray-500 text-sm">We aim to respond to all enquiries within 24 hours during business days.</p>
+                  <p className="text-gray-500 text-sm">We aim to respond to all enquiries within 24 hours during business days. For urgent booking issues, please give us a call.</p>
                 </div>
               </div>
             </div>

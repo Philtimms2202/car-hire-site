@@ -154,6 +154,11 @@ export default async function CityPage({
             About {cityData.city}
           </h2>
 
+          <p className="text-gray-600 leading-relaxed">
+            {cityData.description ||
+              `Explore top attractions, tours, and activities in ${cityData.city}.`}
+          </p>
+
           {cityData.mainContent && (
             <div className="prose max-w-none mt-8">
               <PortableText value={cityData.mainContent} />
