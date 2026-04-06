@@ -8,7 +8,6 @@ export default function FlightSearch() {
   const [returnDate, setReturnDate] = useState('')
   const [roundTrip, setRoundTrip] = useState(true)
 
-  // City → IATA lookup
   const airportCodes: Record<string, string> = {
     manchester: "MAN",
     london: "LON",
@@ -45,18 +44,16 @@ export default function FlightSearch() {
     const fromCode = toIATA(from)
     const toCode = toIATA(to)
     const departFormatted = formatDate(depart)
-    const returnFormatted = returnDate ? formatDate(returnDate) : ''
+    const returnFormatted = roundTrip && returnDate ? formatDate(returnDate) : ''
 
-    // Correct Aviasales URL format:
-    // One-way: FROMDDMMTO1
-    // Round-trip: FROMDDMMTORETURNDDMM11
-    const aviaUrl = roundTrip
-      ? `https://www.aviasales.com/search/${fromCode}${departFormatted}${toCode}${returnFormatted}11`
-      : `https://www.aviasales.com/search/${fromCode}${departFormatted}${toCode}1`
+    // Build Aviasales dynamic URL
+    const aviaUrl = returnFormatted
+      ? `https://www.aviasales.com/search/${fromCode}${departFormatted}${toCode}${returnFormatted}`
+      : `https://www.aviasales.com/search/${fromCode}${departFormatted}${toCode}`
 
     const encoded = encodeURIComponent(aviaUrl)
 
-    // Your Travelpayouts affiliate wrapper
+    // Your affiliate link
     const finalUrl = `https://aviasales.tpm.li/5tsfGPfB?u=${encoded}`
 
     window.open(finalUrl, '_blank')

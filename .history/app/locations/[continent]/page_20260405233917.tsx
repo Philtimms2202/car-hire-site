@@ -117,7 +117,7 @@ export default async function ContinentPage({ params }: { params: Promise<{ cont
 
           <div className="mt-8">
             <a
-              href="/locations/continents"
+              href="/locations"
               style={{ color: '#2f797c' }}
               className="font-semibold hover:opacity-75 transition"
             >
