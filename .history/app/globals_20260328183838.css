@@ -57,14 +57,3 @@
     border-color: #2f797c;
   }
 }
-
-/* Fix iOS Safari date input text color */
-input[type="date"] {
-  color: #111 !important;          /* visible text */
-  background-color: #fff !important;
-}
-
-/* Fix the calendar icon (iOS renders it white by default) */
-input[type="date"]::-webkit-date-and-time-value {
-  color: #111 !important;
-}
