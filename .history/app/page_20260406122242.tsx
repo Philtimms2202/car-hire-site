@@ -137,7 +137,6 @@ export default function Home() {
             <p className="text-center text-gray-500 mb-10">
               Hand picked deals from top destinations
             </p>
-            <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH"></div>
           </div>
         </section>
       )}
@@ -227,6 +226,16 @@ export default function Home() {
             <a href="/locations/continents" className="btn-primary inline-block">View All Destinations</a>
           </div>
 
+          {/* GYG WIDGET */}
+          <div className="mt-16">
+            <h3 className="text-2xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+              Top Experiences
+            </h3>
+            <p className="text-center text-gray-500 mb-8">
+              Discover the best activities and tours worldwide
+            </p>
+            <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH"></div>
+          </div>
 
         </div>
       </section>

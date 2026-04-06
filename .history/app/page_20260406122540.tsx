@@ -127,20 +127,32 @@ export default function Home() {
         </section>
       )}
 
-      {/* FEATURED DEALS (when NOT searched) */}
-      {!searched && (
-        <section className="py-16 px-6 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
-              Popular Experiences
-            </h2>
-            <p className="text-center text-gray-500 mb-10">
-              Hand picked deals from top destinations
-            </p>
-            <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH"></div>
-          </div>
-        </section>
-      )}
+{/* FEATURED DEALS (when NOT searched) */}
+{!searched && (
+  <section className="py-16 px-6 bg-gray-50">
+    <div className="max-w-6xl mx-auto">
+      <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+        Popular Experiences
+      </h2>
+      <p className="text-center text-gray-500 mb-10">
+        Hand picked deals from top destinations
+      </p>
+
+      {/* Mobile: horizontal scroll carousel — Desktop: normal full width */}
+      <div className="md:block overflow-x-auto md:overflow-x-visible">
+        <div className="flex md:block min-w-max md:min-w-0">
+          <div
+            className="md:w-full"
+            style={{ minWidth: '900px' }}
+            data-gyg-widget="auto"
+            data-gyg-partner-id="P7B7GRH"
+          />
+        </div>
+      </div>
+
+    </div>
+  </section>
+)}
 
       {/* HOW IT WORKS */}
       <section className="py-16 px-6">
