@@ -140,7 +140,7 @@ export default async function CityPage({
       </section>
 
       {/* GYG Widget */}
-      <section className="py-16 px-6 bg-gray-50">
+      <section className="hidden md:block py-16 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
             Top Experiences in {cityData.city}
@@ -148,6 +148,7 @@ export default async function CityPage({
           <p className="text-center text-gray-500 mb-10">
             Hand picked activities and tours in {cityData.city}
           </p>
+          <div data-gyg-widget="activities" data-gyg-partner-id="P7B7GRH" data-gyg-q={cityName}></div>
           <div data-gyg-widget="activities" data-gyg-partner-id="P7B7GRH" data-gyg-q={cityName} data-gyg-number-of-items="8"></div>
         </div>
       </section>

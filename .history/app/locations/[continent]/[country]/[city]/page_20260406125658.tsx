@@ -140,7 +140,7 @@ export default async function CityPage({
       </section>
 
       {/* GYG Widget */}
-      <section className="py-16 px-6 bg-gray-50">
+      <section className="hidden md:block py-16 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
             Top Experiences in {cityData.city}

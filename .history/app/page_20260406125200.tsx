@@ -129,7 +129,7 @@ export default function Home() {
 
 {/* FEATURED DEALS (when NOT searched) */}
 {!searched && (
-  <section className="hidden md:block py-16 px-6 bg-gray-50">
+  <section className="py-16 px-6 bg-gray-50">
     <div className="max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
         Popular Experiences
@@ -137,7 +137,12 @@ export default function Home() {
       <p className="text-center text-gray-500 mb-10">
         Hand picked deals from top destinations
       </p>
-      <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH"></div>
+
+      {/* Hidden on mobile, visible from md breakpoint up */}
+      <div className="hidden md:block">
+        <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH"></div>
+      </div>
+
     </div>
   </section>
 )}

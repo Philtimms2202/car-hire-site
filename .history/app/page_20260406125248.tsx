@@ -127,7 +127,6 @@ export default function Home() {
         </section>
       )}
 
-{/* FEATURED DEALS (when NOT searched) */}
 {!searched && (
   <section className="hidden md:block py-16 px-6 bg-gray-50">
     <div className="max-w-6xl mx-auto">
