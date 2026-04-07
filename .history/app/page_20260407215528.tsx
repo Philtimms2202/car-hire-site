@@ -12,7 +12,7 @@ import CarSearch from '@/app/components/Search/CarSearch'
 import { useState } from 'react'
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('flights')
+  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('experiences')
   const [pickupLocation, setPickupLocation] = useState('')
   const [pickupDate, setPickupDate] = useState('')
   const [dropoffDate, setDropoffDate] = useState('')

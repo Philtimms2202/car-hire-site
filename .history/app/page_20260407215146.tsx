@@ -12,19 +12,13 @@ import CarSearch from '@/app/components/Search/CarSearch'
 import { useState } from 'react'
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('flights')
+  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('experiences')
   const [pickupLocation, setPickupLocation] = useState('')
   const [pickupDate, setPickupDate] = useState('')
   const [dropoffDate, setDropoffDate] = useState('')
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
   const [results, setResults] = useState<any[]>([])
-
-  const handleCarSearch = () => {
-    if (!pickupLocation || !pickupDate || !dropoffDate) return
-    const affiliateCode = 'YOURAFFILIATETOKEN'
-    const url = `https://www.rentalcars.com/?affiliateCode=${affiliateCode}&preflocation=${encodeURIComponent(pickupLocation)}&puDay=${pickupDate}&doDay=${dropoffDate}`
-    window.open(url, '_blank')
   }
 
   const destinations = [
@@ -60,7 +54,7 @@ export default function Home() {
 
         {/* TAB MENU */}
         <div className="flex justify-center gap-6 mb-8">
-          {['flights', 'hotels', 'experiences', 'cars'].map((tab) => (
+          {['experiences', 'flights', 'hotels', 'cars'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
@@ -73,9 +67,9 @@ export default function Home() {
 
         {/* SEARCH AREA */}
         <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+          {activeTab === 'experiences' && <ExperienceSearch />}
           {activeTab === 'flights' && <FlightSearch />}
           {activeTab === 'hotels' && <HotelSearch />}
-          {activeTab === 'experiences' && <ExperienceSearch />}
           {activeTab === 'cars' && (
             <CarSearch
               pickupLocation={pickupLocation}

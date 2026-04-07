@@ -12,7 +12,7 @@ import CarSearch from '@/app/components/Search/CarSearch'
 import { useState } from 'react'
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('flights')
+  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('experiences')
   const [pickupLocation, setPickupLocation] = useState('')
   const [pickupDate, setPickupDate] = useState('')
   const [dropoffDate, setDropoffDate] = useState('')
@@ -60,7 +60,7 @@ export default function Home() {
 
         {/* TAB MENU */}
         <div className="flex justify-center gap-6 mb-8">
-          {['flights', 'hotels', 'experiences', 'cars'].map((tab) => (
+          {['experiences', 'flights', 'hotels', 'cars'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
@@ -73,9 +73,9 @@ export default function Home() {
 
         {/* SEARCH AREA */}
         <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+          {activeTab === 'experiences' && <ExperienceSearch />}
           {activeTab === 'flights' && <FlightSearch />}
           {activeTab === 'hotels' && <HotelSearch />}
-          {activeTab === 'experiences' && <ExperienceSearch />}
           {activeTab === 'cars' && (
             <CarSearch
               pickupLocation={pickupLocation}
@@ -212,25 +212,8 @@ export default function Home() {
 
 
         </div>
+      </section>
 
-      </section>
-    {/* WHY CHOOSE US */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          {[
-            { emoji: '🌍', title: 'Worldwide Locations', text: 'Available in 100+ countries' },
-            { emoji: '💰', title: 'Competitive Pricing', text: 'We compare all major providers' },
-            { emoji: '🛡️', title: 'Flexible Bookings', text: 'Plans change — we get it' },
-          ].map(({ emoji, title, text }) => (
-            <div key={title}>
-              <div className="text-4xl mb-3">{emoji}</div>
-              <h3 className="font-bold text-lg mb-1" style={{ color: '#232e4e' }}>{title}</h3>
-              <p className="text-gray-500 text-sm">{text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-      
       <Footer />
 
     </main>

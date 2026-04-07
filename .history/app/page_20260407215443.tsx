@@ -12,7 +12,7 @@ import CarSearch from '@/app/components/Search/CarSearch'
 import { useState } from 'react'
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('flights')
+  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('experiences')
   const [pickupLocation, setPickupLocation] = useState('')
   const [pickupDate, setPickupDate] = useState('')
   const [dropoffDate, setDropoffDate] = useState('')
@@ -49,46 +49,49 @@ export default function Home() {
         strategy="afterInteractive"
       />
 
-      {/* HERO SECTION */}
-      <section style={{ backgroundColor: '#232e4e' }} className="text-white py-24 px-6 text-center">
-        <h1 className="text-5xl font-bold mb-4">
-          Compare Thousands of Experiences Globally 🌍
-        </h1>
-        <p className="text-xl mb-10 text-gray-300">
-          Thousands of experiences for you to enjoy - instant results at the best price!
-        </p>
+{/* HERO SECTION */}
+<section style={{ backgroundColor: '#232e4e' }} className="text-white py-24 px-6 text-center">
+  <h1 className="text-5xl font-bold mb-4">
+    Compare Flights, Hotels & More 🌍
+  </h1>
+  <p className="text-xl mb-10 text-gray-300">
+    Find the best deals instantly — fast, simple, and tailored for you.
+  </p>
 
-        {/* TAB MENU */}
-        <div className="flex justify-center gap-6 mb-8">
-          {['flights', 'hotels', 'experiences', 'cars'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab as any)}
-              className={`pb-2 text-lg font-medium ${activeTab === tab ? 'border-b-2 border-white' : 'text-gray-400'}`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </div>
+  {/* TAB MENU */}
+  <div className="flex justify-center gap-6 mb-8">
+    {['flights', 'hotels', 'experiences', 'cars'].map((tab) => (
+      <button
+        key={tab}
+        onClick={() => setActiveTab(tab as any)}
+        className={`pb-2 text-lg font-medium ${
+          activeTab === tab ? 'border-b-2 border-white' : 'text-gray-400'
+        }`}
+      >
+        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+      </button>
+    ))}
+  </div>
 
-        {/* SEARCH AREA */}
-        <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
-          {activeTab === 'flights' && <FlightSearch />}
-          {activeTab === 'hotels' && <HotelSearch />}
-          {activeTab === 'experiences' && <ExperienceSearch />}
-          {activeTab === 'cars' && (
-            <CarSearch
-              pickupLocation={pickupLocation}
-              pickupDate={pickupDate}
-              dropoffDate={dropoffDate}
-              setPickupLocation={setPickupLocation}
-              setPickupDate={setPickupDate}
-              setDropoffDate={setDropoffDate}
-              loading={loading}
-              onSearch={handleCarSearch}
-            />
-          )}
-        </div>
+  {/* SEARCH AREA */}
+  <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+    {activeTab === 'flights' && <FlightSearch />}
+    {activeTab === 'hotels' && <HotelSearch />}
+    {activeTab === 'experiences' && <ExperienceSearch />}
+    {activeTab === 'cars' && (
+      <CarSearch
+        pickupLocation={pickupLocation}
+        pickupDate={pickupDate}
+        dropoffDate={dropoffDate}
+        setPickupLocation={setPickupLocation}
+        setPickupDate={setPickupDate}
+        setDropoffDate={setDropoffDate}
+        loading={loading}
+        onSearch={handleCarSearch}
+      />
+    )}
+  </div>
+</section>
 
         {/* Trust indicators */}
         <div className="flex justify-center gap-8 mt-8 text-sm text-gray-300">

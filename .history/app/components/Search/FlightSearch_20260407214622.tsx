@@ -14,9 +14,6 @@ export default function FlightSearch() {
   const [selectedFrom, setSelectedFrom] = useState<any>(null)
   const [selectedTo, setSelectedTo] = useState<any>(null)
 
-  const today = new Date().toISOString().split('T')[0]
-
-  // Debounce helper
   const debounce = (fn: Function, delay = 300) => {
     let timer: any
     return (...args: any[]) => {
@@ -25,7 +22,6 @@ export default function FlightSearch() {
     }
   }
 
-  // Fetch from your local API route
   const fetchAirports = async (query: string, setter: Function) => {
     if (!query || query.length < 2) {
       setter([])
@@ -76,53 +72,27 @@ export default function FlightSearch() {
     window.open(finalUrl, '_blank')
   }
 
-  const renderDropdown = (
-    results: any[],
-    setter: Function,
-    inputSetter: Function,
-    selectSetter: Function
-  ) => {
+  const renderDropdown = (results: any[], setter: Function, inputSetter: Function, selectSetter: Function) => {
     if (!results.length) return null
 
     return (
-      <div
-        className="
-          absolute left-0 right-0 z-30 
-          bg-white border border-gray-200 
-          rounded-xl shadow-xl 
-          mt-2 max-h-72 overflow-y-auto
-          animate-fadeIn
-        "
-      >
+      <div className="absolute z-30 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-64 overflow-y-auto">
         {results.map((a) => (
           <div
             key={a.iata_code}
-            className="
-              px-4 py-3 
-              cursor-pointer 
-              hover:bg-blue-50 
-              active:bg-blue-100 
-              transition 
-              flex flex-col
-            "
+            className="px-4 py-2 cursor-pointer hover:bg-blue-50 transition"
             onClick={() => {
               inputSetter(`${a.city} (${a.iata_code})`)
-              selectSetter(a)
+              selectSetter(a)   // <-- THIS is the fix
               setter([])
             }}
           >
-            <div className="flex justify-between items-center">
-              <span className="font-semibold text-gray-900 text-base">
-                {a.city}, {a.country}
-              </span>
-              <span className="text-blue-600 font-bold text-sm">
-                {a.iata_code}
-              </span>
+            <div className="font-medium text-gray-900">
+              {a.city}, {a.country}
             </div>
-
-            <span className="text-gray-500 text-sm mt-1">
-              {a.name}
-            </span>
+            <div className="text-sm text-gray-500">
+              {a.name} — <span className="font-semibold text-blue-600">{a.iata_code}</span>
+            </div>
           </div>
         ))}
       </div>
@@ -132,7 +102,6 @@ export default function FlightSearch() {
   return (
     <div className="card space-y-6">
 
-      {/* Round-trip toggle */}
       <div className="flex gap-4">
         <button
           className={`px-4 py-2 rounded ${roundTrip ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
@@ -148,10 +117,8 @@ export default function FlightSearch() {
         </button>
       </div>
 
-      {/* Inputs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-        {/* FROM */}
         <div className="relative">
           <label className="block text-gray-600 text-sm mb-1">From</label>
           <input
@@ -166,7 +133,6 @@ export default function FlightSearch() {
           {renderDropdown(fromResults, setFromResults, setFrom, setSelectedFrom)}
         </div>
 
-        {/* TO */}
         <div className="relative">
           <label className="block text-gray-600 text-sm mb-1">To</label>
           <input
@@ -181,26 +147,16 @@ export default function FlightSearch() {
           {renderDropdown(toResults, setToResults, setTo, setSelectedTo)}
         </div>
 
-        {/* DEPART */}
         <div>
           <label className="block text-gray-600 text-sm mb-1">Departure Date</label>
           <input
             type="date"
             className="input-field bg-white text-gray-900"
             value={depart}
-            min={today}
-            onChange={(e) => {
-              const newDepart = e.target.value
-              setDepart(newDepart)
-
-              if (returnDate && returnDate < newDepart) {
-                setReturnDate(newDepart)
-              }
-            }}
+            onChange={(e) => setDepart(e.target.value)}
           />
         </div>
 
-        {/* RETURN */}
         {roundTrip && (
           <div>
             <label className="block text-gray-600 text-sm mb-1">Return Date</label>
@@ -208,7 +164,6 @@ export default function FlightSearch() {
               type="date"
               className="input-field bg-white text-gray-900"
               value={returnDate}
-              min={depart || today}
               onChange={(e) => setReturnDate(e.target.value)}
             />
           </div>

@@ -12,7 +12,7 @@ import CarSearch from '@/app/components/Search/CarSearch'
 import { useState } from 'react'
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('flights')
+  const [activeTab, setActiveTab] = useState<'experiences' | 'flights' | 'hotels' | 'cars'>('experiences')
   const [pickupLocation, setPickupLocation] = useState('')
   const [pickupDate, setPickupDate] = useState('')
   const [dropoffDate, setDropoffDate] = useState('')
@@ -60,7 +60,7 @@ export default function Home() {
 
         {/* TAB MENU */}
         <div className="flex justify-center gap-6 mb-8">
-          {['flights', 'hotels', 'experiences', 'cars'].map((tab) => (
+          {['experiences', 'flights', 'hotels', 'cars'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
