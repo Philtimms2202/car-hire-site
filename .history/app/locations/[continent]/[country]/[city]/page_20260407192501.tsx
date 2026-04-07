@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: any) {
     `Discover the best tours, attractions, and experiences in ${cityName}, ${countryName}.`
 
   return {
-    title: `Timms Travel | Explore ${cityName}`,
+    title: `Things to do in ${cityName}`,
     description: desc,
   }
 }

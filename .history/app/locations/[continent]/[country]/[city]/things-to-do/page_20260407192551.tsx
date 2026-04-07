@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: any) {
   const countryName = cityData?.country || country
 
   return {
-    title: `Top 12 Things to do in ${cityName}`,
+    title: `Things to do in ${cityName} | Timms Travel`,
     description: `Discover the best things to do in ${cityName}, ${countryName}. Search nightlife, food tours, adventures and more.`,
   }
 }

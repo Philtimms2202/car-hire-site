@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: any) {
   const continentName = cities?.continent || continent
 
   return {
-    title: `Timms Travel | ${continentName}`,
+    title: `Things to do in ${continentName}`,
     description: `Discover top attractions, tours, and activities across ${continentName}.`,
   }
 }

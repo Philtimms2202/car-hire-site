@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: any) {
   const countryName = cities[0]?.country || country
 
   return {
-    title: `Timms Travel | ${countryName}`,
+    title: `Things to do in ${countryName}`,
     description: `Discover the best experiences, attractions, and adventures across ${countryName}.`,
   }
 }
