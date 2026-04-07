@@ -132,7 +132,7 @@ export default async function ContinentPage({ params }: { params: Promise<{ cont
         <h2 className="text-3xl font-bold mb-4">Ready to Explore {continentName}?</h2>
         <p className="text-gray-300 mb-8">Find amazing experiences and get there your way.</p>
         <a href="/" className="btn-primary inline-block">
-          Get Started
+          Search Cars
         </a>
       </section>
 

@@ -184,7 +184,7 @@ export default async function CountryPage({
           Find amazing experiences and get there your way.
         </p>
         <a href="/" className="btn-primary inline-block">
-          Get Started
+          Search Cars
         </a>
       </section>
 

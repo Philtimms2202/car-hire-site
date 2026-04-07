@@ -154,7 +154,7 @@ export default async function CityPage({
       shadow-md hover:opacity-90 transition
     "
   >
-    View More Things To Do in {cityName}
+    View Things To Do in {cityName}
   </a>
 </div>
 

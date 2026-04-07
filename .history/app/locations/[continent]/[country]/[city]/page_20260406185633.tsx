@@ -144,20 +144,6 @@ export default async function CityPage({
         </div>
       </section>
 
-<div className="mt-10 text-center">
-  <a
-    href={`/locations/${continent}/${country}/${city}/things-to-do`}
-    className="
-      inline-flex items-center justify-center 
-      px-6 py-3 rounded-xl font-semibold 
-      bg-[#2f797c] text-white 
-      shadow-md hover:opacity-90 transition
-    "
-  >
-    View More Things To Do in {cityName}
-  </a>
-</div>
-
       {/* About + Main Content BELOW GYG */}
       <section className="py-16 px-6">
         <div className="max-w-100% mx-auto">

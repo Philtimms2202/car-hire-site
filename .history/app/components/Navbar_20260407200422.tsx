@@ -23,7 +23,7 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-6">
           <a
-            href="/locations/continents"
+            href="/locations/continent"
             style={{ color: '#232e4e' }}
             className="font-medium hover:opacity-75 transition"
           >

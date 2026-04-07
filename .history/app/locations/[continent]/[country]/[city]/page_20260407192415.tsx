@@ -144,9 +144,13 @@ export default async function CityPage({
         </div>
       </section>
 
-<div className="mt-10 text-center">
+      <div className="mt-10 text-center">
   <a
-    href={`/locations/${continent}/${country}/${city}/things-to-do`}
+    href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(
+      cityName
+    )}&partner_id=P7B7GRH&searchSource=7`}
+    target="_blank"
+    rel="noopener noreferrer"
     className="
       inline-flex items-center justify-center 
       px-6 py-3 rounded-xl font-semibold 
@@ -154,7 +158,7 @@ export default async function CityPage({
       shadow-md hover:opacity-90 transition
     "
   >
-    View More Things To Do in {cityName}
+    View Things To Do in {cityName}
   </a>
 </div>
 
