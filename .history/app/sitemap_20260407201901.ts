@@ -62,20 +62,6 @@ export default async function sitemap() {
     priority: 0.7,
   }))
 
-// ⭐ NEW: Things-to-do pages
-const thingsToDoPages = locations.map((location: any) => ({
-  url: `${BASE_URL}/locations/${location.continentSlug}/${location.countrySlug}/${location.citySlug}/things-to-do`,
-  lastModified: new Date(location._updatedAt),
-  changeFrequency: 'weekly',
-  priority: 0.7,
-}))
-
-return [
-  ...staticPages,
-  ...continentPages,
-  ...countryPages,
-  ...cityPages,
-  ...thingsToDoPages,
-]
-}
-
+  // ⭐ NEW: Things-to-do pages
+  const thingsToDoPages = locations.map((location: any) => ({
+    url: `${BASE_URL}/locations/${location.continentSlug}/${location.countrySlug}/${location.citySlug

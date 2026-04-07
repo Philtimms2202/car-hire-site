@@ -12,15 +12,13 @@ export default async function sitemap() {
     }`
   )
 
-  // Unique continents
+  // Get unique continents
   const continents = [...new Set(locations.map((l: any) => l.continentSlug))]
 
-  // Unique continent/country combos
-  const countries = [
-    ...new Map(
-      locations.map((l: any) => [`${l.continentSlug}/${l.countrySlug}`, l])
-    ).values(),
-  ]
+  // Get unique continent/country combos
+  const countries = [...new Map(locations.map((l: any) => 
+    [`${l.continentSlug}/${l.countrySlug}`, l]
+  )).values()]
 
   // Static pages
   const staticPages = [
@@ -38,7 +36,7 @@ export default async function sitemap() {
     },
   ]
 
-  // Continent pages
+  // Continent pages e.g. /locations/europe
   const continentPages = continents.map((continent: any) => ({
     url: `${BASE_URL}/locations/${continent}`,
     lastModified: new Date(),
@@ -46,7 +44,7 @@ export default async function sitemap() {
     priority: 0.8,
   }))
 
-  // Country pages
+  // Country pages e.g. /locations/europe/united-kingdom
   const countryPages = countries.map((location: any) => ({
     url: `${BASE_URL}/locations/${location.continentSlug}/${location.countrySlug}`,
     lastModified: new Date(),
@@ -54,7 +52,7 @@ export default async function sitemap() {
     priority: 0.75,
   }))
 
-  // City pages
+  // City pages e.g. /locations/europe/united-kingdom/london
   const cityPages = locations.map((location: any) => ({
     url: `${BASE_URL}/locations/${location.continentSlug}/${location.countrySlug}/${location.citySlug}`,
     lastModified: new Date(location._updatedAt),
@@ -62,20 +60,5 @@ export default async function sitemap() {
     priority: 0.7,
   }))
 
-// ⭐ NEW: Things-to-do pages
-const thingsToDoPages = locations.map((location: any) => ({
-  url: `${BASE_URL}/locations/${location.continentSlug}/${location.countrySlug}/${location.citySlug}/things-to-do`,
-  lastModified: new Date(location._updatedAt),
-  changeFrequency: 'weekly',
-  priority: 0.7,
-}))
-
-return [
-  ...staticPages,
-  ...continentPages,
-  ...countryPages,
-  ...cityPages,
-  ...thingsToDoPages,
-]
+  return [...staticPages, ...continentPages, ...countryPages, ...cityPages]
 }
-

@@ -69,13 +69,3 @@ const thingsToDoPages = locations.map((location: any) => ({
   changeFrequency: 'weekly',
   priority: 0.7,
 }))
-
-return [
-  ...staticPages,
-  ...continentPages,
-  ...countryPages,
-  ...cityPages,
-  ...thingsToDoPages,
-]
-}
-
