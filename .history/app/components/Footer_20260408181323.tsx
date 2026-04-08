@@ -15,7 +15,7 @@ export default function Footer() {
               <a href="/">
                 <img src="/timms-travel-logo.png" alt="Timms Travel Logo" className="h-12 w-auto mb-4" />
               </a>
-              <p className="text-black-400 text-sm leading-7">
+              <p className="text-white-400 text-sm leading-7">
                Discover thousands of experiences globally.
               </p>
             </div>

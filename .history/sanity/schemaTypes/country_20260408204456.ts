@@ -9,26 +9,26 @@ export default {
     // -------------------------------------------------
     {
       name: "name",
-      title: "Name",
       type: "string",
+      title: "Name",
       validation: Rule => Rule.required()
     },
     {
       name: "slug",
-      title: "Slug",
       type: "slug",
+      title: "Slug",
       options: { source: "name", maxLength: 96 }
     },
     {
       name: "iso2",
-      title: "ISO2 Code",
       type: "string",
+      title: "ISO2 Code",
       description: "Two‑letter country code (e.g., IT, FR, US)"
     },
     {
       name: "emoji",
-      title: "Flag Emoji (Manual)",
-      type: "string"
+      type: "string",
+      title: "Flag Emoji (Manual)"
     },
 
     // -------------------------------------------------
@@ -42,7 +42,7 @@ export default {
     },
 
     // -------------------------------------------------
-    // AUTO‑POPULATED (REST Countries API)
+    // AUTO‑POPULATED FROM REST COUNTRIES API
     // -------------------------------------------------
     {
       name: "capital",
@@ -72,7 +72,7 @@ export default {
     },
 
     // -------------------------------------------------
-    // AUTO‑POPULATED TRAVEL DETAILS
+    // AUTO‑POPULATED TRAVEL DETAILS (NEW)
     // -------------------------------------------------
     {
       name: "plugType",

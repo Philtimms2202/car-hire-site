@@ -14,27 +14,56 @@ export async function generateMetadata({ params }: any) {
   const { continent, country, city } = await params
 
   const data = await client.fetch(
-    `*[
-      _type == "city" &&
-      slug.current == $city &&
-      country->slug.current == $country &&
-      country->continent->slug.current == $continent
-    ][0]{
-      name,
-      heroDescription,
-      metaDescription,
-      country->{ name }
+    `{
+      "city": *[
+        _type == "city" &&
+        slug.current == $city &&
+        country->slug.current == $country &&
+        country->continent->slug.current == $continent
+      ][0]{
+        name,
+        heroDescription,
+        metaDescription,
+        country->{ name }
+      },
+      "location": *[
+        _type == "location" &&
+        continentSlug.current == $continent &&
+        countrySlug.current == $country &&
+        slug.current == $city
+      ][0]{
+        city,
+        country,
+        metaDescription,
+        heroDescription
+      }
     }`,
     { continent, country, city }
   )
 
-  const cityName = data?.name || city
-  const countryName = data?.country?.name || country
+  const cityDoc = data.city
+  const locationDoc = data.location
 
-  const desc =
-    data?.metaDescription ||
-    data?.heroDescription ||
+  const pick = <T,>(...values: (T | null | undefined)[]): T | undefined =>
+    values.find(v => v !== undefined && v !== null)
+
+  const cityName =
+    cityDoc?.name ||
+    locationDoc?.city ||
+    city
+
+  const countryName =
+    cityDoc?.country?.name ||
+    locationDoc?.country ||
+    country
+
+  const desc = pick(
+    cityDoc?.metaDescription,
+    locationDoc?.metaDescription,
+    cityDoc?.heroDescription,
+    locationDoc?.heroDescription,
     `Discover the best tours, attractions, and experiences in ${cityName}, ${countryName}.`
+  )
 
   return {
     title: `Timms Travel | Explore ${cityName}`,
@@ -43,29 +72,49 @@ export async function generateMetadata({ params }: any) {
 }
 
 // -----------------------------
-// City Fetch (no Location fallback)
+// Unified City Fetch
 // -----------------------------
 async function getCity(continentSlug: string, countrySlug: string, citySlug: string) {
   try {
     return await client.fetch(
-      `*[
-        _type == "city" &&
-        slug.current == $citySlug &&
-        country->slug.current == $countrySlug &&
-        country->continent->slug.current == $continentSlug
-      ][0]{
-        name,
-        "slug": slug.current,
-        emoji,
-        airport,
-        heroDescription,
-        mainContent,
-        metaDescription,
-        country->{
+      `{
+        "city": *[
+          _type == "city" &&
+          slug.current == $citySlug &&
+          country->slug.current == $countrySlug &&
+          country->continent->slug.current == $continentSlug
+        ][0]{
           name,
           "slug": slug.current,
           emoji,
-          continent->{ name, "slug": slug.current, emoji }
+          airport,
+          heroDescription,
+          mainContent,
+          metaDescription,
+          country->{
+            name,
+            "slug": slug.current,
+            emoji,
+            continent->{ name, "slug": slug.current, emoji }
+          }
+        },
+
+        "location": *[
+          _type == "location" &&
+          continentSlug.current == $continentSlug &&
+          countrySlug.current == $countrySlug &&
+          slug.current == $citySlug
+        ][0]{
+          city,
+          country,
+          emoji,
+          countryEmoji,
+          heroDescription,
+          mainContent,
+          metaDescription,
+          "citySlug": slug.current,
+          "countrySlug": countrySlug.current,
+          "continentSlug": continentSlug.current
         }
       }`,
       { continentSlug, countrySlug, citySlug }
@@ -84,9 +133,9 @@ export default async function CityPage({
   params: Promise<{ continent: string; country: string; city: string }>
 }) {
   const { continent, country, city } = await params
-  const cityDoc = await getCity(continent, country, city)
+  const data = await getCity(continent, country, city)
 
-  if (!cityDoc) {
+  if (!data) {
     return (
       <main className="min-h-screen bg-white">
         <Navbar />
@@ -107,18 +156,28 @@ export default async function CityPage({
     )
   }
 
+  const cityDoc = data.city
+  const locationDoc = data.location
+
+  const pick = <T,>(...values: (T | null | undefined)[]): T | undefined =>
+    values.find(v => v !== undefined && v !== null)
+
   const cityName =
-    cityDoc.name ||
+    cityDoc?.name ||
+    locationDoc?.city ||
     city
       .split('-')
       .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(' ')
 
-  const countryName = cityDoc.country?.name || country
+  const countryName =
+    cityDoc?.country?.name ||
+    locationDoc?.country ||
+    country
 
-  const emoji = cityDoc.emoji
-  const heroDescription = cityDoc.heroDescription
-  const mainContent = cityDoc.mainContent
+  const emoji = pick(cityDoc?.emoji, locationDoc?.emoji)
+  const heroDescription = pick(cityDoc?.heroDescription, locationDoc?.heroDescription)
+  const mainContent = pick(cityDoc?.mainContent, locationDoc?.mainContent)
 
   return (
     <main className="min-h-screen bg-white">
