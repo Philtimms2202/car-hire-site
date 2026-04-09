@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
 type Airport = {
   name: string
@@ -21,8 +21,6 @@ export default function FlightSearch() {
   const [infants, setInfants] = useState(0)
   const [cabin, setCabin] = useState('economy')
 
-  const [travellerOpen, setTravellerOpen] = useState(false)
-
   const [fromResults, setFromResults] = useState<Airport[]>([])
   const [toResults, setToResults] = useState<Airport[]>([])
   const [selectedFrom, setSelectedFrom] = useState<Airport | null>(null)
@@ -31,18 +29,6 @@ export default function FlightSearch() {
   const [loading, setLoading] = useState(false)
 
   const today = new Date().toISOString().split('T')[0]
-
-  const travellerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (travellerRef.current && !travellerRef.current.contains(e.target as Node)) {
-        setTravellerOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
 
   const debounce = (fn: (...args: any[]) => void, delay = 300) => {
     let timer: any
@@ -90,18 +76,22 @@ export default function FlightSearch() {
 
     if (!originSlug || !destinationSlug) return ''
 
-    let path = `https://www.kiwi.com/en/search/results/${originSlug}/${destinationSlug}/${depart}`
-
-    if (roundTrip && returnDate) {
-      path += `/${returnDate}`
-    }
-
-    const url = new URL(path)
+    const url = new URL('https://www.kiwi.com/en/')
 
     url.searchParams.set(
       'affilid',
       'travelpayoutsdeeplink_timmstravel.com_6bc7301798224d1cad7e3f320-714930'
     )
+
+    url.searchParams.set('origin', originSlug)
+    url.searchParams.set('destination', destinationSlug)
+    url.searchParams.set('outboundDate', depart)
+
+    if (roundTrip && returnDate) {
+      url.searchParams.set('inboundDate', returnDate)
+    } else {
+      url.searchParams.set('inboundDate', 'no-return')
+    }
 
     url.searchParams.set('adults', adults.toString())
     url.searchParams.set('children', children.toString())
@@ -247,115 +237,59 @@ export default function FlightSearch() {
         )}
       </div>
 
-      {/* TRAVELLERS + CABIN */}
-      <div className="relative" ref={travellerRef}>
-        <label className="block text-gray-600 text-sm mb-1">Travellers & cabin</label>
+      {/* PASSENGERS + CABIN */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-        <button
-          className="input-field bg-white text-gray-900 w-full text-left"
-          onClick={() => setTravellerOpen(!travellerOpen)}
-        >
-          {adults} Adult{adults > 1 ? 's' : ''}{children > 0 ? `, ${children} Child` : ''}{infants > 0 ? `, ${infants} Infant` : ''} · {cabin.replace('_', ' ')}
-        </button>
+        <div>
+          <label className="block text-gray-600 text-sm mb-1">Adults</label>
+          <input
+            type="number"
+            min={1}
+            max={9}
+            className="input-field bg-white text-gray-900"
+            value={adults}
+            onChange={(e) => setAdults(Number(e.target.value))}
+          />
+        </div>
 
-        {travellerOpen && (
-          <div className="absolute left-0 right-0 z-40 bg-white border border-gray-200 rounded-xl shadow-xl mt-2 p-4 space-y-4">
+        <div>
+          <label className="block text-gray-600 text-sm mb-1">Children</label>
+          <input
+            type="number"
+            min={0}
+            max={9}
+            className="input-field bg-white text-gray-900"
+            value={children}
+            onChange={(e) => setChildren(Number(e.target.value))}
+          />
+        </div>
 
-            {/* Cabin class */}
-            <div>
-              <div className="font-semibold text-gray-800 mb-2">Cabin class</div>
-              <select
-                className="input-field bg-white text-gray-900 w-full"
-                value={cabin}
-                onChange={(e) => setCabin(e.target.value)}
-              >
-                <option value="economy">Economy</option>
-                <option value="premium">Premium Economy</option>
-                <option value="business">Business</option>
-                <option value="first">First</option>
-              </select>
-            </div>
+        <div>
+          <label className="block text-gray-600 text-sm mb-1">Infants</label>
+          <input
+            type="number"
+            min={0}
+            max={9}
+            className="input-field bg-white text-gray-900"
+            value={infants}
+            onChange={(e) => setInfants(Number(e.target.value))}
+          />
+        </div>
 
-            {/* Adults */}
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="font-semibold text-gray-800">Adults</div>
-                <div className="text-gray-500 text-sm">Aged 18+</div>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  className="px-3 py-1 bg-gray-200 rounded"
-                  disabled={adults <= 1}
-                  onClick={() => setAdults(adults - 1)}
-                >
-                  -
-                </button>
-                <span className="w-6 text-center">{adults}</span>
-                <button
-                  className="px-3 py-1 bg-gray-200 rounded"
-                  onClick={() => setAdults(adults + 1)}
-                >
-                  +
-                </button>
-              </div>
-            </div>
+        <div className="md:col-span-3">
+          <label className="block text-gray-600 text-sm mb-1">Cabin class</label>
+          <select
+            className="input-field bg-white text-gray-900"
+            value={cabin}
+            onChange={(e) => setCabin(e.target.value)}
+          >
+            <option value="economy">Economy</option>
+            <option value="premium_economy">Premium Economy</option>
+            <option value="business">Business</option>
+            <option value="first">First</option>
+          </select>
+        </div>
 
-            {/* Children */}
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="font-semibold text-gray-800">Children</div>
-                <div className="text-gray-500 text-sm">Aged 0–17</div>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  className="px-3 py-1 bg-gray-200 rounded"
-                  disabled={children <= 0}
-                  onClick={() => setChildren(children - 1)}
-                >
-                  -
-                </button>
-                <span className="w-6 text-center">{children}</span>
-                <button
-                  className="px-3 py-1 bg-gray-200 rounded"
-                  onClick={() => setChildren(children + 1)}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            {/* Infants */}
-            <div className="flex justify-between items-center">
-              <div>
-                <div className="font-semibold text-gray-800">Infants</div>
-                <div className="text-gray-500 text-sm">Under 2</div>
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  className="px-3 py-1 bg-gray-200 rounded"
-                  disabled={infants <= 0}
-                  onClick={() => setInfants(infants - 1)}
-                >
-                  -
-                </button>
-                <span className="w-6 text-center">{infants}</span>
-                <button
-                  className="px-3 py-1 bg-gray-200 rounded"
-                  onClick={() => setInfants(infants + 1)}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            <button
-              className="btn-primary w-full mt-2"
-              onClick={() => setTravellerOpen(false)}
-            >
-              Apply
-            </button>
-          </div>
-        )}
       </div>
 
       <button
