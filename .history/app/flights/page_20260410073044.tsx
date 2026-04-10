@@ -1,5 +1,16 @@
 'use client'
 
+export const metadata = {
+  title: {
+    default: "Timms Travel | Flights",
+    template: "Tiimms Travel |",
+  },
+  description: "Discover amazing experiences around the world.",
+  icons: {
+    icon: "/favicon.ico",
+  },
+}
+
 import { useState, useEffect, useMemo } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'

@@ -9,6 +9,16 @@ import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import airports from '@/data/airports.json'
 
+export const metadata = {
+  title: {
+    default: "Tiimms Travel | Find Flights Online",
+    template: "Tiimms Travel |",
+  },
+  description: "Choose from hundreds of destinations.",
+  icons: {
+    icon: "/favicon.ico",
+  },
+}
 
 // -----------------------------
 // TYPES

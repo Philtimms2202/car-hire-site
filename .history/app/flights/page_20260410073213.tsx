@@ -1,5 +1,16 @@
 'use client'
 
+export const metadata = {
+  title: {
+    default: "Timms Travel | Flights",
+    template: "Timms Travel | %s",
+  },
+  description: "Find cheap flights with Timms Travel. Compare airlines instantly — real prices, no hidden fees.",
+  icons: {
+    icon: "/favicon.ico",
+  },
+}
+
 import { useState, useEffect, useMemo } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -8,6 +19,8 @@ import HotelSearch from '@/app/components/Search/HotelSearch'
 import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import airports from '@/data/airports.json'
+
+// ...rest of your code
 
 
 // -----------------------------

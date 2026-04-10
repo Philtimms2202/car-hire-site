@@ -1,4 +1,14 @@
-'use client'
+
+export const metadata = {
+  title: {
+    default: "Timms Travel | Flights",
+    template: "Timms Travel | %s",
+  },
+  description: "Find cheap flights with Timms Travel. Compare airlines instantly — real prices, no hidden fees.",
+  icons: {
+    icon: "/favicon.ico",
+  },
+}
 
 import { useState, useEffect, useMemo } from 'react'
 import Navbar from '../components/Navbar'
