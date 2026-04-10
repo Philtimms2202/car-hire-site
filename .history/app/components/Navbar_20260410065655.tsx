@@ -21,7 +21,7 @@ export default function Navbar() {
         </a>
 
         {/* Desktop Menu */}
-          <div className="hidden md:flex gap-6">
+        <div className="hidden md:flex gap-6">
           <a
             href="/locations/continents"
             style={{ color: '#232e4e' }}
@@ -29,6 +29,7 @@ export default function Navbar() {
           >
             Locations
           </a>
+          <div className="hidden md:flex gap-6">
           <a
             href="/flights"
             style={{ color: '#232e4e' }}

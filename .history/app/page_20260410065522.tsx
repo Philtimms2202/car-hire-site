@@ -55,7 +55,7 @@ export default function Home() {
           Create Unforgettable Moments
         </h1>
         <p className="text-xl mb-10 text-gray-300">
-          Choose from hundreds of destinations around the world!
+          Thousands of experiences for you to enjoy - instant results at the best price!
         </p>
 
         {/* TAB MENU */}

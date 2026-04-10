@@ -58,14 +58,14 @@ export default function About() {
               <p className="text-gray-500">No waiting around. Our search pulls up live availability and pricing in real time so you can book with confidence.</p>
             </div>
             <div className="card text-center">
-              <div className="text-5xl mb-4">💰</div>
-              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>No Added Fees</h3>
-              <p className="text-gray-500">We don't charge any fees for using our service. What we do is provided to you completely free of charge.</p>
+              <div className="text-5xl mb-4">🛡️</div>
+              <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Free Cancellation</h3>
+              <p className="text-gray-500">Plans change and we get it. Most of our deals come with free cancellation so you can book now and adjust later.</p>
             </div>
             <div className="card text-center">
               <div className="text-5xl mb-4">⭐</div>
               <h3 className="font-bold text-xl mb-2" style={{color: '#232e4e'}}>Trusted Suppliers Only</h3>
-              <p className="text-gray-500">Timms Travel only operates with a select number of our most trusted suppliers. You book directly with the supplier, giving you confidence.</p>
+              <p className="text-gray-500">We only work with reputable, well-reviewed car hire companies so you can travel with complete peace of mind.</p>
             </div>
           </div>
         </div>

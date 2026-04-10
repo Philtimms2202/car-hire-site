@@ -30,7 +30,7 @@ export default function Navbar() {
             Locations
           </a>
           <a
-            href="/flights"
+            href="/locations/continents"
             style={{ color: '#232e4e' }}
             className="font-medium hover:opacity-75 transition"
           >
