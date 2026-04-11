@@ -247,7 +247,7 @@ export default function FlightsPageClient() {
         </h1>
 
         <p className="text-xl mb-10 text-gray-300 max-w-2xl mx-auto">
-          Compare hundreds of airlines instantly - real prices, no hidden fees.
+          Compare hundreds of airlines instantly — real prices, no hidden fees.
         </p>
 
         {/* TAB MENU */}
