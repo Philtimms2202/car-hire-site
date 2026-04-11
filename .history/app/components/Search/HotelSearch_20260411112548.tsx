@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useLocale } from '@/app/context/localecontext'
+import { useLocale } from '@/context/localeContext'
 
 type City = {
   id: string

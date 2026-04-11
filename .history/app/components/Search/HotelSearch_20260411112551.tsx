@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useLocale } from '@/app/context/localecontext'
+import { useLocale } from '@/context/localeContext'
 
 type CityOption = {
   id: string

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useLocale } from "@/app/context/LocaleContext"
+import { useLocale } from "@/context/localeContext"
 
 export default function ExperienceSearch({ defaultLocation }: { defaultLocation: string }) {
   const [location, setLocation] = useState(defaultLocation)

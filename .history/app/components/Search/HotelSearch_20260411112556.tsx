@@ -1,6 +1,6 @@
 'use client'
 
-import { useLocale } from '@/app/context/localeContext'
+import { useLocale } from '@/context/localeContext'
 
 const TRIP_LOCALE_MAP: Record<string, string> = {
   en: 'en_gb',

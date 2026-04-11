@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useLocale } from '@/app/context/localeContext'
+import { useLocale } from '@/context/localeContext'
 import { LANGUAGES, CURRENCIES } from '@/data/locale-options'
 
 const GlobeIcon = () => (
