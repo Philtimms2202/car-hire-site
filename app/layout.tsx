@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
-import { LocaleProvider } from "@/app/context/LocaleContext"; // ← ADDED
+import { LocaleProvider } from "@/app/context/localeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,8 +27,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* Google Tag Manager */}
-        <script
+        {/* ⭐ Google Tag Manager (Next.js Safe Version) */}
+        <Script
+          id="gtm-script"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -39,9 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
-        {/* End Google Tag Manager */}
 
-        {/* GetYourGuide Analytics */}
+        {/* ⭐ GetYourGuide Analytics */}
         <Script
           src="https://widget.getyourguide.com/dist/pa.umd.production.min.js"
           data-gyg-partner-id="P7B7GRH"
@@ -50,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defer
         />
 
-        {/* GetYourGuide Widget Engine */}
+        {/* ⭐ GetYourGuide Widget Engine */}
         <Script
           src="https://widget.getyourguide.com/dist/gyg-widget.js"
           strategy="afterInteractive"
@@ -59,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className="min-h-full flex flex-col">
-        {/* Google Tag Manager (noscript) */}
+        {/* ⭐ Google Tag Manager (noscript) — MUST be directly inside <body> */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-K4RWSHXR"
@@ -68,13 +69,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-        {/* End Google Tag Manager (noscript) */}
 
-        {/* 🌍 Wrap entire site in LocaleProvider */}
+        {/* ⭐ Locale Provider wrapping entire app */}
         <LocaleProvider>
           {children}
         </LocaleProvider>
-
       </body>
     </html>
   );

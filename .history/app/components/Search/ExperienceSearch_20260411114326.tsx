@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useLocale } from "@/app/context/localeContext"
+import { useLocale } from "@/app/context/LocaleContext"
 
 export default function ExperienceSearch({ defaultLocation }: { defaultLocation: string }) {
   const [location, setLocation] = useState(defaultLocation)
@@ -13,9 +13,8 @@ export default function ExperienceSearch({ defaultLocation }: { defaultLocation:
     if (!location) return
 
     const url = `https://www.getyourguide.com/s/?q=${encodeURIComponent(
-  location
-)}&partner_id=P7B7GRH&locale=${language}&currency=${currency}&forceLocale=1&et=1&_v=${Date.now()}`
-
+      location
+    )}&partner_id=P7B7GRH&locale=${language}&currency=${currency}&forceLocale=1&_v=${Date.now()}`
 
     window.open(url, "_blank")
   }

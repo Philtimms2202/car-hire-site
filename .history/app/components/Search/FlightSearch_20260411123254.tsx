@@ -79,58 +79,73 @@ export default function FlightSearch() {
 
 // Fetch Kiwi slug — always use English to avoid Spanish/Tenerife bug
 const fetchKiwiSlug = async (iata: string) => {
-  const url = `https://api.skypicker.com/locations?term=${encodeURIComponent(
-    iata
-  )}&locale=en&location_types=airport&limit=1&_=${Date.now()}`
+  try {
+    const url = `https://api.skypicker.com/locations?term=${encodeURIComponent(
+      iata
+    )}&locale=en&location_types=airport&limit=1`
 
-  const res = await fetch(url, { cache: "no-store" })
-  const data = await res.json()
+    const res = await fetch(url)
+    const data = await res.json()
 
-  return data?.locations?.[0]?.slug || null
-}
+    console.log("KIWI SLUG LOOKUP:", {
+      iata,
+      url,
+      returned: data?.locations?.[0]
+    })
 
-// Build Kiwi URL — stable routing + correct currency
-const buildKiwiUrl = async () => {
-  const selectedFrom = selectedFromRef.current
-  const selectedTo = selectedToRef.current
+    console.log("FETCH URL:", url)
 
-  if (!selectedFrom || !selectedTo || !depart) return ''
+    if (!data?.locations || data.locations.length === 0) {
+      return null
+    }
 
-  // Always fetch slugs in English — Kiwi only stable in EN
-  const [originSlug, destinationSlug] = await Promise.all([
-    fetchKiwiSlug(selectedFrom.iata_code),
-    fetchKiwiSlug(selectedTo.iata_code),
-  ])
-
-  if (!originSlug || !destinationSlug) return ''
-
-  // Always use EN in the path to avoid slug reinterpretation
-  let path = `https://www.kiwi.com/en/search/results/${originSlug}/${destinationSlug}/${depart}`
-
-  if (roundTrip && returnDate) {
-    path += `/${returnDate}`
+    return data.locations[0].slug || null
+  } catch (err) {
+    console.error("KIWI SLUG ERROR:", err)
+    return null
   }
-
-  const url = new URL(path)
-
-  // Affiliate ID
-  url.searchParams.set(
-    'affilid',
-    'travelpayoutsdeeplink_timmstravel.com_6bc7301798224d1cad7e3f320-714930'
-  )
-
-  // Travellers
-  url.searchParams.set('adults', adults.toString())
-  url.searchParams.set('children', children.toString())
-  url.searchParams.set('infants', infants.toString())
-  url.searchParams.set('cabinClass', cabin)
-
-  // Correct currency — SAFE version
-  url.searchParams.set('currency', currency)
-
-  return url.toString()
 }
 
+
+
+  // Build Kiwi URL
+  const buildKiwiUrl = async () => {
+    const selectedFrom = selectedFromRef.current
+    const selectedTo = selectedToRef.current
+
+    if (!selectedFrom || !selectedTo || !depart) return ''
+
+    const [originSlug, destinationSlug] = await Promise.all([
+      fetchKiwiSlug(selectedFrom.iata_code),
+      fetchKiwiSlug(selectedTo.iata_code),
+    ])
+
+    if (!originSlug || !destinationSlug) return ''
+
+    let path = `https://www.kiwi.com/${language}/search/results/${originSlug}/${destinationSlug}/${depart}`
+
+    if (roundTrip && returnDate) {
+      path += `/${returnDate}`
+    }
+
+    const url = new URL(path)
+
+    url.searchParams.set(
+      'affilid',
+      'travelpayoutsdeeplink_timmstravel.com_6bc7301798224d1cad7e3f320-714930'
+    )
+
+    url.searchParams.set('adults', adults.toString())
+    url.searchParams.set('children', children.toString())
+    url.searchParams.set('infants', infants.toString())
+    url.searchParams.set('cabinClass', cabin)
+
+    url.searchParams.set('locale', language)
+    url.searchParams.set('curr', currency)
+    url.searchParams.set('reset_currency', '1')
+
+    return url.toString()
+  }
 
   const handleSearch = async () => {
     if (!selectedFromRef.current || !selectedToRef.current || !depart) {

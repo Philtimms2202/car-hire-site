@@ -1,6 +1,6 @@
 // ============================================
 // TERMS AND CONDITIONS - app/terms-and-conditions/page.tsx
-// URL: hirecarhub.com/terms-and-conditions
+// URL: timmstravel.com/terms-and-conditions
 // ============================================
 
 import Navbar from '../components/Navbar'

@@ -89,7 +89,7 @@ const fetchKiwiSlug = async (iata: string) => {
   return data?.locations?.[0]?.slug || null
 }
 
-// Build Kiwi URL — stable routing + correct currency
+ // Build Kiwi URL — stable, locale‑safe, slug‑safe
 const buildKiwiUrl = async () => {
   const selectedFrom = selectedFromRef.current
   const selectedTo = selectedToRef.current
@@ -104,7 +104,9 @@ const buildKiwiUrl = async () => {
 
   if (!originSlug || !destinationSlug) return ''
 
-  // Always use EN in the path to avoid slug reinterpretation
+  // IMPORTANT:
+  // Do NOT include UI language in the URL path.
+  // Kiwi rewrites slugs when locale != en.
   let path = `https://www.kiwi.com/en/search/results/${originSlug}/${destinationSlug}/${depart}`
 
   if (roundTrip && returnDate) {
@@ -125,12 +127,14 @@ const buildKiwiUrl = async () => {
   url.searchParams.set('infants', infants.toString())
   url.searchParams.set('cabinClass', cabin)
 
-  // Correct currency — SAFE version
-  url.searchParams.set('currency', currency)
+  // CRITICAL:
+  // Do NOT send locale or currency — Kiwi will override slugs.
+  // url.searchParams.set('locale', language)
+  // url.searchParams.set('curr', currency)
+  // url.searchParams.set('reset_currency', '1')
 
   return url.toString()
 }
-
 
   const handleSearch = async () => {
     if (!selectedFromRef.current || !selectedToRef.current || !depart) {

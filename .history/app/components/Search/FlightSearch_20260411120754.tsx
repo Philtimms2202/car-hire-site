@@ -13,33 +13,46 @@ type Airport = {
 export default function FlightSearch() {
   const { language, currency } = useLocale()
 
-  // Inputs (text)
+  // -----------------------------
+  // INPUT FIELDS
+  // -----------------------------
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [depart, setDepart] = useState('')
   const [returnDate, setReturnDate] = useState('')
   const [roundTrip, setRoundTrip] = useState(true)
 
-  // Traveller state
+  // -----------------------------
+  // TRAVELLERS
+  // -----------------------------
   const [adults, setAdults] = useState(1)
   const [children, setChildren] = useState(0)
   const [infants, setInfants] = useState(0)
   const [cabin, setCabin] = useState('economy')
   const [travellerOpen, setTravellerOpen] = useState(false)
 
-  // Airport results
+  // -----------------------------
+  // AIRPORT SEARCH RESULTS
+  // -----------------------------
   const [fromResults, setFromResults] = useState<Airport[]>([])
   const [toResults, setToResults] = useState<Airport[]>([])
 
-  // ⭐ Selected airports stored in refs so they NEVER reset on locale change
+  // -----------------------------
+  // SELECTED AIRPORTS (REFS)
+  // -----------------------------
   const selectedFromRef = useRef<Airport | null>(null)
   const selectedToRef = useRef<Airport | null>(null)
 
+  // -----------------------------
+  // UI + MISC
+  // -----------------------------
   const [loading, setLoading] = useState(false)
   const today = new Date().toISOString().split('T')[0]
   const travellerRef = useRef<HTMLDivElement>(null)
 
-  // Close traveller dropdown on outside click
+  // -----------------------------
+  // CLOSE TRAVELLER DROPDOWN
+  // -----------------------------
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (travellerRef.current && !travellerRef.current.contains(e.target as Node)) {
@@ -49,6 +62,17 @@ export default function FlightSearch() {
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [])
+
+  // -----------------------------
+  // ⬇️ YOUR RETURN GOES HERE
+  // -----------------------------
+  return (
+    <div>
+      {/* your JSX */}
+    </div>
+  )
+}
+
 
   // Debounce helper
   const debounce = (fn: (...args: any[]) => void, delay = 300) => {
@@ -77,60 +101,56 @@ export default function FlightSearch() {
   useEffect(() => debouncedFromSearch(from), [from])
   useEffect(() => debouncedToSearch(to), [to])
 
-// Fetch Kiwi slug — always use English to avoid Spanish/Tenerife bug
-const fetchKiwiSlug = async (iata: string) => {
-  const url = `https://api.skypicker.com/locations?term=${encodeURIComponent(
-    iata
-  )}&locale=en&location_types=airport&limit=1&_=${Date.now()}`
-
-  const res = await fetch(url, { cache: "no-store" })
-  const data = await res.json()
-
-  return data?.locations?.[0]?.slug || null
-}
-
-// Build Kiwi URL — stable routing + correct currency
-const buildKiwiUrl = async () => {
-  const selectedFrom = selectedFromRef.current
-  const selectedTo = selectedToRef.current
-
-  if (!selectedFrom || !selectedTo || !depart) return ''
-
-  // Always fetch slugs in English — Kiwi only stable in EN
-  const [originSlug, destinationSlug] = await Promise.all([
-    fetchKiwiSlug(selectedFrom.iata_code),
-    fetchKiwiSlug(selectedTo.iata_code),
-  ])
-
-  if (!originSlug || !destinationSlug) return ''
-
-  // Always use EN in the path to avoid slug reinterpretation
-  let path = `https://www.kiwi.com/en/search/results/${originSlug}/${destinationSlug}/${depart}`
-
-  if (roundTrip && returnDate) {
-    path += `/${returnDate}`
+  // ⭐ Fetch Kiwi slug — ALWAYS use English to avoid Tenerife bug
+  const fetchKiwiSlug = async (iata: string) => {
+    const res = await fetch(
+      `https://api.skypicker.com/locations?term=${encodeURIComponent(
+        iata
+      )}&locale=en&location_types=airport&limit=1`
+    )
+    const data = await res.json()
+    if (!data.locations?.length) return null
+    return data.locations[0].slug as string
   }
 
-  const url = new URL(path)
+  // Build Kiwi URL
+  const buildKiwiUrl = async () => {
+    const selectedFrom = selectedFromRef.current
+    const selectedTo = selectedToRef.current
 
-  // Affiliate ID
-  url.searchParams.set(
-    'affilid',
-    'travelpayoutsdeeplink_timmstravel.com_6bc7301798224d1cad7e3f320-714930'
-  )
+    if (!selectedFrom || !selectedTo || !depart) return ''
 
-  // Travellers
-  url.searchParams.set('adults', adults.toString())
-  url.searchParams.set('children', children.toString())
-  url.searchParams.set('infants', infants.toString())
-  url.searchParams.set('cabinClass', cabin)
+    const [originSlug, destinationSlug] = await Promise.all([
+      fetchKiwiSlug(selectedFrom.iata_code),
+      fetchKiwiSlug(selectedTo.iata_code),
+    ])
 
-  // Correct currency — SAFE version
-  url.searchParams.set('currency', currency)
+    if (!originSlug || !destinationSlug) return ''
 
-  return url.toString()
-}
+    let path = `https://www.kiwi.com/${language}/search/results/${originSlug}/${destinationSlug}/${depart}`
 
+    if (roundTrip && returnDate) {
+      path += `/${returnDate}`
+    }
+
+    const url = new URL(path)
+
+    url.searchParams.set(
+      'affilid',
+      'travelpayoutsdeeplink_timmstravel.com_6bc7301798224d1cad7e3f320-714930'
+    )
+
+    url.searchParams.set('adults', adults.toString())
+    url.searchParams.set('children', children.toString())
+    url.searchParams.set('infants', infants.toString())
+    url.searchParams.set('cabinClass', cabin)
+
+    url.searchParams.set('locale', language)
+    url.searchParams.set('curr', currency)
+    url.searchParams.set('reset_currency', '1')
+
+    return url.toString()
+  }
 
   const handleSearch = async () => {
     if (!selectedFromRef.current || !selectedToRef.current || !depart) {
@@ -168,7 +188,6 @@ const renderDropdown = (
           onClick={() => {
             // ⭐ Debug log — this tells us EXACTLY what airport object is being selected
             console.log("SELECTED AIRPORT OBJECT:", a)
-             console.log("SELECTED AIRPORT:", a)
 
             // Update input text
             inputSetter(`${a.city} (${a.iata_code})`)

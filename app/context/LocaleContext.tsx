@@ -1,22 +1,36 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 type LocaleContextType = {
-  locale: string
-  setLocale: (value: string) => void
+  language: string
   currency: string
-  setCurrency: (value: string) => void
+  setLanguage: (lang: string) => void
+  setCurrency: (cur: string) => void
 }
 
 const LocaleContext = createContext<LocaleContextType | null>(null)
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState("en_gb")     // Trip.com language + currency
-  const [currency, setCurrency] = useState("gbp")   // Aviasales currency
+  const [language, setLanguage] = useState('en')
+  const [currency, setCurrency] = useState('GBP')
+
+  // Load saved prefs
+  useEffect(() => {
+    const savedLang = localStorage.getItem('language')
+    const savedCur = localStorage.getItem('currency')
+    if (savedLang) setLanguage(savedLang)
+    if (savedCur) setCurrency(savedCur)
+  }, [])
+
+  // Save prefs
+  useEffect(() => {
+    localStorage.setItem('language', language)
+    localStorage.setItem('currency', currency)
+  }, [language, currency])
 
   return (
-    <LocaleContext.Provider value={{ locale, setLocale, currency, setCurrency }}>
+    <LocaleContext.Provider value={{ language, currency, setLanguage, setCurrency }}>
       {children}
     </LocaleContext.Provider>
   )
@@ -24,6 +38,6 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
 export function useLocale() {
   const ctx = useContext(LocaleContext)
-  if (!ctx) throw new Error("useLocale must be used inside LocaleProvider")
+  if (!ctx) throw new Error('useLocale must be used inside LocaleProvider')
   return ctx
 }
