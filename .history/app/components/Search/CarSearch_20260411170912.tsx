@@ -238,37 +238,31 @@ export default function CarSearch() {
     [`${prefix}timezone`]: airport.timezone,
   })
 
-const handleSearch = () => {
-  if (!pickupAirport) {
-    // No airport selected from list — fall back to generic Trip.com page
-    const url = `https://www.trip.com/carhire/?${AFFILIATE}`
+  const handleSearch = () => {
+    if (!pickupAirport) { setShowError(true); return }
+    if (diffDropoff && !dropAirport) { setShowError(true); return }
+    setShowError(false)
+
+    const returnAirport = diffDropoff && dropAirport ? dropAirport : pickupAirport
+
+    const params = new URLSearchParams({
+      ...Object.fromEntries(
+        Object.entries(buildLocationParams(pickupAirport, 'p')).map(([k, v]) => [k, String(v)])
+      ),
+      ...Object.fromEntries(
+        Object.entries(buildLocationParams(returnAirport, 'r')).map(([k, v]) => [k, String(v)])
+      ),
+      ptime: fmtTrip(pickupDate, pickupTime),
+      rtime: fmtTrip(dropoffDate, dropoffTime),
+      scountry: String(pickupAirport.scountry),
+      age: driverAge,
+      channelid: CHANNEL,
+      locale: language === 'en' ? 'en-XX' : language,
+    })
+
+    const url = `https://www.trip.com/carhire/online/list?${params.toString()}&${AFFILIATE}`
     window.open(url, '_blank')
-    return
   }
-
-  if (diffDropoff && !dropAirport) { setShowError(true); return }
-  setShowError(false)
-
-  const returnAirport = diffDropoff && dropAirport ? dropAirport : pickupAirport
-
-  const params = new URLSearchParams({
-    ...Object.fromEntries(
-      Object.entries(buildLocationParams(pickupAirport, 'p')).map(([k, v]) => [k, String(v)])
-    ),
-    ...Object.fromEntries(
-      Object.entries(buildLocationParams(returnAirport, 'r')).map(([k, v]) => [k, String(v)])
-    ),
-    ptime: fmtTrip(pickupDate, pickupTime),
-    rtime: fmtTrip(dropoffDate, dropoffTime),
-    scountry: String(pickupAirport.scountry),
-    age: driverAge,
-    channelid: CHANNEL,
-    locale: language === 'en' ? 'en-XX' : language,
-  })
-
-  const url = `https://www.trip.com/carhire/online/list?${params.toString()}&${AFFILIATE}`
-  window.open(url, '_blank')
-}
 
   return (
     <div className="w-full bg-white rounded-xl border border-gray-200 p-6 shadow-sm">

@@ -125,70 +125,61 @@ export default function HotelSearch() {
     setRooms(updated)
   }
 
-// FINAL EXPEDIA UK DEEP LINK BUILDER
-const handleSearch = () => {
-  if (!selectedCity) return
+  // FINAL EXPEDIA UK DEEP LINK BUILDER
+  const handleSearch = () => {
+    if (!selectedCity) return
 
-  const params = new URLSearchParams({
-    destination: `${selectedCity.name}, ${selectedCity.country}`,
-    affcid: PID,
-    lang: language,
-    rooms: rooms.length.toString(),
-  })
+    const params = new URLSearchParams({
+      destination: `${selectedCity.name}, ${selectedCity.country}`,
+      affcid: PID,
+      lang: language,
+      rooms: rooms.length.toString(),
+    })
 
-  // Dates
-  if (checkIn) {
-    params.append('d1', checkIn)
-    params.append('startDate', checkIn)
+    // Dates
+    if (checkIn) {
+      params.append('d1', checkIn)
+      params.append('startDate', checkIn)
+    }
+    if (checkOut) {
+      params.append('d2', checkOut)
+      params.append('endDate', checkOut)
+    }
+
+    // Adults (comma-separated)
+    params.append(
+      "adults",
+      rooms.map(r => r.adults).join(",")
+    )
+
+    // Children (underscore-separated)
+    params.append(
+      "children",
+      rooms.map(r => r.children).join("_")
+    )
+
+    // Child ages (indexed)
+    let ageIndex = 1
+    rooms.forEach(room => {
+      room.ages.forEach(age => {
+        params.append(`childAge${ageIndex}`, String(age))
+        ageIndex++
+      })
+    })
+
+    const url = `${baseUrl}/Hotel-Search?${params.toString()}`
+    window.open(url, '_blank')
   }
-  if (checkOut) {
-    params.append('d2', checkOut)
-    params.append('endDate', checkOut)
-  }
 
-  // --- TRAVELLER PARAMS (EXPEDIA UK FORMAT — RELIABLE) ---
+  const totalAdults = rooms.reduce((sum, r) => sum + r.adults, 0)
+  const totalChildren = rooms.reduce((sum, r) => sum + r.children, 0)
 
-  // Adults (comma-separated)
-  params.append(
-    "adults",
-    rooms.map(r => r.adults).join(",")
-  )
+  const travellersLabel = `${totalAdults} adult${totalAdults !== 1 ? 's' : ''}${totalChildren > 0 ? `, ${totalChildren} child${totalChildren !== 1 ? 'ren' : ''}` : ''}, ${rooms.length} room${rooms.length !== 1 ? 's' : ''}`
 
-  // Children (underscore-separated)
-  params.append(
-    "children",
-    rooms.map(r => r.children).join("_")
-  )
-
-  // IMPORTANT:
-  // Expedia UK *does not reliably prefill child ages*.
-  // It only uses childAge1, and only sometimes.
-  // To avoid Expedia ignoring the entire children block,
-  // we DO NOT send any childAge parameters.
-  // This is the behaviour that matches your working URLs.
-
-  // Number of rooms
-  params.append("rooms", String(rooms.length))
-
-  // Build URL + open
-  const url = `${baseUrl}/Hotel-Search?${params.toString()}`
-  console.log('Expedia URL:', url)
-  window.open(url, '_blank')
-}
-
-// --- TRAVELLER LABELS ---
-
-const totalAdults = rooms.reduce((sum, r) => sum + r.adults, 0)
-const totalChildren = rooms.reduce((sum, r) => sum + r.children, 0)
-
-const travellersLabel = `${totalAdults} adult${totalAdults !== 1 ? 's' : ''}${
-  totalChildren > 0 ? `, ${totalChildren} child${totalChildren !== 1 ? 'ren' : ''}` : ''
-}, ${rooms.length} room${rooms.length !== 1 ? 's' : ''}`
-
-const childAgeOptions = [
-  { label: 'Under 1', value: 0 },
-  ...Array.from({ length: 17 }, (_, i) => ({ label: `${i + 1}`, value: i + 1 })),
-]
+  const childAgeOptions = [
+    { label: 'Under 1', value: 0 },
+    ...Array.from({ length: 17 }, (_, i) => ({ label: `${i + 1}`, value: i + 1 })),
+  ]
 
   return (
     <div className="w-full flex justify-center px-4 py-6">
