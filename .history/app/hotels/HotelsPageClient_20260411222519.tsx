@@ -1,0 +1,311 @@
+'use client'
+
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import HotelSearch from '@/app/components/Search/HotelSearch'
+
+// -------------------------------
+// EXPEDIA AFFILIATE CONSTANTS
+// -------------------------------
+const EXPEDIA_BASE = 'https://www.expedia.co.uk'
+const EXPEDIA_AFFILIATE = 'affcid=UK.DIRECT.PHG.1011l428377'
+
+// Build a hotel search URL for a city
+const expediaCityUrl = (city: string, country: string) =>
+  `${EXPEDIA_BASE}/Hotel-Search?${EXPEDIA_AFFILIATE}&destination=${encodeURIComponent(
+    `${city}, ${country}`
+  )}`
+
+// -------------------------------
+// DESTINATIONS
+// -------------------------------
+const destinations = [
+  {
+    city: 'London',
+    country: 'United Kingdom',
+    emoji: '🏙️',
+    description: 'Historic charm meets modern luxury',
+    image: '#1a2a4a',
+  },
+  {
+    city: 'Manchester',
+    country: 'United Kingdom',
+    emoji: '🐝',
+    description: 'Vibrant culture in the North',
+    image: '#1e3a5f',
+  },
+  {
+    city: 'Edinburgh',
+    country: 'United Kingdom',
+    emoji: '🏰',
+    description: "Scotland's stunning capital",
+    image: '#2a1a4a',
+  },
+  {
+    city: 'Barcelona',
+    country: 'Spain',
+    emoji: '⛪',
+    description: 'Sun, architecture & gastronomy',
+    image: '#4a2a1a',
+  },
+  {
+    city: 'New Delhi',
+    country: 'India',
+    emoji: '🕌',
+    description: 'Ancient history, vibrant streets',
+    image: '#3a2a1a',
+  },
+  {
+    city: 'New York',
+    country: 'United States',
+    emoji: '🗽',
+    description: 'The city that never sleeps',
+    image: '#1a3a4a',
+  },
+  {
+    city: 'Orlando',
+    country: 'United States',
+    emoji: '🎢',
+    description: 'Theme parks & family fun',
+    image: '#2a4a1a',
+  },
+  {
+    city: 'Paris',
+    country: 'France',
+    emoji: '🗼',
+    description: 'Romance, art & haute cuisine',
+    image: '#3a1a2a',
+  },
+]
+
+// -------------------------------
+// HOTEL TYPES
+// -------------------------------
+const hotelTypes = [
+  { label: 'Luxury', icon: '✦', desc: '5-star properties & resorts' },
+  { label: 'Boutique', icon: '◈', desc: 'Unique, character-rich stays' },
+  { label: 'Budget', icon: '◇', desc: 'Great value, no compromises' },
+  { label: 'Apartments', icon: '⬡', desc: 'Home comforts, longer stays' },
+]
+
+// -------------------------------
+// PERKS
+// -------------------------------
+const perks = [
+  { icon: '🔓', title: 'Free cancellation', text: 'Flexible plans, no stress' },
+  { icon: '💳', title: 'No booking fees', text: 'The price you see is what you pay' },
+  { icon: '🌐', title: '500,000+ hotels', text: 'Every destination, every budget' },
+  { icon: '⭐', title: 'Verified reviews', text: 'Real guests, honest opinions' },
+]
+
+// -------------------------------
+// DESTINATION CARD
+// -------------------------------
+function DestinationCard({ dest }: { dest: typeof destinations[0] }) {
+  const url = expediaCityUrl(dest.city, dest.country)
+
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group relative rounded-2xl overflow-hidden cursor-pointer block"
+      style={{ minHeight: '200px' }}
+    >
+      {/* Background */}
+      <div
+        className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
+        style={{ backgroundColor: dest.image }}
+      />
+
+      {/* Overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%)',
+        }}
+      />
+
+      {/* Emoji */}
+      <div className="absolute top-4 right-4 text-4xl opacity-30 group-hover:opacity-50 transition-opacity duration-300">
+        {dest.emoji}
+      </div>
+
+      {/* Content */}
+      <div className="absolute bottom-0 left-0 right-0 p-5">
+        <p className="text-white font-bold text-lg leading-tight">{dest.city}</p>
+        <p className="text-gray-300 text-xs mt-0.5 mb-2">{dest.country}</p>
+        <p className="text-gray-400 text-xs leading-relaxed">{dest.description}</p>
+        <span
+          className="inline-block mt-3 text-xs font-medium px-3 py-1 rounded-full transition-all duration-300 group-hover:px-4"
+          style={{ backgroundColor: '#2f797c', color: 'white' }}
+        >
+          Browse hotels →
+        </span>
+      </div>
+    </a>
+  )
+}
+
+// -------------------------------
+// PAGE
+// -------------------------------
+export default function HotelsPage() {
+  return (
+    <main className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* HERO */}
+      <section style={{ backgroundColor: '#232e4e' }} className="text-white py-24 px-6 text-center">
+        <p className="text-sm uppercase tracking-widest mb-3" style={{ color: '#03989e' }}>
+        </p>
+
+        <h1 className="text-5xl font-bold mb-4">Find Your Perfect Stay!</h1>
+
+        <p className="text-xl mb-10 text-gray-300 max-w-xl mx-auto">
+          Compare hundreds of thousands of hotels worldwide - from cosy B&Bs to 5‑star luxury resorts.
+        </p>
+
+        {/* Search */}
+        <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+          <HotelSearch />
+        </div>
+
+        {/* Trust strip */}
+        <div className="flex justify-center gap-8 mt-8 text-sm text-gray-300 flex-wrap">
+          <span>Free cancellation available</span>
+          <span>No hidden fees</span>
+          <span>500,000+ hotels worldwide</span>
+        </div>
+      </section>
+
+      {/* HOTEL TYPES */}
+      <section className="py-14 px-6 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+            Every type of stay
+          </h2>
+          <p className="text-center text-gray-500 mb-10 text-sm">Whatever you need, we have it</p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {hotelTypes.map(({ label, icon, desc }) => (
+              <div
+                key={label}
+                className="bg-white rounded-xl p-5 text-center border border-gray-100 hover:border-teal-200 hover:shadow-md transition-all duration-200 cursor-default"
+              >
+                <div className="text-2xl mb-2" style={{ color: '#2f797c' }}>{icon}</div>
+                <p className="font-semibold text-sm mb-1" style={{ color: '#232e4e' }}>{label}</p>
+                <p className="text-xs text-gray-400">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURED DESTINATIONS */}
+      <section className="py-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+            Popular Destinations
+          </h2>
+          <p className="text-center text-gray-500 mb-10">
+            Hand‑picked hotels in our most searched cities
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {destinations.map(dest => (
+              <DestinationCard key={dest.city} dest={dest} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PERKS */}
+      <section style={{ backgroundColor: '#232e4e' }} className="py-14 px-6">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {perks.map(({ icon, title, text }) => (
+            <div key={title}>
+              <div className="text-3xl mb-3">{icon}</div>
+              <p className="font-semibold text-white text-sm mb-1">{title}</p>
+              <p className="text-gray-400 text-xs">{text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+            How it works
+          </h2>
+          <p className="text-center text-gray-500 mb-12">
+            Booking your perfect hotel takes just minutes
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { n: 1, title: 'Search', text: 'Enter your destination, dates and number of guests to see available hotels instantly.' },
+              { n: 2, title: 'Compare', text: 'Filter by price, rating, amenities and location. Read verified guest reviews.' },
+              { n: 3, title: 'Book', text: 'Secure your stay directly with no hidden fees, and free cancellation on most rooms.' },
+            ].map(({ n, title, text }) => (
+              <div key={n} className="text-center">
+                <div
+                  className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white mx-auto mb-4"
+                  style={{ backgroundColor: '#2f797c' }}
+                >
+                  {n}
+                </div>
+                <h3 className="font-bold text-xl mb-2" style={{ color: '#232e4e' }}>{title}</h3>
+                <p className="text-gray-500 leading-7 text-sm">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section style={{ backgroundColor: '#232e4e' }} className="py-12 px-6">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {[
+            { stat: '500K+', label: 'Hotels worldwide' },
+            { stat: '100+', label: 'Countries covered' },
+            { stat: '4.5★', label: 'Average guest rating' },
+            { stat: '24/7', label: 'Customer support' },
+          ].map(({ stat, label }) => (
+            <div key={label}>
+              <p className="text-4xl font-bold mb-1" style={{ color: '#03989e' }}>{stat}</p>
+              <p className="text-gray-300 text-sm">{label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA BANNER */}
+      <section className="py-16 px-6">
+        <div
+          className="max-w-4xl mx-auto rounded-2xl p-10 text-center text-white"
+          style={{ backgroundColor: '#2f797c' }}
+        >
+          <h2 className="text-3xl font-bold mb-3">Not sure where to stay?</h2>
+          <p className="text-teal-100 mb-6 text-sm max-w-md mx-auto">
+            Browse our full hotel catalogue on Expedia and discover deals across every destination.
+          </p>
+
+          <a
+            href={`${EXPEDIA_BASE}/Hotel-Search?${EXPEDIA_AFFILIATE}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white font-semibold px-8 py-3 rounded-full text-sm transition-opacity hover:opacity-90"
+            style={{ color: '#2f797c' }}
+          >
+            Be Inspired, Browse Hotels.
+          </a>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  )
+}
