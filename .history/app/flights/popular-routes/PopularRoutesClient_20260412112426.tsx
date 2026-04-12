@@ -137,7 +137,7 @@ function RegionSection({ group }: { group: RegionGroup }) {
         >
           {expanded
             ? `Show fewer cities in ${group.region} ↑`
-            : `Show all ${group.origins.length} departure cities in ${group.continent} ↓`}
+            : `Show all ${group.origins.length} departure cities in ${group.region} ↓`}
         </button>
       )}
     </section>
@@ -297,25 +297,20 @@ const filteredCount = (Array.isArray(filtered) ? filtered : []).reduce(
       {/* CONTINENT BUTTONS */}
       {(Array.isArray(regionGroups) ? regionGroups : []).map(r => (
         <button
-          key={r.continent}
-          onClick={() =>
-            setActiveRegion(
-              r.continent === activeRegion ? null : r.continent
-            )
-          }
-          className={`px-4 py-2 rounded-xl text-sm font-semibold transition whitespace-nowrap ${
-            activeRegion === r.continent
-              ? 'text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          }`}
-          style={
-            activeRegion === r.continent
-              ? { backgroundColor: '#03989e' }
-              : {}
-          }
-        >
-          {r.emoji} {r.continent}
-        </button>
+  key={r.continent}
+  onClick={() =>
+    setActiveRegion(r.continent === activeRegion ? null : r.continent)
+  }
+  className={`px-4 py-2 rounded-xl text-sm font-semibold transition whitespace-nowrap ${
+    activeRegion === r.continent
+      ? 'text-white'
+      : 'text-gray-600 hover:bg-gray-100'
+  }`}
+  style={activeRegion === r.continent ? { backgroundColor: '#03989e' } : {}}
+>
+  {r.emoji} {r.continent}
+</button>
+
       ))}
     </div>
   </div>

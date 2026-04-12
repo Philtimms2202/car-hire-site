@@ -137,7 +137,7 @@ function RegionSection({ group }: { group: RegionGroup }) {
         >
           {expanded
             ? `Show fewer cities in ${group.region} ↑`
-            : `Show all ${group.origins.length} departure cities in ${group.continent} ↓`}
+            : `Show all ${group.origins.length} departure cities in ${group.region} ↓`}
         </button>
       )}
     </section>
