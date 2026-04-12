@@ -1,8 +1,6 @@
 import { buildMetadata } from '@/app/metadata'
 import RoutePageClient from './RoutePageClient'
 import { client } from '@/sanity/lib/client'
-import { getSanityCities } from "@/lib/getSanityCities"
-
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -231,11 +229,6 @@ export default async function RoutePage({
     getCityByIATA(destinationIATA),
   ])
 
-  // Fetch all cities with IATA codes from Sanity
-  const sanityCities = await getSanityCities()
-
-console.log("🔥 SERVER sanityCities:", sanityCities.length)
-
   return (
     <RoutePageClient
       originIATA={originIATA}
@@ -243,7 +236,6 @@ console.log("🔥 SERVER sanityCities:", sanityCities.length)
       slug={slug}
       origin={origin}
       destination={destination}
-      sanityCities={sanityCities}
     />
   )
 }

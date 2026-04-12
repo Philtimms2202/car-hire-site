@@ -411,40 +411,25 @@ function RouteInfoStrip({
 function PopularRoutesGrid({
   originIATA,
   destinationName,
-  sanityCities,
 }: {
   originIATA: string
   destinationName: string
-  sanityCities: any[]
 }) {
   const [loadingIata, setLoadingIata] = useState<string | null>(null)
 
-  const baseRoutes = sanityCities
-    .filter((c) => c.primaryIATA !== originIATA)
-    .map((c) => ({
-      city: c.cityName,
-      country: c.countryName,
-      iata: c.primaryIATA,
-      emoji: c.emoji ?? "✈️",
-    }))
+  const baseRoutes = POPULAR_ONWARD[originIATA] ?? POPULAR_ONWARD.DEFAULT
 
-  const seed = `${originIATA}-${destinationName}`
-
-  const routes = useMemo(() => {
-    const shuffled = seededShuffle(baseRoutes, seed)
-    return shuffled.slice(0, 6)
-  }, [baseRoutes, seed])
+  const routes = useMemo(
+    () => seededShuffle(baseRoutes, `${originIATA}-${destinationName}`),
+    [baseRoutes, originIATA, destinationName]
+  )
 
   const handleClick = async (destIata: string) => {
     setLoadingIata(destIata)
     const url = await buildKiwiUrl(originIATA, destIata)
     setLoadingIata(null)
-    window.open(url, "_blank")
+    window.open(url, '_blank')
   }
-
-console.log("🔥 sanityCities:", sanityCities)
-console.log("🔥 baseRoutes:", baseRoutes)
-console.log("🔥 routes:", routes)
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -456,7 +441,10 @@ console.log("🔥 routes:", routes)
           <div className="flex items-center gap-3 mb-4">
             <span className="text-4xl">{route.emoji}</span>
             <div>
-              <p className="font-bold text-lg" style={{ color: "#232e4e" }}>
+              <p
+                className="font-bold text-lg"
+                style={{ color: '#232e4e' }}
+              >
                 {route.city}
               </p>
               <p className="text-xs text-gray-400">{route.country}</p>
@@ -477,10 +465,10 @@ console.log("🔥 routes:", routes)
             onClick={() => handleClick(route.iata)}
             disabled={loadingIata === route.iata}
             className="w-full py-2 rounded-xl text-white font-semibold text-sm transition hover:opacity-90 disabled:opacity-60"
-            style={{ backgroundColor: "#232e4e" }}
+            style={{ backgroundColor: '#232e4e' }}
           >
             {loadingIata === route.iata
-              ? "Loading…"
+              ? 'Loading…'
               : `Search flights from ${originIATA} →`}
           </button>
         </div>
@@ -564,7 +552,6 @@ export default function RoutePageClient({
   slug,
   origin,
   destination,
-  sanityCities,
 }: Props) {
   const originName = resolveCityName(originIATA, origin)
   const destinationName = resolveCityName(destinationIATA, destination)
@@ -659,30 +646,24 @@ export default function RoutePageClient({
         </div>
       </section>
 
-{/* POPULAR ROUTES FROM ORIGIN */}
-<section className="py-16 px-6 bg-gray-50">
-  <div className="max-w-6xl mx-auto">
-    <h2
-      className="text-3xl font-bold text-center mb-2"
-      style={{ color: '#232e4e' }}
-    >
-      More Popular Flights from {originName}
-    </h2>
-
-    <p className="text-center text-gray-500 mb-10">
-      Explore other top routes departing from {originName}
-    </p>
-
-    <PopularRoutesGrid
-      originIATA={originIATA}
-      destinationName={destinationName}
-      sanityCities={sanityCities}
-    />
-  </div>
-</section>
-
-
-
+      {/* POPULAR ROUTES FROM ORIGIN */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2
+            className="text-3xl font-bold text-center mb-2"
+            style={{ color: '#232e4e' }}
+          >
+            More Popular Flights from {originName}
+          </h2>
+          <p className="text-center text-gray-500 mb-10">
+            Explore other top routes departing from {originName}
+          </p>
+          <PopularRoutesGrid
+            originIATA={originIATA}
+            destinationName={destinationName}
+          />
+        </div>
+      </section>
 
       {/* TRAVEL TIPS */}
       <section className="py-16 px-6 bg-white">

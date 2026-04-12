@@ -234,8 +234,6 @@ export default async function RoutePage({
   // Fetch all cities with IATA codes from Sanity
   const sanityCities = await getSanityCities()
 
-console.log("🔥 SERVER sanityCities:", sanityCities.length)
-
   return (
     <RoutePageClient
       originIATA={originIATA}

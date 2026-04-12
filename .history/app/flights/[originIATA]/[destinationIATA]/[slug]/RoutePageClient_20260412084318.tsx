@@ -419,6 +419,7 @@ function PopularRoutesGrid({
 }) {
   const [loadingIata, setLoadingIata] = useState<string | null>(null)
 
+  // Build onward routes from Sanity cities
   const baseRoutes = sanityCities
     .filter((c) => c.primaryIATA !== originIATA)
     .map((c) => ({
@@ -428,8 +429,10 @@ function PopularRoutesGrid({
       emoji: c.emoji ?? "✈️",
     }))
 
+  // Unique seed per route page
   const seed = `${originIATA}-${destinationName}`
 
+  // Stable shuffle → take 6
   const routes = useMemo(() => {
     const shuffled = seededShuffle(baseRoutes, seed)
     return shuffled.slice(0, 6)
@@ -441,10 +444,6 @@ function PopularRoutesGrid({
     setLoadingIata(null)
     window.open(url, "_blank")
   }
-
-console.log("🔥 sanityCities:", sanityCities)
-console.log("🔥 baseRoutes:", baseRoutes)
-console.log("🔥 routes:", routes)
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

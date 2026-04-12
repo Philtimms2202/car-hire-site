@@ -419,6 +419,7 @@ function PopularRoutesGrid({
 }) {
   const [loadingIata, setLoadingIata] = useState<string | null>(null)
 
+  // Build onward routes from Sanity cities
   const baseRoutes = sanityCities
     .filter((c) => c.primaryIATA !== originIATA)
     .map((c) => ({
@@ -428,8 +429,10 @@ function PopularRoutesGrid({
       emoji: c.emoji ?? "✈️",
     }))
 
+  // Unique seed per route page
   const seed = `${originIATA}-${destinationName}`
 
+  // Stable shuffle → take 6
   const routes = useMemo(() => {
     const shuffled = seededShuffle(baseRoutes, seed)
     return shuffled.slice(0, 6)
@@ -441,10 +444,6 @@ function PopularRoutesGrid({
     setLoadingIata(null)
     window.open(url, "_blank")
   }
-
-console.log("🔥 sanityCities:", sanityCities)
-console.log("🔥 baseRoutes:", baseRoutes)
-console.log("🔥 routes:", routes)
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -481,6 +480,52 @@ console.log("🔥 routes:", routes)
           >
             {loadingIata === route.iata
               ? "Loading…"
+              : `Search flights from ${originIATA} →`}
+          </button>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+  return {
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {routes.map((route) => (
+        <div
+          key={route.iata}
+          className="bg-white rounded-2xl shadow-md p-5 hover:shadow-xl transition-shadow border border-gray-100"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-4xl">{route.emoji}</span>
+            <div>
+              <p
+                className="font-bold text-lg"
+                style={{ color: '#232e4e' }}
+              >
+                {route.city}
+              </p>
+              <p className="text-xs text-gray-400">{route.country}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+              {originIATA}
+            </span>
+            <span>→</span>
+            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+              {route.iata}
+            </span>
+          </div>
+
+          <button
+            onClick={() => handleClick(route.iata)}
+            disabled={loadingIata === route.iata}
+            className="w-full py-2 rounded-xl text-white font-semibold text-sm transition hover:opacity-90 disabled:opacity-60"
+            style={{ backgroundColor: '#232e4e' }}
+          >
+            {loadingIata === route.iata
+              ? 'Loading…'
               : `Search flights from ${originIATA} →`}
           </button>
         </div>
