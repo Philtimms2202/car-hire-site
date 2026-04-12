@@ -375,7 +375,7 @@ function SearchBox({
       </div>
 
       <p className="text-center text-xs text-gray-400 mt-4">
-        Powered by Kiwi.com · Prices updated in real time · No hidden fees
+         · Prices updated in real time · No hidden fees
       </p>
     </div>
   )

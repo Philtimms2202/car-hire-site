@@ -375,7 +375,7 @@ function SearchBox({
       </div>
 
       <p className="text-center text-xs text-gray-400 mt-4">
-        Powered by Kiwi.com · Prices updated in real time · No hidden fees
+        Prices updated in real time · No hidden fees
       </p>
     </div>
   )
@@ -529,7 +529,7 @@ function SeoTextBlock({
       <p>
         Whether you're travelling for a weekend break, a long-haul adventure, or
         a business trip, our search pulls together real-time fares so you can
-        compare and book in minutes. We partner with Kiwi.com to bring you
+        compare and book in minutes. We partner with reputable partners to bring you
         flexible ticket options including one-way, return, and multi-city routes
         on this popular flight corridor.
       </p>
@@ -602,7 +602,7 @@ export default function RoutePageClient({
 
         <p className="text-gray-400 mb-10 max-w-xl mx-auto">
           Compare airlines, dates and prices in seconds. Book securely with
-          Kiwi.com.
+          our trusted provider today.
         </p>
 
         <SearchBox

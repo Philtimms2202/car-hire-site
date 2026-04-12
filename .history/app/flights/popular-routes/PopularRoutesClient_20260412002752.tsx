@@ -487,7 +487,7 @@ export default function PopularRoutesClient({ continentGroups, totalRoutes, allC
             — we&apos;ve got you covered.
           </p>
           <p>
-            All routes link through to live search results powered by Kiwi.com. Prices updated in
+            All routes link through to live search results . Prices updated in
             real time, no hidden fees, no mark-ups.
           </p>
           <div className="pt-4">

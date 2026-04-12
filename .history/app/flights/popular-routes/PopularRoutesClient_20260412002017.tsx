@@ -316,7 +316,7 @@ export default function PopularRoutesClient({ regionGroups, totalRoutes }: Props
             the Americas, or island-hopping routes in the Caribbean — we&apos;ve got you covered.
           </p>
           <p>
-            All routes connect through to live search results powered by Kiwi.com. Prices
+            All routes connect through to live search results . Prices
             are updated in real time with no hidden fees and no price mark-ups.
           </p>
           <div className="pt-4">

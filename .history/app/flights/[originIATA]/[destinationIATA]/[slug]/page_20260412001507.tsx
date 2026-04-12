@@ -199,7 +199,7 @@ export async function generateMetadata(
   // Meta description — include countries for broader keyword coverage
   const description =
     destination?.metaDescription ??
-    `Find cheap flights from ${originName}${originCountry ? `, ${originCountry}` : ''} to ${destinationName}${destinationCountry ? `, ${destinationCountry}` : ''}. Compare airlines and book securely with Timms Travel powered by Kiwi.com.`
+    `Find cheap flights from ${originName}${originCountry ? `, ${originCountry}` : ''} to ${destinationName}${destinationCountry ? `, ${destinationCountry}` : ''}. Compare airlines and book securely with Timms Travel .`
 
   const canonical = `https://timmstravel.com/flights/${originIATA}/${destinationIATA}/${slug}`
 
