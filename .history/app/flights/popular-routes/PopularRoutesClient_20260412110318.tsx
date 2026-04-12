@@ -157,7 +157,7 @@ export default function PopularRoutesClient({ regionGroups, totalRoutes }: Props
     if (!q && !activeRegion) return regionGroups
 
     return regionGroups
-      .filter(r => !activeRegion || r.continent === activeRegion)
+      .filter(r => !activeRegion || r.region === activeRegion)
       .map(r => ({
         ...r,
         origins: r.origins
@@ -226,101 +226,78 @@ const filteredCount = (Array.isArray(filtered) ? filtered : []).reduce(
         </p>
 
         {/* Search */}
-{/* Search */}
-<div className="max-w-lg mx-auto mt-8">
-  <div className="relative">
-    {/* Search icon */}
-    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg">
-      🔍
-    </span>
-
-    <input
-      type="text"
-      placeholder="Search by city, country or IATA code…"
-      value={search}
-      onChange={e => setSearch(e.target.value)}
-      className="
-        w-full
-        pl-11 pr-10 py-4
-        rounded-2xl
-        bg-white
-        text-black
-        placeholder-gray-500
-        border border-gray-300
-        shadow-md
-        focus:outline-none
-        focus:ring-2
-        focus:ring-[#03989e]
-        focus:border-[#03989e]
-        transition
-      "
-    />
-
-    {/* Clear button */}
-    {search && (
-      <button
-        onClick={() => setSearch('')}
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 text-xl"
-      >
-        ×
-      </button>
-    )}
-  </div>
-
-  {search && (
-    <p className="text-sm text-gray-500 mt-2">
-      {filteredCount.toLocaleString()} routes match “{search}”
-    </p>
-  )}
-</div>
-
+        <div className="max-w-lg mx-auto mt-8">
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+              🔍
+            </span>
+            <input
+              type="text"
+              placeholder="Search by city, country or IATA code…"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full pl-11 pr-4 py-4 rounded-2xl text-gray-900 text-base shadow-xl focus:outline-none focus:ring-2"
+              style={{ '--tw-ring-color': '#03989e' } as React.CSSProperties}
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xl"
+              >
+                ×
+              </button>
+            )}
+          </div>
+          {search && (
+            <p className="text-sm text-gray-400 mt-2">
+              {filteredCount.toLocaleString()} routes match &ldquo;{search}&rdquo;
+            </p>
+          )}
+        </div>
       </section>
 
- {/* ── CONTINENT TABS ──────────────────────── */}
-<div className="sticky top-0 z-40 border-b border-gray-200 bg-white shadow-sm">
-  <div className="max-w-7xl mx-auto px-4 overflow-x-auto">
-    <div className="flex gap-1 py-3 min-w-max">
-
-      {/* ALL REGIONS BUTTON */}
-      <button
-        onClick={() => setActiveRegion(null)}
-        className={`px-4 py-2 rounded-xl text-sm font-semibold transition whitespace-nowrap ${
-          activeRegion === null
-            ? 'text-white'
-            : 'text-gray-600 hover:bg-gray-100'
-        }`}
-        style={activeRegion === null ? { backgroundColor: '#232e4e' } : {}}
+      {/* ── REGION TABS ──────────────────────── */}
+      <div
+        className="sticky top-0 z-40 border-b border-gray-200 bg-white shadow-sm"
       >
-        All Regions
-      </button>
+        <div className="max-w-7xl mx-auto px-4 overflow-x-auto">
+          <div className="flex gap-1 py-3 min-w-max">
+            <button
+              onClick={() => setActiveRegion(null)}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition whitespace-nowrap ${
+                activeRegion === null
+                  ? 'text-white'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              style={activeRegion === null ? { backgroundColor: '#232e4e' } : {}}
+            >
+              All Regions
+            </button>
+            {(Array.isArray(regionGroups) ? regionGroups : []).map(r => (
+  <button
+    key={r.continent}
+    onClick={() =>
+      setActiveRegion(r.continent === activeRegion ? null : r.continent)
+    }
 
-      {/* CONTINENT BUTTONS */}
-      {(Array.isArray(regionGroups) ? regionGroups : []).map(r => (
-        <button
-          key={r.continent}
-          onClick={() =>
-            setActiveRegion(
-              r.continent === activeRegion ? null : r.continent
-            )
-          }
-          className={`px-4 py-2 rounded-xl text-sm font-semibold transition whitespace-nowrap ${
-            activeRegion === r.continent
-              ? 'text-white'
-              : 'text-gray-600 hover:bg-gray-100'
-          }`}
-          style={
-            activeRegion === r.continent
-              ? { backgroundColor: '#03989e' }
-              : {}
-          }
-        >
-          {r.emoji} {r.continent}
-        </button>
-      ))}
-    </div>
-  </div>
-</div>
+           onClick={() =>
+            setActiveRegion(r.continent === activeRegion ? null : r.continent)
+    }
 
+
+                className={`px-4 py-2 rounded-xl text-sm font-semibold transition whitespace-nowrap ${
+                  activeRegion === r.region
+                    ? 'text-white'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+                style={activeRegion === r.region ? { backgroundColor: '#03989e' } : {}}
+              >
+                {r.emoji} {r.region}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* ── ROUTE CONTENT ────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">

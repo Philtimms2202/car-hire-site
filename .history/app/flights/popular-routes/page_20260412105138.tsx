@@ -351,9 +351,9 @@ export default function PopularRoutesPage() {
 
   return (
     <PopularRoutesClient
-  regionGroups={continentGroups}
-  totalRoutes={totalRoutes}
-  allCities={allCities}
-/>
+      continentGroups={continentGroups}
+      totalRoutes={totalRoutes}
+      allCities={allCities}
+    />
   )
 }

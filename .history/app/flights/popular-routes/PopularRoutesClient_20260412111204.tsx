@@ -226,54 +226,34 @@ const filteredCount = (Array.isArray(filtered) ? filtered : []).reduce(
         </p>
 
         {/* Search */}
-{/* Search */}
-<div className="max-w-lg mx-auto mt-8">
-  <div className="relative">
-    {/* Search icon */}
-    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg">
-      🔍
-    </span>
-
-    <input
-      type="text"
-      placeholder="Search by city, country or IATA code…"
-      value={search}
-      onChange={e => setSearch(e.target.value)}
-      className="
-        w-full
-        pl-11 pr-10 py-4
-        rounded-2xl
-        bg-white
-        text-black
-        placeholder-gray-500
-        border border-gray-300
-        shadow-md
-        focus:outline-none
-        focus:ring-2
-        focus:ring-[#03989e]
-        focus:border-[#03989e]
-        transition
-      "
-    />
-
-    {/* Clear button */}
-    {search && (
-      <button
-        onClick={() => setSearch('')}
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 text-xl"
-      >
-        ×
-      </button>
-    )}
-  </div>
-
-  {search && (
-    <p className="text-sm text-gray-500 mt-2">
-      {filteredCount.toLocaleString()} routes match “{search}”
-    </p>
-  )}
-</div>
-
+        <div className="max-w-lg mx-auto mt-8">
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+              🔍
+            </span>
+            <input
+              type="text"
+              placeholder="Search by city, country or IATA code…"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full pl-11 pr-4 py-4 rounded-2xl text-gray-900 text-base shadow-xl focus:outline-none focus:ring-2"
+              style={{ '--tw-ring-color': '#03989e' } as React.CSSProperties}
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xl"
+              >
+                ×
+              </button>
+            )}
+          </div>
+          {search && (
+            <p className="text-sm text-gray-400 mt-2">
+              {filteredCount.toLocaleString()} routes match &ldquo;{search}&rdquo;
+            </p>
+          )}
+        </div>
       </section>
 
  {/* ── CONTINENT TABS ──────────────────────── */}

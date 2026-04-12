@@ -225,55 +225,36 @@ const filteredCount = (Array.isArray(filtered) ? filtered : []).reduce(
           prices and book instantly.
         </p>
 
-        {/* Search */}
-{/* Search */}
-<div className="max-w-lg mx-auto mt-8">
-  <div className="relative">
-    {/* Search icon */}
-    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg">
-      🔍
-    </span>
-
-    <input
-      type="text"
-      placeholder="Search by city, country or IATA code…"
-      value={search}
-      onChange={e => setSearch(e.target.value)}
-      className="
-        w-full
-        pl-11 pr-10 py-4
-        rounded-2xl
-        bg-white
-        text-black
-        placeholder-gray-500
-        border border-gray-300
-        shadow-md
-        focus:outline-none
-        focus:ring-2
-        focus:ring-[#03989e]
-        focus:border-[#03989e]
-        transition
-      "
-    />
-
-    {/* Clear button */}
-    {search && (
-      <button
-        onClick={() => setSearch('')}
-        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 text-xl"
-      >
-        ×
-      </button>
-    )}
-  </div>
-
-  {search && (
-    <p className="text-sm text-gray-500 mt-2">
-      {filteredCount.toLocaleString()} routes match “{search}”
-    </p>
-  )}
+ {/* ── SEARCH BAR ───────────────────────── */}
+<div className="max-w-3xl mx-auto mt-6 px-4">
+  <input
+    type="text"
+    value={search}
+    onChange={e => setSearch(e.target.value)}
+    placeholder="Search by city, country or IATA code..."
+    className="
+      w-full
+      px-5 py-3
+      rounded-xl
+      border border-gray-300
+      bg-white
+      text-black
+      placeholder-gray-500
+      shadow-sm
+      focus:outline-none
+      focus:ring-2
+      focus:ring-[#03989e]
+      focus:border-[#03989e]
+      transition
+    "
+  />
 </div>
-
+          {search && (
+            <p className="text-sm text-gray-400 mt-2">
+              {filteredCount.toLocaleString()} routes match &ldquo;{search}&rdquo;
+            </p>
+          )}
+        </div>
       </section>
 
  {/* ── CONTINENT TABS ──────────────────────── */}
