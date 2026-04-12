@@ -5,9 +5,6 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import HotelSearch from '@/app/components/Search/HotelSearch'
 import airports from '@/data/airports.json'
-import FlightSearch from '@/app/components/Search/FlightSearch'
-import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
-import CarSearch from '@/app/components/Search/CarSearch'
 
 // ---------------------------------------------
 // TYPES
@@ -329,7 +326,6 @@ const TOP_DESTINATIONS: CityOption[] = [
 // PAGE
 // ---------------------------------------------
 export default function HotelsPageClient() {
-  const [activeTab, setActiveTab] = React.useState<'flights' | 'hotels' | 'experiences' | 'cars'>('hotels')
   const [selectedCity, setSelectedCity] = React.useState<CityOption>({
     city: 'London',
     country: 'United Kingdom',
@@ -343,40 +339,43 @@ export default function HotelsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-      {/* HERO */}
-      <section
-        style={{ backgroundColor: '#232e4e' }}
-        className="text-white py-20 px-6 text-center"
-      >
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Find Your Perfect Stay
-        </h1>
-        <p className="text-base md:text-lg mb-8 text-gray-300 max-w-xl mx-auto">
-          Search hotels in any city worldwide. Get started with your search today.
-        </p>
-        <div className="flex justify-center gap-6 mb-8">
-  {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-    <button
-      key={tab}
-      onClick={() => setActiveTab(tab)}
-      className={`pb-2 text-lg font-medium transition-colors ${
-        activeTab === tab
-          ? 'border-b-2 border-white text-white'
-          : 'text-gray-400 hover:text-gray-200'
-      }`}
-    >
-      {tab.charAt(0).toUpperCase() + tab.slice(1)}
-    </button>
-  ))}
-</div>
+ {/* HERO */}
+<section
+  style={{ backgroundColor: '#232e4e' }}
+  className="text-white py-20 px-6 text-center"
+>
+  <h1 className="text-4xl md:text-5xl font-bold mb-4">
+    Find Your Perfect Stay
+  </h1>
+  <p className="text-base md:text-lg mb-8 text-gray-300 max-w-xl mx-auto">
+    Search hotels in any city worldwide. Get started with your search today.
+  </p>
 
-<div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
-  {activeTab === 'flights'     && <FlightSearch />}
-  {activeTab === 'hotels'      && <HotelSearch />}
-  {activeTab === 'experiences' && <ExperienceSearch />}
-  {activeTab === 'cars'        && <CarSearch />}
-</div>
-      </section>
+  {/* TAB MENU */}
+  <div className="flex justify-center gap-6 mb-8">
+    {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+      <button
+        key={tab}
+        onClick={() => setActiveTab(tab)}
+        className={`pb-2 text-lg font-medium transition-colors ${
+          activeTab === tab
+            ? 'border-b-2 border-white text-white'
+            : 'text-gray-400 hover:text-gray-200'
+        }`}
+      >
+        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+      </button>
+    ))}
+  </div>
+
+  {/* SEARCH AREA */}
+  <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+    {activeTab === 'flights'     && <FlightSearch />}
+    {activeTab === 'hotels'      && <HotelSearch />}
+    {activeTab === 'experiences' && <ExperienceSearch />}
+    {activeTab === 'cars'        && <CarSearch />}
+  </div>
+</section>
 
       {/* SEARCH + RESULTS */}
       <section className="py-16 px-6 bg-gray-50">

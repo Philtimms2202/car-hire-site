@@ -4,10 +4,10 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import HotelSearch from '@/app/components/Search/HotelSearch'
-import airports from '@/data/airports.json'
 import FlightSearch from '@/app/components/Search/FlightSearch'
 import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
+import airports from '@/data/airports.json'
 
 // ---------------------------------------------
 // TYPES
@@ -227,7 +227,7 @@ function HotelPill({ hotel }: { hotel: Hotel }) {
         )}
       </div>
 
-      <a
+      
         href={hotel.expediaUrl}
         target="_blank"
         rel="noopener noreferrer"
@@ -263,12 +263,10 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
 
   return (
     <div className="relative max-w-xl mx-auto">
-      {/* Search Input */}
       <div className="relative">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base">
           🔍
         </span>
-
         <input
           type="text"
           value={query}
@@ -294,7 +292,6 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
         />
       </div>
 
-      {/* Autocomplete Dropdown */}
       {open && matches.length > 0 && (
         <div className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-auto">
           {matches.map(option => (
@@ -314,7 +311,7 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
 }
 
 // ---------------------------------------------
-// TOP DESTINATIONS (LINK DIRECTLY TO BOOKING)
+// TOP DESTINATIONS
 // ---------------------------------------------
 const TOP_DESTINATIONS: CityOption[] = [
   { city: 'London', country: 'United Kingdom' },
@@ -354,28 +351,31 @@ export default function HotelsPageClient() {
         <p className="text-base md:text-lg mb-8 text-gray-300 max-w-xl mx-auto">
           Search hotels in any city worldwide. Get started with your search today.
         </p>
-        <div className="flex justify-center gap-6 mb-8">
-  {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-    <button
-      key={tab}
-      onClick={() => setActiveTab(tab)}
-      className={`pb-2 text-lg font-medium transition-colors ${
-        activeTab === tab
-          ? 'border-b-2 border-white text-white'
-          : 'text-gray-400 hover:text-gray-200'
-      }`}
-    >
-      {tab.charAt(0).toUpperCase() + tab.slice(1)}
-    </button>
-  ))}
-</div>
 
-<div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
-  {activeTab === 'flights'     && <FlightSearch />}
-  {activeTab === 'hotels'      && <HotelSearch />}
-  {activeTab === 'experiences' && <ExperienceSearch />}
-  {activeTab === 'cars'        && <CarSearch />}
-</div>
+        {/* TAB MENU */}
+        <div className="flex justify-center gap-6 mb-8">
+          {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-2 text-lg font-medium transition-colors ${
+                activeTab === tab
+                  ? 'border-b-2 border-white text-white'
+                  : 'text-gray-400 hover:text-gray-200'
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {/* SEARCH AREA */}
+        <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+          {activeTab === 'flights'     && <FlightSearch />}
+          {activeTab === 'hotels'      && <HotelSearch />}
+          {activeTab === 'experiences' && <ExperienceSearch />}
+          {activeTab === 'cars'        && <CarSearch />}
+        </div>
       </section>
 
       {/* SEARCH + RESULTS */}

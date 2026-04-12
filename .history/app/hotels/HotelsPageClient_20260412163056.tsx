@@ -376,6 +376,8 @@ export default function HotelsPageClient() {
   {activeTab === 'experiences' && <ExperienceSearch />}
   {activeTab === 'cars'        && <CarSearch />}
 </div>
+          <HotelSearch />
+        </div>
       </section>
 
       {/* SEARCH + RESULTS */}
