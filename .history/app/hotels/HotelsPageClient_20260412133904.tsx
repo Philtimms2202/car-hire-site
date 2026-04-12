@@ -239,7 +239,11 @@ function HotelPill({ hotel }: { hotel: Hotel }) {
 // ---------------------------------------------
 // SEARCH BAR WITH AUTOCOMPLETE
 // ---------------------------------------------
-function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
+function CitySearch({
+  onSelect,
+}: {
+  onSelect: (city: CityOption) => void
+}) {
   const cityOptions = useCityOptions()
   const [query, setQuery] = React.useState('')
   const [open, setOpen] = React.useState(false)
@@ -260,12 +264,10 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
 
   return (
     <div className="relative max-w-xl mx-auto">
-      {/* Search Input */}
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base">
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
           🔍
         </span>
-
         <input
           type="text"
           value={query}
@@ -275,23 +277,10 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
           }}
           onFocus={() => setOpen(true)}
           placeholder="Start typing a city or country…"
-          className="
-            w-full
-            border border-gray-200
-            rounded-full
-            pl-12
-            pr-4
-            py-3
-            text-sm
-            focus:outline-none
-            focus:ring-2
-            focus:ring-teal-500
-            focus:border-teal-500
-          "
+          className="w-full border border-gray-200 rounded-full pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
         />
       </div>
 
-      {/* Autocomplete Dropdown */}
       {open && matches.length > 0 && (
         <div className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-auto">
           {matches.map(option => (
@@ -454,126 +443,85 @@ export default function HotelsPageClient() {
       </section>
 
       {/* FAQ SECTION */}
-<section className="py-20 px-6 bg-white">
-  <div className="max-w-4xl mx-auto">
-    <h2 className="text-3xl font-bold text-center mb-10" style={{ color: '#232e4e' }}>
-      Frequently asked questions
-    </h2>
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-10" style={{ color: '#232e4e' }}>
+            Frequently asked questions
+          </h2>
 
-    <div className="space-y-4 text-slate-800 leading-relaxed">
+          <div className="space-y-8 text-slate-800 leading-relaxed">
+            <div>
+              <h3 className="font-semibold text-lg mb-2">How does Timms Travel help me find hotels?</h3>
+              <p>
+                Timms Travel gives you a clean and fast way to search for hotels anywhere in the world. Start typing a city or country and you will instantly see real destinations. You can then explore curated suggestions or browse hotels in any location.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          How does Timms Travel help me find hotels?
-        </summary>
-        <p className="mt-3 text-sm">
-          Timms Travel gives you a clean and fast way to search for hotels anywhere in the world. 
-          Start typing a city or country and you will instantly see real destinations. 
-          You can then explore curated suggestions or browse hotels in any location.
-        </p>
-      </details>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Do I need an account to search for hotels?</h3>
+              <p>
+                No. You can search for hotels worldwide without creating an account. Everything is available instantly.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          Do I need an account to search for hotels?
-        </summary>
-        <p className="mt-3 text-sm">
-          No. You can search for hotels worldwide without creating an account. 
-          Everything is available instantly.
-        </p>
-      </details>
+                        <div>
+              <h3 className="font-semibold text-lg mb-2">Are the hotel prices live and accurate?</h3>
+              <p>
+                Yes. When you click through to book, you will see live prices, room availability and guest reviews from trusted travel providers. This ensures you always see up to date information before making a decision.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          Are the hotel prices live and accurate?
-        </summary>
-        <p className="mt-3 text-sm">
-          Yes. When you click through to book, you will see live prices, room availability 
-          and guest reviews from trusted travel providers. This ensures you always see 
-          up to date information before making a decision.
-        </p>
-      </details>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Can I book hotels directly on Timms Travel?</h3>
+              <p>
+                Timms Travel helps you discover and compare hotels. When you are ready to book, you will be taken to a secure booking page provided by one of our trusted travel partners. This keeps the process simple and reliable.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          Can I book hotels directly on Timms Travel?
-        </summary>
-        <p className="mt-3 text-sm">
-          Timms Travel helps you discover and compare hotels. 
-          When you are ready to book, you will be taken to a secure booking page 
-          provided by one of our trusted travel partners.
-        </p>
-      </details>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Does Timms Travel charge any fees?</h3>
+              <p>
+                No. You will never pay extra to use Timms Travel. The price you see when you click through to book is the price provided by the travel partner. There are no hidden charges or unexpected costs added by us.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          Does Timms Travel charge any fees?
-        </summary>
-        <p className="mt-3 text-sm">
-          No. You will never pay extra to use Timms Travel. 
-          The price you see when you click through to book is the price provided by the travel partner. 
-          There are no hidden charges or unexpected costs added by us.
-        </p>
-      </details>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Can I search for hotels in smaller or less common destinations?</h3>
+              <p>
+                Yes. Timms Travel supports hotel searches in thousands of destinations around the world. Even small towns and remote locations are included, so you can explore widely and find places to stay almost anywhere.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          Can I search for hotels in smaller or less common destinations?
-        </summary>
-        <p className="mt-3 text-sm">
-          Yes. Timms Travel supports hotel searches in thousands of destinations around the world. 
-          Even small towns and remote locations are included, so you can explore widely 
-          and find places to stay almost anywhere.
-        </p>
-      </details>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Why do some cities have curated hotel lists?</h3>
+              <p>
+                For popular destinations, we highlight a selection of hotels that travellers consistently rate highly. These curated lists save you time and help you discover great places to stay without having to sort through hundreds of options.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          Why do some cities have curated hotel lists?
-        </summary>
-        <p className="mt-3 text-sm">
-          For popular destinations, we highlight a selection of hotels that travellers consistently rate highly. 
-          These curated lists save you time and help you discover great places to stay 
-          without having to sort through hundreds of options.
-        </p>
-      </details>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">What if a city does not have a curated list?</h3>
+              <p>
+                You can still search for any city worldwide. If we do not have a curated list for that location, we will generate a clean and helpful set of hotel suggestions so you can explore your options quickly and easily.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          What if a city does not have a curated list?
-        </summary>
-        <p className="mt-3 text-sm">
-          You can still search for any city worldwide. 
-          If we do not have a curated list for that location, 
-          we will generate a clean and helpful set of hotel suggestions 
-          so you can explore your options quickly and easily.
-        </p>
-      </details>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Is Timms Travel suitable for last minute bookings?</h3>
+              <p>
+                Yes. You can search for hotels at any time and click through to see live availability. It is ideal for both planned trips and spontaneous getaways, giving you flexibility whenever you need it.
+              </p>
+            </div>
 
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          Is Timms Travel suitable for last minute bookings?
-        </summary>
-        <p className="mt-3 text-sm">
-          Yes. You can search for hotels at any time and click through to see live availability. 
-          It is ideal for both planned trips and spontaneous getaways.
-        </p>
-      </details>
-
-      <details className="border border-gray-200 rounded-xl p-4 bg-gray-50">
-        <summary className="font-semibold text-lg cursor-pointer">
-          Is Timms Travel a UK based platform?
-        </summary>
-        <p className="mt-3 text-sm">
-          Yes. Timms Travel is built in the United Kingdom and created with a focus on clarity, trust 
-          and ease of use. We aim to provide a simple and enjoyable way to find and compare hotels 
-          around the world.
-        </p>
-      </details>
-
-    </div>
-  </div>
-</section>
+            <div>
+              <h3 className="font-semibold text-lg mb-2">Is Timms Travel a UK based platform?</h3>
+              <p>
+                Yes. Timms Travel is built in the United Kingdom and created with a focus on clarity, trust and ease of use. We aim to provide a simple and enjoyable way to find and compare hotels around the world.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </main>

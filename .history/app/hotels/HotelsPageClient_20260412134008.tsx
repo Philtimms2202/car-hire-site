@@ -239,7 +239,11 @@ function HotelPill({ hotel }: { hotel: Hotel }) {
 // ---------------------------------------------
 // SEARCH BAR WITH AUTOCOMPLETE
 // ---------------------------------------------
-function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
+function CitySearch({
+  onSelect,
+}: {
+  onSelect: (city: CityOption) => void
+}) {
   const cityOptions = useCityOptions()
   const [query, setQuery] = React.useState('')
   const [open, setOpen] = React.useState(false)
@@ -260,12 +264,10 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
 
   return (
     <div className="relative max-w-xl mx-auto">
-      {/* Search Input */}
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base">
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
           🔍
         </span>
-
         <input
           type="text"
           value={query}
@@ -275,23 +277,10 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
           }}
           onFocus={() => setOpen(true)}
           placeholder="Start typing a city or country…"
-          className="
-            w-full
-            border border-gray-200
-            rounded-full
-            pl-12
-            pr-4
-            py-3
-            text-sm
-            focus:outline-none
-            focus:ring-2
-            focus:ring-teal-500
-            focus:border-teal-500
-          "
+          className="w-full border border-gray-200 rounded-full pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
         />
       </div>
 
-      {/* Autocomplete Dropdown */}
       {open && matches.length > 0 && (
         <div className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-auto">
           {matches.map(option => (
