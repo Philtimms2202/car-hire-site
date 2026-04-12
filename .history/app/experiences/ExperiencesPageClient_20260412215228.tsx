@@ -199,33 +199,26 @@ export default function ExperiencesPage() {
           <p className="text-center text-gray-500 mb-8">Filter by category or search below — press Enter to search directly on GetYourGuide.</p>
 
           {/* SEARCH — restyled with dynamic GYG link */}
-<div className="flex flex-col sm:flex-row gap-3 mb-6 max-w-xl">
-  <div className="flex-1 flex items-center border border-gray-300 rounded-lg shadow-sm bg-white focus-within:ring-2 focus-within:ring-blue-200 transition">
-    <span className="ml-3 text-gray-400 text-sm">🔍</span>
-    <input
-      type="text"
-      placeholder="Search destinations or activities…"
-      value={search}
-      onChange={e => setSearch(e.target.value)}
-      onKeyDown={e => { 
-        if (e.key === 'Enter' && search.trim()) 
-          window.open(buildGygSearchUrl(search), '_blank', 'noopener,noreferrer') 
-      }}
-      className="flex-1 px-3 py-2.5 text-black text-sm rounded-r-lg focus:outline-none"
-    />
-  </div>
-  {search.trim() && (
-    <a
-      href={buildGygSearchUrl(search)}
-      target="_blank"
-      rel="noopener noreferrer sponsored"
-      className="flex items-center justify-center px-5 py-2.5 rounded-lg text-white text-sm font-semibold whitespace-nowrap transition-opacity hover:opacity-90"
-      style={{ backgroundColor:'#232e4e' }}
-    >
-      Search on GYG →
-    </a>
-  )}
-</div>
+          <div className="flex flex-col sm:flex-row gap-3 mb-6 max-w-xl">
+            <div className="relative flex-1">
+              <span className="absolute inset-y-0 left-1 flex items-center text-gray-400 pointer-events-none text-sm">🔍</span>
+              <input
+                type="text"
+                placeholder="Search destinations or activities…"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter' && search.trim()) window.open(buildGygSearchUrl(search), '_blank', 'noopener,noreferrer') }}
+                className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-300 shadow-sm text-black bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition"
+              />
+            </div>
+            {search.trim() && (
+              <a href={buildGygSearchUrl(search)} target="_blank" rel="noopener noreferrer sponsored"
+                className="flex items-center justify-center px-5 py-2.5 rounded-lg text-white text-sm font-semibold whitespace-nowrap transition-opacity hover:opacity-90"
+                style={{ backgroundColor:'#232e4e' }}>
+                Search on GYG →
+              </a>
+            )}
+          </div>
 
           {/* CATEGORY FILTERS */}
           <div className="flex gap-2 flex-wrap mb-6">

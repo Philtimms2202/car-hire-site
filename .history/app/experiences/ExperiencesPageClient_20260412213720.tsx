@@ -1,0 +1,540 @@
+'use client'
+
+import { useState, useCallback } from 'react'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import FlightSearch from '@/app/components/Search/FlightSearch'
+import HotelSearch from '@/app/components/Search/HotelSearch'
+import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
+import CarSearch from '@/app/components/Search/CarSearch'
+
+// -----------------------------
+// CONSTANTS
+// -----------------------------
+const GYG_PARTNER_ID = 'P7B7GRH'
+const GYG_BASE = 'https://www.getyourguide.com'
+
+/** Build a GYG affiliate URL from a fixed path */
+const buildGygUrl = (path: string) => {
+  const clean = path.endsWith('/') ? path.slice(0, -1) : path
+  return `${GYG_BASE}${clean}?partner_id=${GYG_PARTNER_ID}`
+}
+
+/** Build a GYG search URL from a free-text query */
+const buildGygSearchUrl = (query: string) =>
+  `${GYG_BASE}/en-gb/s/?q=${encodeURIComponent(query.trim())}&searchSource=8&src=search_bar&adults=1&partner_id=${GYG_PARTNER_ID}`
+
+// -----------------------------
+// TYPES
+// -----------------------------
+type Category = { label: string; value: string; emoji: string }
+
+type Experience = {
+  id: number
+  title: string
+  location: string
+  category: string
+  duration: string
+  rating: number
+  reviews: number
+  price: number
+  badge: string
+  gygPath: string
+  image: string
+}
+
+// -----------------------------
+// DATA
+// -----------------------------
+const categories: Category[] = [
+  { label: 'All',         value: 'all',       emoji: '🌍' },
+  { label: 'Tours',       value: 'tours',     emoji: '🗺️' },
+  { label: 'Food & Drink',value: 'food',      emoji: '🍷' },
+  { label: 'Adventure',   value: 'adventure', emoji: '🧗' },
+  { label: 'Culture',     value: 'culture',   emoji: '🏛️' },
+  { label: 'Water Sports',value: 'water',     emoji: '🌊' },
+  { label: 'Day Trips',   value: 'daytrips',  emoji: '🚌' },
+]
+
+const experiences: Experience[] = [
+  {
+    id: 1, title: 'Colosseum Skip-the-Line Tour', location: 'Rome, Italy',
+    category: 'culture', duration: '3 hours', rating: 4.9, reviews: 12840, price: 49,
+    badge: 'Bestseller', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&q=80',
+    gygPath: '/en-gb/colosseum-l2619/',
+  },
+  {
+    id: 2, title: 'Paris Seine River Cruise', location: 'Paris, France',
+    category: 'tours', duration: '1 hour', rating: 4.8, reviews: 9320, price: 19,
+    badge: 'Top Rated', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80',
+    gygPath: '/en-gb/seine-river-l2601/',
+  },
+  {
+    id: 3, title: 'Barcelona Tapas & Wine Night Tour', location: 'Barcelona, Spain',
+    category: 'food', duration: '3.5 hours', rating: 4.9, reviews: 5210, price: 79,
+    badge: 'Fan Favourite', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80',
+    gygPath: '/en-gb/s/?q=barcelona+tapas+and+wine&searchSource=8&src=search_bar&adults=1',
+  },
+  {
+    id: 4, title: 'Queenstown Bungee Jump', location: 'Queenstown, New Zealand',
+    category: 'adventure', duration: '2 hours', rating: 4.9, reviews: 3870, price: 195,
+    badge: 'Thrilling', image: 'https://images.unsplash.com/photo-1601024445121-e5b82f020549?w=600&q=80',
+    gygPath: '/en-gb/queenstown-l498/bungee-jumping-tc86/?adults=1&searchSource=8',
+  },
+  {
+    id: 5, title: 'Santorini Sunset Sailing', location: 'Santorini, Greece',
+    category: 'water', duration: '5 hours', rating: 4.8, reviews: 7640, price: 115,
+    badge: 'Bestseller', image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=600&q=80',
+    gygPath: '/en-gb/s/?q=santorini+sunset+sailing&searchSource=8&src=search_bar&adults=1',
+  },
+  {
+    id: 6, title: 'Tokyo Tsukiji Market & Sushi Tour', location: 'Tokyo, Japan',
+    category: 'food', duration: '4 hours', rating: 4.9, reviews: 4190, price: 89,
+    badge: 'Top Rated', image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80',
+    gygPath: '/en-gb/s/?q=tokyo+tsukiji+market&searchSource=8&src=search_bar&adults=1',
+  },
+  {
+    id: 7, title: 'Machu Picchu Full Day Tour', location: 'Cusco, Peru',
+    category: 'daytrips', duration: 'Full day', rating: 4.9, reviews: 6580, price: 135,
+    badge: 'Iconic', image: 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=600&q=80',
+    gygPath: '/en-gb/machu-picchu-l1570/?adults=1&searchSource=8',
+  },
+  {
+    id: 8, title: 'New York City Helicopter Tour', location: 'New York, USA',
+    category: 'tours', duration: '15 minutes', rating: 4.8, reviews: 8100, price: 219,
+    badge: 'Spectacular', image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80',
+    gygPath: '/en-gb/s/?q=NYC+helicopter+tour&searchSource=8&src=search_bar&adults=1',
+  },
+  {
+    id: 9, title: 'Pyramids of Giza Guided Tour', location: 'Cairo, Egypt',
+    category: 'culture', duration: '6 hours', rating: 4.7, reviews: 5430, price: 65,
+    badge: 'Must-Do', image: 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?q=80&w=1740&auto=format&fit=crop',
+    gygPath: '/en-gb/pyramids-of-giza-l4184/?adults=1&searchSource=8',
+  },
+  {
+    id: 10, title: 'Amalfi Coast Boat Trip', location: 'Amalfi, Italy',
+    category: 'water', duration: '8 hours', rating: 4.9, reviews: 3210, price: 98,
+    badge: 'Stunning', image: 'https://images.unsplash.com/photo-1533587851505-d119e13fa0d7?w=600&q=80',
+    gygPath: '/en-gb/s/?q=Amalfi+coast+boat+trip&searchSource=8&src=search_bar&adults=1',
+  },
+  {
+    id: 11, title: 'Dubai Desert Safari at Sunset', location: 'Dubai, UAE',
+    category: 'adventure', duration: '6 hours', rating: 4.8, reviews: 11200, price: 55,
+    badge: 'Bestseller', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80',
+    gygPath: '/en-gb/s/?q=dubai+desert+safari&searchSource=8&src=search_bar&adults=1',
+  },
+  {
+    id: 12, title: 'Prague Old Town & Castle Walk', location: 'Prague, Czech Republic',
+    category: 'daytrips', duration: '3 hours', rating: 4.7, reviews: 4870, price: 22,
+    badge: 'Great Value', image: 'https://images.unsplash.com/photo-1541849546-216549ae216d?w=600&q=80',
+    gygPath: '/en-gb/s/?q=prague+old+town&adults=1&searchSource=8',
+  },
+]
+
+const whyItems = [
+  { emoji: '🎟️', title: 'Skip the Queues',    body: "Guaranteed entrance to the world's most popular attractions." },
+  { emoji: '💬', title: 'Expert Local Guides', body: 'Vetted, passionate guides who bring every destination to life.' },
+  { emoji: '🔄', title: 'Free Cancellation',   body: 'Most experiences offer free cancellation up to 24 hours before.' },
+  { emoji: '⭐', title: 'Millions of Reviews', body: 'Every experience is rated by real travellers.' },
+]
+
+// -----------------------------
+// STAR RATING
+// -----------------------------
+function Stars({ rating }: { rating: number }) {
+  const full = Math.floor(rating)
+  const empty = 5 - full
+  return (
+    <span className="text-sm">
+      <span style={{ color: '#f59e0b' }}>{'★'.repeat(full)}</span>
+      <span style={{ color: '#e5e7eb' }}>{'★'.repeat(empty)}</span>
+    </span>
+  )
+}
+
+// -----------------------------
+// BADGE PILL
+// -----------------------------
+function BadgePill({ label }: { label: string }) {
+  return (
+    <span
+      className="absolute top-3 left-3 text-white text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full backdrop-blur-sm"
+      style={{ backgroundColor: 'rgba(15,23,42,0.75)' }}
+    >
+      {label}
+    </span>
+  )
+}
+
+// -----------------------------
+// DYNAMIC EXPERIENCE SEARCH BOX
+// (replaces old <ExperienceSearch /> for the hero)
+// -----------------------------
+function DynamicExperienceSearch() {
+  const [query, setQuery] = useState('')
+
+  const handleSearch = useCallback(() => {
+    if (!query.trim()) return
+    window.open(buildGygSearchUrl(query), '_blank', 'noopener,noreferrer')
+  }, [query])
+
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') handleSearch()
+  }
+
+  return (
+    <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+      {/* Destination / activity input */}
+      <div className="relative flex-1">
+        <span className="absolute inset-y-0 left-4 flex items-center text-gray-400 pointer-events-none text-lg">🔍</span>
+        <input
+          type="text"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          onKeyDown={handleKey}
+          placeholder="City, landmark or activity…"
+          className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-200 text-gray-800 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition"
+        />
+      </div>
+
+      {/* Search → opens GYG with affiliate tag */}
+      <a
+        href={query.trim() ? buildGygSearchUrl(query) : `${GYG_BASE}/?partner_id=${GYG_PARTNER_ID}`}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        onClick={e => { if (!query.trim()) e.preventDefault() }}
+        className="flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-white text-sm font-semibold transition-opacity hover:opacity-90 whitespace-nowrap"
+        style={{ backgroundColor: '#0f172a' }}
+      >
+        Search Experiences →
+      </a>
+    </div>
+  )
+}
+
+// -----------------------------
+// PAGE
+// -----------------------------
+export default function ExperiencesPage() {
+  const [activeTab, setActiveTab]           = useState<'flights' | 'hotels' | 'experiences' | 'cars'>('experiences')
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [search, setSearch]                 = useState('')
+
+  /* ---------- filter card grid ---------- */
+  const filtered = experiences.filter(exp => {
+    const q = search.toLowerCase()
+    const matchSearch =
+      !q ||
+      exp.title.toLowerCase().includes(q) ||
+      exp.location.toLowerCase().includes(q) ||
+      exp.category.toLowerCase().includes(q)
+    const matchCat = activeCategory === 'all' || exp.category === activeCategory
+    return matchSearch && matchCat
+  })
+
+  /* ---------- card grid search → GYG ---------- */
+  const handleCardGridSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && search.trim()) {
+      window.open(buildGygSearchUrl(search), '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  return (
+    <main className="min-h-screen" style={{ fontFamily: "'Manrope', 'Inter', system-ui, sans-serif", backgroundColor: '#f8f8f5' }}>
+      <Navbar />
+
+      {/* ══════════════════════════════════
+          HERO
+      ══════════════════════════════════ */}
+      <section
+        className="relative overflow-hidden text-white py-28 px-6"
+        style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #0f2744 100%)' }}
+      >
+        {/* Subtle dot-grid texture */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-10"
+          style={{
+            backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+          }}
+        />
+
+        <div className="relative max-w-3xl mx-auto text-center">
+          <p className="text-xs uppercase tracking-[0.25em] text-blue-300 font-semibold mb-4">
+            Powered by GetYourGuide
+          </p>
+          <h1
+            className="font-extrabold mb-5 leading-tight"
+            style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.02em' }}
+          >
+            Experiences Worth<br />Remembering
+          </h1>
+          <p className="text-gray-300 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+            Hand-picked tours, activities and adventures from 70,000+ options worldwide.
+          </p>
+
+          {/* Tab strip */}
+          <div className="flex justify-center gap-1 mb-7 bg-white/10 rounded-full p-1 w-fit mx-auto backdrop-blur-sm">
+            {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className="px-5 py-2 rounded-full text-sm font-medium transition-all"
+                style={
+                  activeTab === tab
+                    ? { backgroundColor: '#ffffff', color: '#0f172a' }
+                    : { color: '#93c5fd' }
+                }
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Search panel */}
+          <div className="bg-white rounded-2xl p-6 shadow-2xl text-black">
+            {activeTab === 'flights'     && <FlightSearch />}
+            {activeTab === 'hotels'      && <HotelSearch />}
+            {activeTab === 'experiences' && <DynamicExperienceSearch />}
+            {activeTab === 'cars'        && <CarSearch />}
+          </div>
+
+          {/* Trust strip */}
+          <div className="mt-7 flex justify-center flex-wrap gap-6 text-blue-200 text-xs">
+            {['✓ Instant confirmation', '✓ Free cancellation on most', '✓ 70,000+ activities worldwide'].map(t => (
+              <span key={t}>{t}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════
+          LISTINGS
+      ══════════════════════════════════ */}
+      <section className="py-20 px-6" style={{ backgroundColor: '#f8f8f5' }}>
+        <div className="max-w-6xl mx-auto">
+
+          {/* Section heading */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <h2
+                className="text-3xl font-extrabold mb-1"
+                style={{ color: '#0f172a', letterSpacing: '-0.02em' }}
+              >
+                Featured Experiences
+              </h2>
+              <p className="text-gray-500 text-sm">
+                Search by name or destination — press Enter to go directly to GetYourGuide.
+              </p>
+            </div>
+
+            {/* Inline search */}
+            <div className="relative">
+              <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none">🔍</span>
+              <input
+                type="text"
+                placeholder="Search experiences…"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                onKeyDown={handleCardGridSearch}
+                className="pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300 w-64 shadow-sm"
+              />
+            </div>
+          </div>
+
+          {/* Category filters */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {categories.map(cat => (
+              <button
+                key={cat.value}
+                onClick={() => setActiveCategory(cat.value)}
+                className="px-4 py-1.5 rounded-full text-sm font-medium border transition-all"
+                style={
+                  activeCategory === cat.value
+                    ? { backgroundColor: '#0f172a', color: '#ffffff', borderColor: '#0f172a' }
+                    : { backgroundColor: '#ffffff', color: '#374151', borderColor: '#e5e7eb' }
+                }
+              >
+                {cat.emoji} {cat.label}
+              </button>
+            ))}
+          </div>
+
+          <p className="text-xs text-gray-400 mb-8">
+            {filtered.length} experience{filtered.length !== 1 ? 's' : ''} found
+            {search && (
+              <>
+                {' '}—{' '}
+                <a
+                  href={buildGygSearchUrl(search)}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="underline text-blue-500 hover:text-blue-700"
+                >
+                  Search "{search}" on GetYourGuide →
+                </a>
+              </>
+            )}
+          </p>
+
+          {/* Card grid */}
+          {filtered.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map(exp => (
+                <a
+                  key={exp.id}
+                  href={buildGygUrl(exp.gygPath)}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="group bg-white rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-lg transition-shadow duration-300"
+                >
+                  {/* Image */}
+                  <div className="relative h-52 overflow-hidden">
+                    <img
+                      src={exp.image}
+                      alt={exp.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <BadgePill label={exp.badge} />
+
+                    {/* Price overlay bottom-right */}
+                    <div
+                      className="absolute bottom-3 right-3 text-white text-xs font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm"
+                      style={{ backgroundColor: 'rgba(15,23,42,0.75)' }}
+                    >
+                      from £{exp.price}
+                    </div>
+                  </div>
+
+                  {/* Body */}
+                  <div className="p-5 flex flex-col flex-1">
+                    <p className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-1">
+                      📍 {exp.location}
+                    </p>
+                    <h3 className="font-bold text-gray-900 text-base leading-snug mb-1 group-hover:text-blue-700 transition-colors">
+                      {exp.title}
+                    </h3>
+                    <p className="text-xs text-gray-400 mb-4">⏱ {exp.duration}</p>
+
+                    {/* Rating row */}
+                    <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-gray-100">
+                      <Stars rating={exp.rating} />
+                      <span className="text-sm font-bold text-gray-800">{exp.rating}</span>
+                      <span className="text-xs text-gray-400">({exp.reviews.toLocaleString()} reviews)</span>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-24 text-gray-400">
+              <p className="text-5xl mb-4">🗺️</p>
+              <p className="text-xl font-semibold text-gray-600 mb-2">No experiences found</p>
+              <p className="text-sm mb-6">Try a different search term or category.</p>
+              {search && (
+                <a
+                  href={buildGygSearchUrl(search)}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="inline-block text-white text-sm font-semibold px-6 py-3 rounded-full hover:opacity-90 transition"
+                  style={{ backgroundColor: '#0f172a' }}
+                >
+                  Search "{search}" on GetYourGuide →
+                </a>
+              )}
+            </div>
+          )}
+
+          {/* Browse all */}
+          <div className="text-center mt-14">
+            <a
+              href={`${GYG_BASE}/?partner_id=${GYG_PARTNER_ID}`}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="inline-flex items-center gap-2 text-white font-semibold px-8 py-4 rounded-full transition-opacity hover:opacity-90 text-sm shadow-lg"
+              style={{ backgroundColor: '#0f172a' }}
+            >
+              Browse All 70,000+ Experiences on GetYourGuide →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════
+          WHY BOOK
+      ══════════════════════════════════ */}
+      <section className="py-20 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <h2
+            className="text-3xl font-extrabold text-center mb-2"
+            style={{ color: '#0f172a', letterSpacing: '-0.02em' }}
+          >
+            Why Book With Us?
+          </h2>
+          <p className="text-center text-gray-400 text-sm mb-12">
+            We partner with GetYourGuide so you get the very best.
+          </p>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {whyItems.map(item => (
+              <div key={item.title} className="text-center">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4"
+                  style={{ backgroundColor: '#f1f5f9' }}
+                >
+                  {item.emoji}
+                </div>
+                <h3 className="font-bold text-gray-900 mb-1.5 text-sm">{item.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════
+          BOTTOM CTA
+      ══════════════════════════════════ */}
+      <section
+        className="py-24 px-6 text-center text-white relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)' }}
+      >
+        <div
+          className="absolute inset-0 pointer-events-none opacity-10"
+          style={{
+            backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+          }}
+        />
+        <div className="relative max-w-xl mx-auto">
+          <h2 className="text-4xl font-extrabold mb-3" style={{ letterSpacing: '-0.02em' }}>
+            Ready to Explore?
+          </h2>
+          <p className="text-gray-300 text-base mb-10">
+            Browse over 70,000 experiences across 170+ countries, all bookable in minutes.
+          </p>
+          <div className="flex justify-center gap-3 flex-wrap">
+            <a
+              href={`${GYG_BASE}/?partner_id=${GYG_PARTNER_ID}`}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="font-bold px-8 py-4 rounded-full text-sm transition-opacity hover:opacity-90"
+              style={{ backgroundColor: '#ffffff', color: '#0f172a' }}
+            >
+              Browse All Experiences
+            </a>
+            <a
+              href="/flights"
+              className="border border-white/40 text-white font-semibold px-8 py-4 rounded-full hover:bg-white/10 transition-colors text-sm"
+            >
+              Search Flights Instead
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  )
+}
