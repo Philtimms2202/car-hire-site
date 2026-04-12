@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 
@@ -33,121 +33,120 @@ type Props = {
 
 // ─────────────────────────────────────────────
 // IATA → City name lookup
+// Used as fallback when Sanity primaryIATA isn't populated yet.
+// Add any airport your routes use.
 // ─────────────────────────────────────────────
 const IATA_CITIES: Record<string, { city: string; country: string }> = {
   // UK & Ireland
-  LHR: { city: 'London', country: 'United Kingdom' },
-  LGW: { city: 'London', country: 'United Kingdom' },
-  STN: { city: 'London', country: 'United Kingdom' },
-  LTN: { city: 'London', country: 'United Kingdom' },
-  MAN: { city: 'Manchester', country: 'United Kingdom' },
-  EDI: { city: 'Edinburgh', country: 'United Kingdom' },
-  BHX: { city: 'Birmingham', country: 'United Kingdom' },
-  GLA: { city: 'Glasgow', country: 'United Kingdom' },
-  BRS: { city: 'Bristol', country: 'United Kingdom' },
-  LBA: { city: 'Leeds', country: 'United Kingdom' },
-  NCL: { city: 'Newcastle', country: 'United Kingdom' },
-  DUB: { city: 'Dublin', country: 'Ireland' },
+  LHR: { city: 'London',        country: 'United Kingdom' },
+  LGW: { city: 'London',        country: 'United Kingdom' },
+  STN: { city: 'London',        country: 'United Kingdom' },
+  LTN: { city: 'London',        country: 'United Kingdom' },
+  MAN: { city: 'Manchester',    country: 'United Kingdom' },
+  EDI: { city: 'Edinburgh',     country: 'United Kingdom' },
+  BHX: { city: 'Birmingham',    country: 'United Kingdom' },
+  GLA: { city: 'Glasgow',       country: 'United Kingdom' },
+  BRS: { city: 'Bristol',       country: 'United Kingdom' },
+  LBA: { city: 'Leeds',         country: 'United Kingdom' },
+  NCL: { city: 'Newcastle',     country: 'United Kingdom' },
+  DUB: { city: 'Dublin',        country: 'Ireland' },
   // Europe
-  CDG: { city: 'Paris', country: 'France' },
-  ORY: { city: 'Paris', country: 'France' },
-  AMS: { city: 'Amsterdam', country: 'Netherlands' },
-  BCN: { city: 'Barcelona', country: 'Spain' },
-  MAD: { city: 'Madrid', country: 'Spain' },
-  PMI: { city: 'Mallorca', country: 'Spain' },
-  IBZ: { city: 'Ibiza', country: 'Spain' },
-  AGP: { city: 'Málaga', country: 'Spain' },
-  ALC: { city: 'Alicante', country: 'Spain' },
-  FCO: { city: 'Rome', country: 'Italy' },
-  MXP: { city: 'Milan', country: 'Italy' },
-  VCE: { city: 'Venice', country: 'Italy' },
-  NAP: { city: 'Naples', country: 'Italy' },
-  FRA: { city: 'Frankfurt', country: 'Germany' },
-  MUC: { city: 'Munich', country: 'Germany' },
-  BER: { city: 'Berlin', country: 'Germany' },
-  VIE: { city: 'Vienna', country: 'Austria' },
-  ZRH: { city: 'Zurich', country: 'Switzerland' },
-  GVA: { city: 'Geneva', country: 'Switzerland' },
-  BRU: { city: 'Brussels', country: 'Belgium' },
-  CPH: { city: 'Copenhagen', country: 'Denmark' },
-  OSL: { city: 'Oslo', country: 'Norway' },
-  ARN: { city: 'Stockholm', country: 'Sweden' },
-  HEL: { city: 'Helsinki', country: 'Finland' },
-  LIS: { city: 'Lisbon', country: 'Portugal' },
-  OPO: { city: 'Porto', country: 'Portugal' },
-  FAO: { city: 'Faro', country: 'Portugal' },
-  ATH: { city: 'Athens', country: 'Greece' },
-  HER: { city: 'Heraklion', country: 'Greece' },
-  RHO: { city: 'Rhodes', country: 'Greece' },
-  PRG: { city: 'Prague', country: 'Czech Republic' },
-  BUD: { city: 'Budapest', country: 'Hungary' },
-  WAW: { city: 'Warsaw', country: 'Poland' },
-  KRK: { city: 'Krakow', country: 'Poland' },
-  AYT: { city: 'Antalya', country: 'Turkey' },
-  IST: { city: 'Istanbul', country: 'Turkey' },
-  SAW: { city: 'Istanbul', country: 'Turkey' },
-  TFS: { city: 'Tenerife', country: 'Spain' },
+  CDG: { city: 'Paris',         country: 'France' },
+  ORY: { city: 'Paris',         country: 'France' },
+  AMS: { city: 'Amsterdam',     country: 'Netherlands' },
+  BCN: { city: 'Barcelona',     country: 'Spain' },
+  MAD: { city: 'Madrid',        country: 'Spain' },
+  PMI: { city: 'Mallorca',      country: 'Spain' },
+  IBZ: { city: 'Ibiza',         country: 'Spain' },
+  AGP: { city: 'Málaga',        country: 'Spain' },
+  ALC: { city: 'Alicante',      country: 'Spain' },
+  FCO: { city: 'Rome',          country: 'Italy' },
+  MXP: { city: 'Milan',         country: 'Italy' },
+  VCE: { city: 'Venice',        country: 'Italy' },
+  NAP: { city: 'Naples',        country: 'Italy' },
+  FRA: { city: 'Frankfurt',     country: 'Germany' },
+  MUC: { city: 'Munich',        country: 'Germany' },
+  BER: { city: 'Berlin',        country: 'Germany' },
+  VIE: { city: 'Vienna',        country: 'Austria' },
+  ZRH: { city: 'Zurich',        country: 'Switzerland' },
+  GVA: { city: 'Geneva',        country: 'Switzerland' },
+  BRU: { city: 'Brussels',      country: 'Belgium' },
+  CPH: { city: 'Copenhagen',    country: 'Denmark' },
+  OSL: { city: 'Oslo',          country: 'Norway' },
+  ARN: { city: 'Stockholm',     country: 'Sweden' },
+  HEL: { city: 'Helsinki',      country: 'Finland' },
+  LIS: { city: 'Lisbon',        country: 'Portugal' },
+  OPO: { city: 'Porto',         country: 'Portugal' },
+  FAO: { city: 'Faro',          country: 'Portugal' },
+  ATH: { city: 'Athens',        country: 'Greece' },
+  HER: { city: 'Heraklion',     country: 'Greece' },
+  RHO: { city: 'Rhodes',        country: 'Greece' },
+  PRG: { city: 'Prague',        country: 'Czech Republic' },
+  BUD: { city: 'Budapest',      country: 'Hungary' },
+  WAW: { city: 'Warsaw',        country: 'Poland' },
+  KRK: { city: 'Krakow',        country: 'Poland' },
+  AYT: { city: 'Antalya',       country: 'Turkey' },
+  IST: { city: 'Istanbul',      country: 'Turkey' },
+  SAW: { city: 'Istanbul',      country: 'Turkey' },
+  TFS: { city: 'Tenerife',      country: 'Spain' },
   // Middle East & Africa
-  DXB: { city: 'Dubai', country: 'UAE' },
-  AUH: { city: 'Abu Dhabi', country: 'UAE' },
-  DOH: { city: 'Doha', country: 'Qatar' },
-  AMM: { city: 'Amman', country: 'Jordan' },
-  CAI: { city: 'Cairo', country: 'Egypt' },
-  HRG: { city: 'Hurghada', country: 'Egypt' },
-  SSH: { city: 'Sharm el-Sheikh', country: 'Egypt' },
-  CMN: { city: 'Casablanca', country: 'Morocco' },
-  RAK: { city: 'Marrakech', country: 'Morocco' },
-  CPT: { city: 'Cape Town', country: 'South Africa' },
-  JNB: { city: 'Johannesburg', country: 'South Africa' },
-  SID: { city: 'Cape Verde', country: 'Cape Verde' },
+  DXB: { city: 'Dubai',         country: 'UAE' },
+  AUH: { city: 'Abu Dhabi',     country: 'UAE' },
+  DOH: { city: 'Doha',          country: 'Qatar' },
+  AMM: { city: 'Amman',         country: 'Jordan' },
+  CAI: { city: 'Cairo',         country: 'Egypt' },
+  HRG: { city: 'Hurghada',      country: 'Egypt' },
+  SSH: { city: 'Sharm el-Sheikh',country: 'Egypt' },
+  CMN: { city: 'Casablanca',    country: 'Morocco' },
+  RAK: { city: 'Marrakech',     country: 'Morocco' },
+  CPT: { city: 'Cape Town',     country: 'South Africa' },
+  JNB: { city: 'Johannesburg',  country: 'South Africa' },
+  SID: { city: 'Cape Verde',    country: 'Cape Verde' },
   // Americas
-  JFK: { city: 'New York', country: 'USA' },
-  EWR: { city: 'New York', country: 'USA' },
-  LAX: { city: 'Los Angeles', country: 'USA' },
-  MCO: { city: 'Orlando', country: 'USA' },
-  MIA: { city: 'Miami', country: 'USA' },
-  ORD: { city: 'Chicago', country: 'USA' },
+  JFK: { city: 'New York',      country: 'USA' },
+  EWR: { city: 'New York',      country: 'USA' },
+  LAX: { city: 'Los Angeles',   country: 'USA' },
+  MCO: { city: 'Orlando',       country: 'USA' },
+  MIA: { city: 'Miami',         country: 'USA' },
+  ORD: { city: 'Chicago',       country: 'USA' },
   SFO: { city: 'San Francisco', country: 'USA' },
-  LAS: { city: 'Las Vegas', country: 'USA' },
-  BOS: { city: 'Boston', country: 'USA' },
-  YYZ: { city: 'Toronto', country: 'Canada' },
-  YVR: { city: 'Vancouver', country: 'Canada' },
-  CUN: { city: 'Cancún', country: 'Mexico' },
-  GRU: { city: 'São Paulo', country: 'Brazil' },
-  GIG: { city: 'Rio de Janeiro', country: 'Brazil' },
-  EZE: { city: 'Buenos Aires', country: 'Argentina' },
+  LAS: { city: 'Las Vegas',     country: 'USA' },
+  BOS: { city: 'Boston',        country: 'USA' },
+  YYZ: { city: 'Toronto',       country: 'Canada' },
+  YVR: { city: 'Vancouver',     country: 'Canada' },
+  CUN: { city: 'Cancún',        country: 'Mexico' },
+  GRU: { city: 'São Paulo',     country: 'Brazil' },
+  GIG: { city: 'Rio de Janeiro',country: 'Brazil' },
+  EZE: { city: 'Buenos Aires',  country: 'Argentina' },
   // Asia & Pacific
-  BKK: { city: 'Bangkok', country: 'Thailand' },
-  HKT: { city: 'Phuket', country: 'Thailand' },
-  CNX: { city: 'Chiang Mai', country: 'Thailand' },
-  SIN: { city: 'Singapore', country: 'Singapore' },
-  KUL: { city: 'Kuala Lumpur', country: 'Malaysia' },
-  HKG: { city: 'Hong Kong', country: 'Hong Kong' },
-  NRT: { city: 'Tokyo', country: 'Japan' },
-  HND: { city: 'Tokyo', country: 'Japan' },
-  OSA: { city: 'Osaka', country: 'Japan' },
-  ICN: { city: 'Seoul', country: 'South Korea' },
-  DEL: { city: 'Delhi', country: 'India' },
-  BOM: { city: 'Mumbai', country: 'India' },
-  MAA: { city: 'Chennai', country: 'India' },
-  COK: { city: 'Kochi', country: 'India' },
-  CGK: { city: 'Jakarta', country: 'Indonesia' },
-  DPS: { city: 'Bali', country: 'Indonesia' },
-  MNL: { city: 'Manila', country: 'Philippines' },
+  BKK: { city: 'Bangkok',       country: 'Thailand' },
+  HKT: { city: 'Phuket',        country: 'Thailand' },
+  CNX: { city: 'Chiang Mai',    country: 'Thailand' },
+  SIN: { city: 'Singapore',     country: 'Singapore' },
+  KUL: { city: 'Kuala Lumpur',  country: 'Malaysia' },
+  HKG: { city: 'Hong Kong',     country: 'Hong Kong' },
+  NRT: { city: 'Tokyo',         country: 'Japan' },
+  HND: { city: 'Tokyo',         country: 'Japan' },
+  OSA: { city: 'Osaka',         country: 'Japan' },
+  ICN: { city: 'Seoul',         country: 'South Korea' },
+  DEL: { city: 'Delhi',         country: 'India' },
+  BOM: { city: 'Mumbai',        country: 'India' },
+  MAA: { city: 'Chennai',       country: 'India' },
+  COK: { city: 'Kochi',         country: 'India' },
+  CGK: { city: 'Jakarta',       country: 'Indonesia' },
+  DPS: { city: 'Bali',          country: 'Indonesia' },
+  MNL: { city: 'Manila',        country: 'Philippines' },
   SGN: { city: 'Ho Chi Minh City', country: 'Vietnam' },
-  HAN: { city: 'Hanoi', country: 'Vietnam' },
-  PNH: { city: 'Phnom Penh', country: 'Cambodia' },
-  REP: { city: 'Siem Reap', country: 'Cambodia' },
-  SYD: { city: 'Sydney', country: 'Australia' },
-  MEL: { city: 'Melbourne', country: 'Australia' },
-  BNE: { city: 'Brisbane', country: 'Australia' },
-  AKL: { city: 'Auckland', country: 'New Zealand' },
+  HAN: { city: 'Hanoi',         country: 'Vietnam' },
+  PNH: { city: 'Phnom Penh',    country: 'Cambodia' },
+  REP: { city: 'Siem Reap',     country: 'Cambodia' },
+  SYD: { city: 'Sydney',        country: 'Australia' },
+  MEL: { city: 'Melbourne',     country: 'Australia' },
+  BNE: { city: 'Brisbane',      country: 'Australia' },
+  AKL: { city: 'Auckland',      country: 'New Zealand' },
 }
 
-// ─────────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────────
-
+/** Resolve a human-readable city name from IATA, preferring Sanity data */
 function resolveCityName(iata: string, sanityCity: City | null): string {
   if (sanityCity?.name) return sanityCity.name
   return IATA_CITIES[iata.toUpperCase()]?.city ?? iata.toUpperCase()
@@ -158,60 +157,40 @@ function resolveCountryName(iata: string, sanityCity: City | null): string | und
   return IATA_CITIES[iata.toUpperCase()]?.country
 }
 
-// simple deterministic seeded shuffle (no extra deps)
-function seededShuffle<T>(items: T[], seed: string): T[] {
-  let h = 0
-  for (let i = 0; i < seed.length; i++) {
-    h = (h * 31 + seed.charCodeAt(i)) | 0
-  }
-  const arr = [...items]
-  for (let i = arr.length - 1; i > 0; i--) {
-    const x = Math.sin(h + i) * 10000
-    const r = Math.floor((x - Math.floor(x)) * (i + 1))
-    ;[arr[i], arr[r]] = [arr[r], arr[i]]
-  }
-  return arr
-}
-
 // ─────────────────────────────────────────────
-// STATIC DATA
+// STATIC DATA - popular onward routes from any destination
+// These are shown as "You might also like" cards.
+// In future, generate these from Sanity city relationships.
 // ─────────────────────────────────────────────
-
-const POPULAR_ONWARD: Record<
-  string,
-  { iata: string; city: string; country: string; emoji: string }[]
-> = {
+const POPULAR_ONWARD: Record<string, { iata: string; city: string; country: string; emoji: string }[]> = {
   LHR: [
-    { iata: 'DXB', city: 'Dubai', country: 'UAE', emoji: '🌆' },
-    { iata: 'JFK', city: 'New York', country: 'USA', emoji: '🗽' },
-    { iata: 'BCN', city: 'Barcelona', country: 'Spain', emoji: '⛪' },
-    { iata: 'BKK', city: 'Bangkok', country: 'Thailand', emoji: '🛕' },
-    { iata: 'SYD', city: 'Sydney', country: 'Australia', emoji: '🦘' },
-    { iata: 'CDG', city: 'Paris', country: 'France', emoji: '🗼' },
+    { iata: 'DXB', city: 'Dubai',     country: 'UAE',     emoji: '🌆' },
+    { iata: 'JFK', city: 'New York',  country: 'USA',     emoji: '🗽' },
+    { iata: 'BCN', city: 'Barcelona', country: 'Spain',   emoji: '⛪' },
+    { iata: 'BKK', city: 'Bangkok',   country: 'Thailand',emoji: '🛕' },
+    { iata: 'SYD', city: 'Sydney',    country: 'Australia',emoji: '🦘' },
+    { iata: 'CDG', city: 'Paris',     country: 'France',  emoji: '🗼' },
   ],
   MAN: [
-    { iata: 'DXB', city: 'Dubai', country: 'UAE', emoji: '🌆' },
-    { iata: 'BCN', city: 'Barcelona', country: 'Spain', emoji: '⛪' },
-    { iata: 'AYT', city: 'Antalya', country: 'Turkey', emoji: '🏖️' },
-    { iata: 'LIS', city: 'Lisbon', country: 'Portugal', emoji: '🏛️' },
-    { iata: 'PMI', city: 'Mallorca', country: 'Spain', emoji: '🌴' },
-    { iata: 'FAO', city: 'Faro', country: 'Portugal', emoji: '☀️' },
+    { iata: 'DXB', city: 'Dubai',     country: 'UAE',     emoji: '🌆' },
+    { iata: 'BCN', city: 'Barcelona', country: 'Spain',   emoji: '⛪' },
+    { iata: 'AYT', city: 'Antalya',   country: 'Turkey',  emoji: '🏖️' },
+    { iata: 'LIS', city: 'Lisbon',    country: 'Portugal',emoji: '🏛️' },
+    { iata: 'PMI', city: 'Mallorca',  country: 'Spain',   emoji: '🌴' },
+    { iata: 'FAO', city: 'Faro',      country: 'Portugal',emoji: '☀️' },
   ],
   DEFAULT: [
-    { iata: 'DXB', city: 'Dubai', country: 'UAE', emoji: '🌆' },
-    { iata: 'BCN', city: 'Barcelona', country: 'Spain', emoji: '⛪' },
-    { iata: 'JFK', city: 'New York', country: 'USA', emoji: '🗽' },
-    { iata: 'BKK', city: 'Bangkok', country: 'Thailand', emoji: '🛕' },
-    { iata: 'CDG', city: 'Paris', country: 'France', emoji: '🗼' },
+    { iata: 'DXB', city: 'Dubai',     country: 'UAE',     emoji: '🌆' },
+    { iata: 'BCN', city: 'Barcelona', country: 'Spain',   emoji: '⛪' },
+    { iata: 'JFK', city: 'New York',  country: 'USA',     emoji: '🗽' },
+    { iata: 'BKK', city: 'Bangkok',   country: 'Thailand',emoji: '🛕' },
+    { iata: 'CDG', city: 'Paris',     country: 'France',  emoji: '🗼' },
     { iata: 'AMS', city: 'Amsterdam', country: 'Netherlands', emoji: '🌷' },
   ],
 }
 
-const ROUTE_FACTS: {
-  icon: string
-  label: string
-  getValue: (o: string, d: string) => string
-}[] = [
+// Route facts shown in the info strip
+const ROUTE_FACTS: { icon: string; label: string; getValue: (o: string, d: string) => string }[] = [
   {
     icon: '✈️',
     label: 'Typical flight time',
@@ -234,6 +213,7 @@ const ROUTE_FACTS: {
   },
 ]
 
+// Travel tips - generic but useful for SEO + UX
 const TRAVEL_TIPS = [
   {
     icon: '📅',
@@ -258,18 +238,14 @@ const TRAVEL_TIPS = [
 ]
 
 // ─────────────────────────────────────────────
-// KIWI DEEP LINK BUILDER
+// KIWI DEEP LINK BUILDER (matches your existing pattern)
 // ─────────────────────────────────────────────
-
-const AFFIL_ID =
-  'travelpayoutsdeeplink_timmstravel.com_6bc7301798224d1cad7e3f320-714930'
+const AFFIL_ID = 'travelpayoutsdeeplink_timmstravel.com_6bc7301798224d1cad7e3f320-714930'
 
 const fetchKiwiSlug = async (iata: string): Promise<string | null> => {
   try {
     const res = await fetch(
-      `https://api.skypicker.com/locations?term=${encodeURIComponent(
-        iata
-      )}&locale=en-US&location_types=airport&limit=1`
+      `https://api.skypicker.com/locations?term=${encodeURIComponent(iata)}&locale=en-US&location_types=airport&limit=1`
     )
     const data = await res.json()
     return data.locations?.[0]?.slug || null
@@ -279,21 +255,13 @@ const fetchKiwiSlug = async (iata: string): Promise<string | null> => {
 }
 
 const buildKiwiUrl = async (origin: string, dest: string): Promise<string> => {
-  const [oSlug, dSlug] = await Promise.all([
-    fetchKiwiSlug(origin),
-    fetchKiwiSlug(dest),
-  ])
-  if (!oSlug || !dSlug)
-    return `https://www.kiwi.com/en/search/results/${origin}/${dest}?affilid=${AFFIL_ID}`
+  const [oSlug, dSlug] = await Promise.all([fetchKiwiSlug(origin), fetchKiwiSlug(dest)])
+  if (!oSlug || !dSlug) return `https://www.kiwi.com/en/search/results/${origin}/${dest}?affilid=${AFFIL_ID}`
 
   const today = new Date()
-  const depart = `${today.getFullYear()}-${String(
-    today.getMonth() + 1
-  ).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+  const depart = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 
-  const url = new URL(
-    `https://www.kiwi.com/en/search/results/${oSlug}/${dSlug}/${depart}`
-  )
+  const url = new URL(`https://www.kiwi.com/en/search/results/${oSlug}/${dSlug}/${depart}`)
   url.searchParams.set('affilid', AFFIL_ID)
   url.searchParams.set('adults', '1')
   url.searchParams.set('cabinClass', 'economy')
@@ -327,34 +295,28 @@ function SearchBox({
   return (
     <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-3xl mx-auto">
       <div className="flex flex-col sm:flex-row items-center gap-3">
+        {/* Origin */}
         <div className="flex-1 w-full">
-          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-            From
-          </label>
+          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">From</label>
           <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-lg">
             {originName}
-            <span className="ml-2 text-sm font-mono text-gray-400">
-              {originIATA}
-            </span>
+            <span className="ml-2 text-sm font-mono text-gray-400">{originIATA}</span>
           </div>
         </div>
 
-        <div className="text-2xl text-gray-400 mt-4 sm:mt-0 select-none">
-          ⇄
-        </div>
+        {/* Swap icon */}
+        <div className="text-2xl text-gray-400 mt-4 sm:mt-0 select-none">⇄</div>
 
+        {/* Destination */}
         <div className="flex-1 w-full">
-          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-            To
-          </label>
+          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">To</label>
           <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-lg">
             {destinationName}
-            <span className="ml-2 text-sm font-mono text-gray-400">
-              {destinationIATA}
-            </span>
+            <span className="ml-2 text-sm font-mono text-gray-400">{destinationIATA}</span>
           </div>
         </div>
 
+        {/* CTAs */}
         <div className="mt-4 sm:mt-6 flex flex-col gap-2 shrink-0">
           <button
             onClick={handleSearch}
@@ -396,12 +358,8 @@ function RouteInfoStrip({
           className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center"
         >
           <div className="text-3xl mb-2">{icon}</div>
-          <p className="text-xs uppercase tracking-widest text-gray-400 mb-1">
-            {label}
-          </p>
-          <p className="font-semibold text-gray-800 text-sm">
-            {getValue(originIATA, destinationIATA)}
-          </p>
+          <p className="text-xs uppercase tracking-widest text-gray-400 mb-1">{label}</p>
+          <p className="font-semibold text-gray-800 text-sm">{getValue(originIATA, destinationIATA)}</p>
         </div>
       ))}
     </div>
@@ -417,12 +375,7 @@ function PopularRoutesGrid({
 }) {
   const [loadingIata, setLoadingIata] = useState<string | null>(null)
 
-  const baseRoutes = POPULAR_ONWARD[originIATA] ?? POPULAR_ONWARD.DEFAULT
-
-  const routes = useMemo(
-    () => seededShuffle(baseRoutes, `${originIATA}-${destinationName}`),
-    [baseRoutes, originIATA, destinationName]
-  )
+  const routes = POPULAR_ONWARD[originIATA] ?? POPULAR_ONWARD.DEFAULT
 
   const handleClick = async (destIata: string) => {
     setLoadingIata(destIata)
@@ -441,10 +394,7 @@ function PopularRoutesGrid({
           <div className="flex items-center gap-3 mb-4">
             <span className="text-4xl">{route.emoji}</span>
             <div>
-              <p
-                className="font-bold text-lg"
-                style={{ color: '#232e4e' }}
-              >
+              <p className="font-bold text-lg" style={{ color: '#232e4e' }}>
                 {route.city}
               </p>
               <p className="text-xs text-gray-400">{route.country}</p>
@@ -452,13 +402,9 @@ function PopularRoutesGrid({
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
-              {originIATA}
-            </span>
+            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{originIATA}</span>
             <span>→</span>
-            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
-              {route.iata}
-            </span>
+            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{route.iata}</span>
           </div>
 
           <button
@@ -467,9 +413,7 @@ function PopularRoutesGrid({
             className="w-full py-2 rounded-xl text-white font-semibold text-sm transition hover:opacity-90 disabled:opacity-60"
             style={{ backgroundColor: '#232e4e' }}
           >
-            {loadingIata === route.iata
-              ? 'Loading…'
-              : `Search flights from ${originIATA} →`}
+            {loadingIata === route.iata ? 'Loading…' : `Search flights from ${originIATA} →`}
           </button>
         </div>
       ))}
@@ -488,9 +432,7 @@ function TravelTips() {
           <span className="text-3xl shrink-0">{tip.icon}</span>
           <div>
             <p className="font-bold text-gray-800 mb-1">{tip.title}</p>
-            <p className="text-sm text-gray-500 leading-relaxed">
-              {tip.body}
-            </p>
+            <p className="text-sm text-gray-500 leading-relaxed">{tip.body}</p>
           </div>
         </div>
       ))}
@@ -517,26 +459,23 @@ function SeoTextBlock({
         <p>{destinationDescription}</p>
       ) : (
         <p>
-          Looking for cheap flights from {originName} to {destinationName}? You're
-          in the right place. Timms Travel compares hundreds of airlines and
-          booking options to find you the best prices on flights from {originName}
-          {originCountry ? `, ${originCountry}` : ''} to {destinationName}
-          {destinationCountry ? `, ${destinationCountry}` : ''} with no hidden
+          Looking for cheap flights from {originName} to {destinationName}? You're in the right
+          place. Timms Travel compares hundreds of airlines and booking options to find you the best
+          prices on flights from {originName}{originCountry ? `, ${originCountry}` : ''} to{' '}
+          {destinationName}{destinationCountry ? `, ${destinationCountry}` : ''} with no hidden
           fees and no price mark-ups.
         </p>
       )}
       <p>
-        Whether you're travelling for a weekend break, a long-haul adventure, or
-        a business trip, our search pulls together real-time fares so you can
-        compare and book in minutes. We partner with Kiwi.com to bring you
-        flexible ticket options including one-way, return, and multi-city routes
-        on this popular flight corridor.
+        Whether you're travelling for a weekend break, a long-haul adventure, or a business trip,
+        our search pulls together real-time fares so you can compare and book in minutes. We partner
+        with Kiwi.com to bring you flexible ticket options including one-way, return, and multi-city
+        routes on this popular flight corridor.
       </p>
       <p>
-        Prices on the {originName} to {destinationName} route vary throughout the
-        year. To find the best deal, try adjusting your travel dates by a day or
-        two - even small changes can significantly lower the fare. Use the search
-        above to explore all available options.
+        Prices on the {originName} to {destinationName} route vary throughout the year. To find the
+        best deal, try adjusting your travel dates by a day or two - even small changes can
+        significantly lower the fare. Use the search above to explore all available options.
       </p>
     </div>
   )
@@ -545,7 +484,6 @@ function SeoTextBlock({
 // ─────────────────────────────────────────────
 // MAIN PAGE
 // ─────────────────────────────────────────────
-
 export default function RoutePageClient({
   originIATA,
   destinationIATA,
@@ -553,30 +491,29 @@ export default function RoutePageClient({
   origin,
   destination,
 }: Props) {
+  // Resolve display names - Sanity first, local lookup second, IATA code last
   const originName = resolveCityName(originIATA, origin)
   const destinationName = resolveCityName(destinationIATA, destination)
   const originCountry = resolveCountryName(originIATA, origin)
   const destinationCountry = resolveCountryName(destinationIATA, destination)
 
+  // Breadcrumb label
   const routeLabel = `${originName} → ${destinationName}`
 
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
 
-      {/* HERO */}
+      {/* ── HERO ─────────────────────────────── */}
       <section
         style={{ backgroundColor: '#232e4e' }}
         className="text-white py-20 px-6 text-center"
       >
+        {/* Breadcrumb */}
         <nav className="flex justify-center gap-2 text-sm mb-6 text-gray-400">
-          <a href="/" className="hover:text-white transition">
-            Home
-          </a>
+          <a href="/" className="hover:text-white transition">Home</a>
           <span>/</span>
-          <a href="/flights" className="hover:text-white transition">
-            Flights
-          </a>
+          <a href="/flights" className="hover:text-white transition">Flights</a>
           <span>/</span>
           <span className="text-white">{routeLabel}</span>
         </nav>
@@ -599,10 +536,10 @@ export default function RoutePageClient({
         )}
 
         <p className="text-gray-400 mb-10 max-w-xl mx-auto">
-          Compare airlines, dates and prices in seconds. Book securely with
-          Kiwi.com.
+          Compare airlines, dates and prices in seconds. Book securely with Kiwi.com.
         </p>
 
+        {/* Inline search box */}
         <SearchBox
           originIATA={originIATA}
           destinationIATA={destinationIATA}
@@ -611,7 +548,7 @@ export default function RoutePageClient({
         />
       </section>
 
-      {/* ROUTE INFO STRIP */}
+      {/* ── ROUTE INFO STRIP ─────────────────── */}
       <section className="py-12 px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <h2
@@ -620,14 +557,11 @@ export default function RoutePageClient({
           >
             About This Route
           </h2>
-          <RouteInfoStrip
-            originIATA={originIATA}
-            destinationIATA={destinationIATA}
-          />
+          <RouteInfoStrip originIATA={originIATA} destinationIATA={destinationIATA} />
         </div>
       </section>
 
-      {/* SEO CONTENT */}
+      {/* ── SEO CONTENT ──────────────────────── */}
       <section className="py-16 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <h2
@@ -646,7 +580,7 @@ export default function RoutePageClient({
         </div>
       </section>
 
-      {/* POPULAR ROUTES FROM ORIGIN */}
+      {/* ── POPULAR ROUTES FROM ORIGIN ───────── */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2
@@ -658,14 +592,11 @@ export default function RoutePageClient({
           <p className="text-center text-gray-500 mb-10">
             Explore other top routes departing from {originName}
           </p>
-          <PopularRoutesGrid
-            originIATA={originIATA}
-            destinationName={destinationName}
-          />
+          <PopularRoutesGrid originIATA={originIATA} destinationName={destinationName} />
         </div>
       </section>
 
-      {/* TRAVEL TIPS */}
+      {/* ── TRAVEL TIPS ──────────────────────── */}
       <section className="py-16 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <h2
@@ -681,7 +612,7 @@ export default function RoutePageClient({
         </div>
       </section>
 
-      {/* FINAL CTA */}
+      {/* ── FINAL CTA ────────────────────────── */}
       <section
         style={{ backgroundColor: '#232e4e' }}
         className="py-16 px-6 text-center text-white"
