@@ -16,24 +16,23 @@ export async function GET() {
   const now = new Date().toISOString()
 
   // Unique continents
-  const continents = [...new Set(locations.map((l: any) => l.continentSlug))]
+  const continents = [...new Set(locations.map(l => l.continentSlug))]
 
   // Unique continent/country combinations
   const countries = [
     ...new Map(
-      locations.map((l: any) => [`${l.continentSlug}/${l.countrySlug}`, l])
+      locations.map(l => [`${l.continentSlug}/${l.countrySlug}`, l])
     ).values()
-  ] as any[]
+  ]
 
   // Build all URLs
   const urls = [
     // Static pages
-    { loc: `${BASE_URL}/`,            lastmod: now },
-    { loc: `${BASE_URL}/locations`,   lastmod: now },
-    { loc: `${BASE_URL}/hotels`,      lastmod: now },
-    { loc: `${BASE_URL}/flights`,     lastmod: now },
-    { loc: `${BASE_URL}/experiences`, lastmod: now },
-    { loc: `${BASE_URL}/car-hire`,    lastmod: now },
+    { loc: `${BASE_URL}/`, lastmod: now },
+    { loc: `${BASE_URL}/locations`, lastmod: now },
+    { loc: `${BASE_URL}/hotels`, lastmod: now },
+    { loc: `${BASE_URL}/flights`, lastmod: now },
+    { loc: `${BASE_URL}/experiences`, lastmod: now }, // <-- Added experiences page
 
     // Continent pages
     ...continents.map(continent => ({
@@ -48,13 +47,13 @@ export async function GET() {
     })),
 
     // City pages
-    ...locations.map((l: any) => ({
+    ...locations.map(l => ({
       loc: `${BASE_URL}/locations/${l.continentSlug}/${l.countrySlug}/${l.citySlug}`,
       lastmod: new Date(l._updatedAt).toISOString(),
     })),
 
     // Things-to-do pages
-    ...locations.map((l: any) => ({
+    ...locations.map(l => ({
       loc: `${BASE_URL}/locations/${l.continentSlug}/${l.countrySlug}/${l.citySlug}/things-to-do`,
       lastmod: new Date(l._updatedAt).toISOString(),
     })),
@@ -65,12 +64,12 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls
     .map(
-      u => `  <url>
-    <loc>${u.loc}</loc>
-    <lastmod>${u.lastmod}</lastmod>
-  </url>`
+      u => `<url>
+  <loc>${u.loc}</loc>
+  <lastmod>${u.lastmod}</lastmod>
+</url>`
     )
-    .join('\n')}
+    .join('')}
 </urlset>`
 
   return new Response(xml, {
