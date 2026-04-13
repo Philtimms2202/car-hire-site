@@ -1,0 +1,184 @@
+// ============================================
+// BLOG POST PAGE - app/blog/[slug]/page.tsx
+// ============================================
+
+import Navbar from '../../components/Navbar'
+import Footer from '../../components/Footer'
+import { PortableText } from '@portabletext/react'
+import { client } from '../../../sanity/lib/client'
+import imageUrlBuilder from '@sanity/image-url'
+
+export const revalidate = 60
+
+const builder = imageUrlBuilder(client)
+const urlFor = (src: any) => builder.image(src).url()
+
+// ⭐ ONE unified query for both metadata + page
+const fullPostQuery = `
+  *[_type == "post" && slug.current == $slug][0]{
+    title,
+    metaTitle,
+    metaDescription,
+    metaImage,
+    author,
+    category,
+    estimatedReadingTime,
+    publishedAt,
+    mainImage,
+    excerpt,
+    body
+  }
+`
+
+// ⭐ Metadata now uses the SAME data as the page
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const post = await client.fetch(fullPostQuery, { slug: params.slug })
+
+  if (!post) {
+    return {
+      title: "Timms Travel | Blog",
+      description: "Discover amazing experiences around the world."
+    }
+  }
+
+  return {
+    title: post.metaTitle || post.title,
+    description: post.metaDescription || "",
+    openGraph: {
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || "",
+      images: post.metaImage ? [urlFor(post.metaImage)] : [],
+      url: `https://timmstravel.com/blog/${params.slug}`,
+      type: "article"
+    }
+  }
+}
+
+async function getPost(slug: string) {
+  return await client.fetch(fullPostQuery, { slug })
+}
+
+export default async function BlogPost({ params }: { params: { slug: string } }) {
+  const post = await getPost(params.slug)
+
+  if (!post) {
+    return (
+      <main className="min-h-screen bg-white">
+        <Navbar />
+        <div className="text-center py-24">
+          <h1 className="text-3xl font-bold mb-4" style={{ color: '#232e4e' }}>
+            Article Not Found
+          </h1>
+          <a href="/blog" style={{ color: '#2f797c' }} className="font-semibold hover:opacity-75 transition">
+            Back to Blog
+          </a>
+        </div>
+      </main>
+    )
+  }
+
+  return (
+    <main className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* Hero */}
+      <section style={{ backgroundColor: '#232e4e' }} className="text-white py-20 px-6 text-center">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex justify-center gap-2 mb-4">
+            {post.category && (
+              <span className="text-xs font-semibold px-3 py-1 rounded-full text-white" style={{ backgroundColor: '#2f797c' }}>
+                {post.category}
+              </span>
+            )}
+            {post.estimatedReadingTime > 0 && (
+              <span className="text-xs font-medium px-3 py-1 rounded-full bg-white text-gray-600">
+                {post.estimatedReadingTime} min read
+              </span>
+            )}
+          </div>
+
+          <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+
+          <p className="text-gray-300 text-sm">
+            {post.author && <span>By {post.author} · </span>}
+            {new Date(post.publishedAt).toLocaleDateString('en-GB', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+              timeZone: 'UTC'
+            })}
+          </p>
+        </div>
+      </section>
+
+      {/* Article Content */}
+      <article className="max-w-3xl mx-auto px-6 py-16">
+
+        {post.mainImage && (
+          <img
+            src={urlFor(post.mainImage)}
+            alt={post.title}
+            className="w-full h-auto rounded-xl mb-10"
+          />
+        )}
+
+        {post.excerpt && (
+          <p className="text-xl text-gray-500 leading-8 mb-8 font-medium">
+            {post.excerpt}
+          </p>
+        )}
+
+        {post.body && (
+          <PortableText
+            value={post.body}
+            components={{
+              block: {
+                normal: ({ children }) => <p className="text-gray-600 leading-8 mb-6">{children}</p>,
+                h2: ({ children }) => (
+                  <h2 className="text-2xl font-bold mt-10 mb-4" style={{ color: '#232e4e' }}>
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-xl font-bold mt-8 mb-3" style={{ color: '#232e4e' }}>
+                    {children}
+                  </h3>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-4 pl-4 italic text-gray-500 my-6" style={{ borderColor: '#2f797c' }}>
+                    {children}
+                  </blockquote>
+                )
+              },
+              list: {
+                bullet: ({ children }) => (
+                  <ul className="list-disc list-inside mb-6 text-gray-600 leading-8">{children}</ul>
+                ),
+                number: ({ children }) => (
+                  <ol className="list-decimal list-inside mb-6 text-gray-600 leading-8">{children}</ol>
+                )
+              },
+              marks: {
+                strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                em: ({ children }) => <em className="italic">{children}</em>,
+                link: ({ value, children }) => (
+                  <a href={value?.href} style={{ color: '#2f797c' }} className="underline hover:opacity-75 transition">
+                    {children}
+                  </a>
+                )
+              }
+            }}
+          />
+        )}
+      </article>
+
+      <div className="text-center pb-16">
+        <a href="/blog" style={{ color: '#2f797c' }} className="font-semibold hover:opacity-75 transition">
+          ← Back to Blog
+        </a>
+      </div>
+
+      <Footer />
+    </main>
+  )
+}
