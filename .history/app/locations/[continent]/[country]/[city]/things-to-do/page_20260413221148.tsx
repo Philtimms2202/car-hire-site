@@ -77,7 +77,7 @@ export default async function ThingsToDoPage({ params }: any) {
           <Link
             href={`/locations/${continent}/${country}`}
             className="font-semibold hover:opacity-75 transition"
-            style={{ color: '#2f797c' }}
+            style={{ color: '#ffffff' }}
           >
             Back to {country}
           </Link>

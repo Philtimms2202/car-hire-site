@@ -121,7 +121,7 @@ export default async function ThingsToDoPage({ params }: any) {
             className="text-3xl font-bold mb-6 text-center"
             style={{ color: '#232e4e' }}
           >
-            Top Categories in {cityName}, {countryName}
+            Top Experience Categories in {cityName}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-6 text-gray-700">
@@ -130,7 +130,7 @@ export default async function ThingsToDoPage({ params }: any) {
               href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(cityName + ' city tours')}&partner_id=P7B7GRH`}
               className="p-4 border rounded-lg shadow-sm hover:shadow-md transition block"
             >
-              <strong>City Tours 🚌</strong>
+              <strong>City Tours</strong>
               <p className="text-sm mt-1">
                 Walking tours, bus tours, guided sightseeing.
               </p>
@@ -140,7 +140,7 @@ export default async function ThingsToDoPage({ params }: any) {
               href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(cityName + ' food tours')}&partner_id=P7B7GRH`}
               className="p-4 border rounded-lg shadow-sm hover:shadow-md transition block"
             >
-              <strong>Food & Drink 🍽️</strong>
+              <strong>Food & Drink</strong>
               <p className="text-sm mt-1">
                 Food tours, wine tastings, cooking classes.
               </p>
@@ -150,7 +150,7 @@ export default async function ThingsToDoPage({ params }: any) {
               href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(cityName + ' outdoor activities')}&partner_id=P7B7GRH`}
               className="p-4 border rounded-lg shadow-sm hover:shadow-md transition block"
             >
-              <strong>Adventure & Outdoors 🗻</strong>
+              <strong>Adventure & Outdoors</strong>
               <p className="text-sm mt-1">
                 Boat trips, hiking, water sports and more.
               </p>
@@ -160,7 +160,46 @@ export default async function ThingsToDoPage({ params }: any) {
         </div>
       </section>
 
-      
+      {/* GYG WIDGET */}
+      <section className="py-16 px-6 bg-gray-50">
+        <style>{`
+          iframe { border: none !important; }
+        `}</style>
+
+        <div className="max-w-6xl mx-auto">
+          <h2
+            className="text-3xl font-bold text-center mb-2"
+            style={{ color: '#232e4e' }}
+          >
+            Top Experiences in {cityName}
+          </h2>
+          <p className="text-center text-gray-500 mb-10">
+            Hand‑picked activities and tours in {cityName}
+          </p>
+
+          <div
+            data-gyg-widget="activities"
+            data-gyg-partner-id="P7B7GRH"
+            data-gyg-q={cityName}
+            data-gyg-number-of-items="8"
+          ></div>
+
+          <div className="mt-10 text-center">
+            <a
+              href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(cityName)}&partner_id=P7B7GRH`}
+              className="
+                inline-flex items-center justify-center 
+                px-6 py-3 rounded-xl font-semibold 
+                bg-[#2f797c] text-white 
+                shadow-md hover:opacity-90 transition
+              "
+            >
+              View All Experiences in {cityName}
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* BREADCRUMBS */}
       <section className="pb-10 px-6">
         <div className="max-w-4xl mx-auto flex gap-4 text-sm flex-wrap">

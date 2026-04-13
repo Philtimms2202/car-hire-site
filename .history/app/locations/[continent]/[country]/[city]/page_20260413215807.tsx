@@ -149,7 +149,7 @@ export default async function CityPage({ params }: any) {
     <p className="text-gray-600 mb-8 leading-relaxed">
       {cityName} is one of the most iconic destinations in {countryName}. Whether you're
       visiting for culture, food, nightlife, or history, the city offers something for every
-      traveller. Here are some of the reasons people love visiting {cityName}.
+      traveller. Here are some of the reasons people love visiting {cityName} in {countryName}.
     </p>
 
     <ul className="grid md:grid-cols-2 gap-6 text-gray-700">

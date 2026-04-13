@@ -139,57 +139,50 @@ export default async function CityPage({ params }: any) {
         </div>
       </section>
 
-{/* CITY HIGHLIGHTS */}
-<section className="py-16 px-6 bg-white">
-  <div className="max-w-5xl mx-auto">
-    <h2 className="text-3xl font-bold mb-6" style={{ color: '#232e4e' }}>
-      Highlights of {cityName}
-    </h2>
+      {/* CITY HIGHLIGHTS */}
+      <section className="py-16 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6" style={{ color: '#232e4e' }}>
+            Highlights of {cityName}
+          </h2>
 
-    <p className="text-gray-600 mb-8 leading-relaxed">
-      {cityName} is one of the most iconic destinations in {countryName}. Whether you're
-      visiting for culture, food, nightlife, or history, the city offers something for every
-      traveller. Here are some of the reasons people love visiting {cityName}.
-    </p>
+          <p className="text-gray-600 mb-8 leading-relaxed">
+            {cityName} is one of the most iconic destinations in {countryName}. Whether you're
+            visiting for culture, food, nightlife, or history, the city offers something for every
+            traveller. Here are some of the reasons people love visiting {cityName}.
+          </p>
 
-    <ul className="grid md:grid-cols-2 gap-6 text-gray-700">
+          <ul className="grid md:grid-cols-2 gap-6 text-gray-700">
+            <li className="p-4 border rounded-lg shadow-sm">
+              <strong>Top Attractions</strong>
+              <p className="text-sm mt-1">
+                Explore museums, landmarks, and must‑see sights across {cityName}.
+              </p>
+            </li>
 
-      <li className="p-4 border rounded-lg shadow-sm">
-        <strong>Top Attractions in {countryName}</strong>
-        <p className="text-sm mt-1">
-          Explore world‑famous landmarks, museums, and must‑see sights that make {cityName}
-          one of the most visited cities in {countryName}.
-        </p>
-      </li>
+            <li className="p-4 border rounded-lg shadow-sm">
+              <strong>Local Culture</strong>
+              <p className="text-sm mt-1">
+                Discover neighbourhoods, traditions, and authentic local experiences.
+              </p>
+            </li>
 
-      <li className="p-4 border rounded-lg shadow-sm">
-        <strong>Culture & Local Life</strong>
-        <p className="text-sm mt-1">
-          Experience the traditions, neighbourhoods, and cultural highlights that define
-          {` ${countryName }`} — all through the unique lens of {cityName}.
-        </p>
-      </li>
+            <li className="p-4 border rounded-lg shadow-sm">
+              <strong>Food & Dining</strong>
+              <p className="text-sm mt-1">
+                From street food to fine dining, {cityName} has flavours for every palate.
+              </p>
+            </li>
 
-      <li className="p-4 border rounded-lg shadow-sm">
-        <strong>Food & Dining in {countryName}</strong>
-        <p className="text-sm mt-1">
-          From regional dishes to modern cuisine, {cityName} showcases some of the best
-          flavours {countryName} has to offer.
-        </p>
-      </li>
-
-      <li className="p-4 border rounded-lg shadow-sm">
-        <strong>Day Trips in {countryName}</strong>
-        <p className="text-sm mt-1">
-          Discover nearby towns, natural wonders, and coastal escapes — all easily accessible
-          from {cityName}.
-        </p>
-      </li>
-
-    </ul>
-  </div>
-</section>
-
+            <li className="p-4 border rounded-lg shadow-sm">
+              <strong>Day Trips</strong>
+              <p className="text-sm mt-1">
+                Enjoy easy access to nearby towns, beaches, and natural wonders.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
 
       {/* GYG Widget */}
       <section className="py-16 px-6 bg-gray-50">

@@ -130,7 +130,7 @@ export default async function ThingsToDoPage({ params }: any) {
               href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(cityName + ' city tours')}&partner_id=P7B7GRH`}
               className="p-4 border rounded-lg shadow-sm hover:shadow-md transition block"
             >
-              <strong>City Tours 🚌</strong>
+              <strong>City Tours</strong>
               <p className="text-sm mt-1">
                 Walking tours, bus tours, guided sightseeing.
               </p>
@@ -140,7 +140,7 @@ export default async function ThingsToDoPage({ params }: any) {
               href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(cityName + ' food tours')}&partner_id=P7B7GRH`}
               className="p-4 border rounded-lg shadow-sm hover:shadow-md transition block"
             >
-              <strong>Food & Drink 🍽️</strong>
+              <strong>Food & Drink</strong>
               <p className="text-sm mt-1">
                 Food tours, wine tastings, cooking classes.
               </p>
@@ -150,7 +150,7 @@ export default async function ThingsToDoPage({ params }: any) {
               href={`https://www.getyourguide.com/s/?q=${encodeURIComponent(cityName + ' outdoor activities')}&partner_id=P7B7GRH`}
               className="p-4 border rounded-lg shadow-sm hover:shadow-md transition block"
             >
-              <strong>Adventure & Outdoors 🗻</strong>
+              <strong>Adventure & Outdoors</strong>
               <p className="text-sm mt-1">
                 Boat trips, hiking, water sports and more.
               </p>
