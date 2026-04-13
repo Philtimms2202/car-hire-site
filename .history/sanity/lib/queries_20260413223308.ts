@@ -101,4 +101,3 @@ export const cityQuery = `
     "countrySlug": countrySlug.current,
     "continentSlug": continentSlug.current
   }
-`

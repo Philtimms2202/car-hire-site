@@ -16,7 +16,7 @@ export const revalidate = 60
 // ⭐ NEW — generateMetadata (replaces static metadata)
 export async function generateMetadata() {
   return {
-    title: "The Latest News | Timms Travel",
+    title: "Timms Travel | Blog",
     description: "Discover amazing experiences around the world.",
     icons: {
       icon: "/favicon.ico",

@@ -1,13 +1,8 @@
-// ============================================
-// BLOG QUERIES
-// ============================================
-
-// All posts (blog index)
 export const postsQuery = `
   *[_type == "post"] | order(publishedAt desc) {
     _id,
     title,
-    "slug": slug.current,
+    slug,
     publishedAt,
     excerpt,
     "category": categories[0]->title,
@@ -16,7 +11,6 @@ export const postsQuery = `
   }
 `
 
-// Single post (blog article page)
 export const postQuery = `
   *[_type == "post" && slug.current == $slug][0] {
     _id,
@@ -26,23 +20,12 @@ export const postQuery = `
     body,
     excerpt,
     "category": categories[0]->title,
-
-    // FULL Sanity image objects (required for urlFor())
     mainImage,
-    metaImage,
-
-    // SEO fields
-    metaTitle,
-    metaDescription,
-
+    "imageUrl": mainImage.asset->url,
     "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180),
     "author": author->name
   }
 `
-
-// ============================================
-// LOCATION QUERIES
-// ============================================
 
 export const continentsQuery = `
   *[_type == "location"] {
@@ -62,10 +45,7 @@ export const countriesByContinentQuery = `
 `
 
 export const citiesByCountryQuery = `
-  *[_type == "location" 
-    && continentSlug.current == $continentSlug 
-    && countrySlug.current == $countrySlug
-  ] | order(city asc) {
+  *[_type == "location" && continentSlug.current == $continentSlug && countrySlug.current == $countrySlug] | order(city asc) {
     _id,
     city,
     country,
@@ -81,11 +61,7 @@ export const citiesByCountryQuery = `
 `
 
 export const cityQuery = `
-  *[_type == "location" 
-    && continentSlug.current == $continentSlug 
-    && countrySlug.current == $countrySlug 
-    && slug.current == $citySlug
-  ][0] {
+  *[_type == "location" && continentSlug.current == $continentSlug && countrySlug.current == $countrySlug && slug.current == $citySlug][0] {
     _id,
     city,
     country,

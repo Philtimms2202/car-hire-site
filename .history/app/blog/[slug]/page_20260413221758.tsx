@@ -14,41 +14,37 @@ import { postQuery } from '../../../sanity/lib/queries'
 export const revalidate = 60
 
 // ⭐ NEW — generateMetadata (replaces static metadata)
-export async function generateMetadata() {
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const post = await client.fetch(
+    `*[_type == "post" && slug.current == $slug][0]{
+      title,
+      metaTitle,
+      metaDescription,
+      metaImage
+    }`,
+    { slug: params.slug }
+  )
+
+  if (!post) {
+    return {
+      title: "Timms Travel | Blog",
+      description: "Discover amazing experiences around the world.",
+    }
+  }
+
   return {
-    title: "The Latest News | Timms Travel",
-    description: "Discover amazing experiences around the world.",
-    icons: {
-      icon: "/favicon.ico",
+    title: post.metaTitle || post.title,
+    description: post.metaDescription || "",
+    openGraph: {
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || "",
+      images: post.metaImage ? [urlFor(post.metaImage)] : [],
+      url: `https://hirecarhub.com/blog/${params.slug}`,
+      type: "article",
     },
   }
 }
 
-async function getPost(slug: string) {
-  try {
-    const post = await client.fetch(postQuery, { slug })
-    return post
-  } catch (error) {
-    return null
-  }
-}
-
-export default async function BlogPost({ params }: { params: { slug: string } })
- {
-    const { slug } = await params
-    const post = await getPost(slug)
-
-  if (!post) {
-    return (
-      <main className="min-h-screen bg-white">
-        <Navbar />
-        <div className="text-center py-24">
-          <h1 className="text-3xl font-bold mb-4" style={{color: '#232e4e'}}>Article Not Found</h1>
-          <a href="/blog" style={{color: '#2f797c'}} className="font-semibold hover:opacity-75 transition">Back to Blog</a>
-        </div>
-      </main>
-    )
-  }
 
   return (
     <main className="min-h-screen bg-white">
