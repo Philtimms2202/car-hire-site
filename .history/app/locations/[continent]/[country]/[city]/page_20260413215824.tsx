@@ -5,7 +5,6 @@ import { client } from '../../../../../sanity/lib/client'
 import { PortableText } from '@portabletext/react'
 import CitySearchBar from '../../../../components/Search/CitySearchBar'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 
 export const revalidate = 60
 
@@ -32,6 +31,7 @@ export async function generateMetadata({ params }: any) {
 
   const cityName = data?.name || city
   const countryName = data?.country?.name || country
+
   const desc =
     data?.metaDescription ||
     data?.heroDescription ||
@@ -40,9 +40,6 @@ export async function generateMetadata({ params }: any) {
   return {
     title: `Timms Travel | Explore ${cityName}`,
     description: desc,
-    alternates: {
-      canonical: `https://timmstravel.com/locations/${continent}/${country}/${city}`,
-    },
   }
 }
 
@@ -80,42 +77,13 @@ async function getCity(continentSlug: string, countrySlug: string, citySlug: str
 }
 
 // -----------------------------
-// Fallback: find correct continent for this country/city
-// -----------------------------
-async function findCorrectLocation(countrySlug: string, citySlug: string) {
-  try {
-    return await client.fetch(
-      `*[
-        _type == "city" &&
-        slug.current == $citySlug &&
-        country->slug.current == $countrySlug
-      ][0]{
-        "slug": slug.current,
-        "countrySlug": country->slug.current,
-        "continentSlug": country->continent->slug.current
-      }`,
-      { countrySlug, citySlug }
-    )
-  } catch {
-    return null
-  }
-}
-
-// -----------------------------
 // Page Component
 // -----------------------------
 export default async function CityPage({ params }: any) {
   const { continent, country, city } = await params
   const cityDoc = await getCity(continent, country, city)
 
-  // If not found, try to redirect to the correct continent URL
   if (!cityDoc) {
-    const correct = await findCorrectLocation(country, city)
-    if (correct?.continentSlug) {
-      redirect(`/locations/${correct.continentSlug}/${correct.countrySlug}/${correct.slug}`)
-    }
-
-    // Truly not found
     return (
       <main className="min-h-screen bg-white">
         <Navbar />
@@ -138,7 +106,6 @@ export default async function CityPage({ params }: any) {
 
   const cityName = cityDoc.name
   const countryName = cityDoc.country?.name
-  const continentName = cityDoc.country?.continent?.name
   const emoji = cityDoc.emoji
   const heroDescription = cityDoc.heroDescription
   const mainContent = cityDoc.mainContent
@@ -153,106 +120,109 @@ export default async function CityPage({ params }: any) {
         strategy="afterInteractive"
       />
 
-      {/* JSON-LD Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "TouristDestination",
-            name: cityName,
-            description: heroDescription,
-            containedInPlace: {
-              "@type": "Country",
-              name: countryName,
-            },
-          }),
-        }}
-      />
-
       {/* HERO */}
       <section
         style={{ backgroundColor: '#232e4e' }}
         className="text-white py-20 px-6 text-center"
       >
         <div className="text-6xl mb-4">{emoji}</div>
+
         <h1 className="text-5xl font-bold mb-4">Explore {cityName}</h1>
+
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
           {heroDescription ||
             `Discover top attractions, tours, and unforgettable experiences in ${cityName}, ${countryName}.`}
         </p>
+
         <div className="mt-10">
           <CitySearchBar defaultCity={cityName} />
         </div>
       </section>
 
-      {/* HIGHLIGHTS */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6" style={{ color: '#232e4e' }}>
-            Highlights of {cityName}
-          </h2>
-          <p className="text-gray-600 mb-8 leading-relaxed">
-            {cityName} is one of the most iconic destinations in {countryName}. Whether you are
-            visiting for culture, food, nightlife or history, the city offers something for every
-            traveller. Here are some of the reasons people love visiting {cityName}.
-          </p>
-          <ul className="grid md:grid-cols-2 gap-6 text-gray-700">
-            <li className="p-4 border rounded-lg shadow-sm">
-              <strong>Top Attractions in {cityName}</strong>
-              <p className="text-sm mt-1 text-gray-500">
-                Explore world-famous landmarks, museums and must-see sights that make {cityName} one
-                of the most visited cities in {countryName}.
-              </p>
-            </li>
-            <li className="p-4 border rounded-lg shadow-sm">
-              <strong>Culture &amp; Local Life</strong>
-              <p className="text-sm mt-1 text-gray-500">
-                Experience the traditions, neighbourhoods and cultural highlights that define{' '}
-                {cityName} — seen through its own unique lens.
-              </p>
-            </li>
-            <li className="p-4 border rounded-lg shadow-sm">
-              <strong>Food &amp; Dining</strong>
-              <p className="text-sm mt-1 text-gray-500">
-                From regional dishes to modern cuisine, {cityName} showcases some of the best
-                flavours {countryName} has to offer.
-              </p>
-            </li>
-            <li className="p-4 border rounded-lg shadow-sm">
-              <strong>Day Trips from {cityName}</strong>
-              <p className="text-sm mt-1 text-gray-500">
-                Discover nearby towns, natural wonders and coastal escapes — all easily accessible
-                from {cityName}.
-              </p>
-            </li>
-          </ul>
-        </div>
-      </section>
+{/* CITY HIGHLIGHTS */}
+<section className="py-16 px-6 bg-white">
+  <div className="max-w-5xl mx-auto">
+    <h2 className="text-3xl font-bold mb-6" style={{ color: '#232e4e' }}>
+      Highlights of {cityName}
+    </h2>
 
-      {/* GYG EXPERIENCES WIDGET */}
+    <p className="text-gray-600 mb-8 leading-relaxed">
+      {cityName} is one of the most iconic destinations in {countryName}. Whether you're
+      visiting for culture, food, nightlife, or history, the city offers something for every
+      traveller. Here are some of the reasons people love visiting {cityName}.
+    </p>
+
+    <ul className="grid md:grid-cols-2 gap-6 text-gray-700">
+
+      <li className="p-4 border rounded-lg shadow-sm">
+        <strong>Top Attractions in {countryName}</strong>
+        <p className="text-sm mt-1">
+          Explore world‑famous landmarks, museums, and must‑see sights that make {cityName}
+          one of the most visited cities in {countryName}.
+        </p>
+      </li>
+
+      <li className="p-4 border rounded-lg shadow-sm">
+        <strong>Culture & Local Life</strong>
+        <p className="text-sm mt-1">
+          Experience the traditions, neighbourhoods, and cultural highlights that define
+          {` ${countryName }`} — all through the unique lens of {cityName}.
+        </p>
+      </li>
+
+      <li className="p-4 border rounded-lg shadow-sm">
+        <strong>Food & Dining in {countryName}</strong>
+        <p className="text-sm mt-1">
+          From regional dishes to modern cuisine, {cityName} showcases some of the best
+          flavours {countryName} has to offer.
+        </p>
+      </li>
+
+      <li className="p-4 border rounded-lg shadow-sm">
+        <strong>Day Trips in {countryName}</strong>
+        <p className="text-sm mt-1">
+          Discover nearby towns, natural wonders, and coastal escapes — all easily accessible
+          from {cityName}.
+        </p>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+
+      {/* GYG Widget */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+          <h2
+            className="text-3xl font-bold text-center mb-2"
+            style={{ color: '#232e4e' }}
+          >
             Top Experiences in {cityName}
           </h2>
           <p className="text-center text-gray-500 mb-10">
-            Hand-picked activities and tours in {cityName}
+            Hand‑picked activities and tours in {cityName}
           </p>
+
           <div
             data-gyg-widget="activities"
             data-gyg-partner-id="P7B7GRH"
             data-gyg-q={cityName}
             data-gyg-number-of-items="8"
-          />
+          ></div>
         </div>
       </section>
 
-      {/* VIEW MORE CTA */}
-      <div className="py-10 text-center">
+      {/* CTA */}
+      <div className="mt-10 text-center">
         <Link
           href={`/locations/${continent}/${country}/${city}/things-to-do`}
-          className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold bg-[#2f797c] text-white shadow-md hover:opacity-90 transition"
+          className="
+            inline-flex items-center justify-center 
+            px-6 py-3 rounded-xl font-semibold 
+            bg-[#2f797c] text-white 
+            shadow-md hover:opacity-90 transition
+          "
         >
           View More Things To Do in {cityName}
         </Link>
@@ -261,9 +231,13 @@ export default async function CityPage({ params }: any) {
       {/* ABOUT */}
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4" style={{ color: '#03989e' }}>
+          <h2
+            className="text-3xl font-bold mb-4"
+            style={{ color: '#03989e' }}
+          >
             About {cityName}
           </h2>
+
           {mainContent ? (
             <div className="prose max-w-none mt-8">
               <PortableText value={mainContent} />
@@ -271,27 +245,39 @@ export default async function CityPage({ params }: any) {
           ) : (
             <p className="text-gray-600 leading-relaxed">
               {cityName} is a vibrant destination in {countryName}, known for its culture,
-              attractions and unique character. Explore the city's highlights, discover local
-              neighbourhoods and enjoy unforgettable experiences.
+              attractions, and unique character. Explore the city’s highlights, discover local
+              neighbourhoods, and enjoy unforgettable experiences.
             </p>
           )}
 
           {/* Breadcrumbs */}
-          <nav className="mt-10 flex flex-wrap gap-2 items-center text-sm">
-            <Link href="/locations" className="hover:opacity-75 transition" style={{ color: '#2f797c' }}>
+          <div className="mt-10 flex gap-4 text-sm">
+            <Link
+              href="/locations"
+              className="hover:opacity-75 transition"
+              style={{ color: '#2f797c' }}
+            >
               All Continents
             </Link>
             <span className="text-gray-400">→</span>
-            <Link href={`/locations/${continent}`} className="hover:opacity-75 transition capitalize" style={{ color: '#2f797c' }}>
-              {continentName || continent}
+
+            <Link
+              href={`/locations/${continent}`}
+              className="hover:opacity-75 transition capitalize"
+              style={{ color: '#2f797c' }}
+            >
+              {continent}
             </Link>
             <span className="text-gray-400">→</span>
-            <Link href={`/locations/${continent}/${country}`} className="hover:opacity-75 transition capitalize" style={{ color: '#2f797c' }}>
-              {countryName || country}
+
+            <Link
+              href={`/locations/${continent}/${country}`}
+              className="hover:opacity-75 transition capitalize"
+              style={{ color: '#2f797c' }}
+            >
+              {country}
             </Link>
-            <span className="text-gray-400">→</span>
-            <span style={{ color: '#232e4e' }} className="font-semibold">{cityName}</span>
-          </nav>
+          </div>
         </div>
       </section>
 
