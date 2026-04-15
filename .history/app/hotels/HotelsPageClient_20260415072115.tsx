@@ -329,16 +329,7 @@ function PopularDestinationsDropdown() {
       </button>
 
       {open && (
-        <div
-          className="
-            absolute left-0 z-50 mt-2 w-64 rounded-2xl shadow-xl bg-white border border-gray-100 
-            py-2 overflow-y-auto
-          "
-          style={{
-            maxHeight: '320px',        // 👈 LIMIT HEIGHT
-            scrollbarWidth: 'thin',    // Firefox
-          }}
-        >
+        <div className="absolute left-0 z-50 mt-2 w-56 rounded-2xl shadow-xl bg-white border border-gray-100 py-2 overflow-hidden">
           {cities.length === 0 ? (
             <p className="px-4 py-3 text-sm text-gray-400">Loading…</p>
           ) : (
@@ -347,10 +338,7 @@ function PopularDestinationsDropdown() {
                 key={city.slug}
                 href={`/hotels/${city.slug}`}
                 onClick={() => setOpen(false)}
-                className="
-                  flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 
-                  hover:bg-gray-50 hover:text-[#03989e] transition-colors group
-                "
+                className="flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#03989e] transition-colors group"
               >
                 <span>{city.name}</span>
                 <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xs">→</span>
@@ -362,7 +350,6 @@ function PopularDestinationsDropdown() {
     </div>
   )
 }
-
 
 // ---------------------------------------------
 // TOP DESTINATIONS

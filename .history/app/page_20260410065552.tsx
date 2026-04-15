@@ -17,15 +17,13 @@ export default function Home() {
   const [pickupDate, setPickupDate] = useState('')
   const [dropoffDate, setDropoffDate] = useState('')
   const [loading, setLoading] = useState(false)
-  const [searched, setSearched] = useState(false)
+  const [searched, setSearched] = useState(false) 
   const [results, setResults] = useState<any[]>([])
 
   const handleCarSearch = () => {
     if (!pickupLocation || !pickupDate || !dropoffDate) return
     const affiliateCode = 'YOURAFFILIATETOKEN'
-    const url = `https://www.rentalcars.com/?affiliateCode=${affiliateCode}&preflocation=${encodeURIComponent(
-      pickupLocation
-    )}&puDay=${pickupDate}&doDay=${dropoffDate}`
+    const url = `https://www.rentalcars.com/?affiliateCode=${affiliateCode}&preflocation=${encodeURIComponent(pickupLocation)}&puDay=${pickupDate}&doDay=${dropoffDate}`
     window.open(url, '_blank')
   }
 
@@ -51,82 +49,55 @@ export default function Home() {
         strategy="afterInteractive"
       />
 
-      {/* ──────────────────────────────── */}
-      {/* NEW HERO (REPLACES OLD HERO) */}
-      {/* ──────────────────────────────── */}
-      <section
-        className="relative overflow-hidden text-white py-24 px-6 text-center"
-        style={{ backgroundColor: '#232e4e' }}
-      >
-        {/* subtle grid texture */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-        />
+      {/* HERO SECTION */}
+      <section style={{ backgroundColor: '#232e4e' }} className="text-white py-24 px-6 text-center">
+        <h1 className="text-5xl font-bold mb-4">
+          Create Unforgettable Moments
+        </h1>
+        <p className="text-xl mb-10 text-gray-300">
+          Choose from hundreds of destinations around the world!
+        </p>
 
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-            Timms Travel
-          </p>
+        {/* TAB MENU */}
+        <div className="flex justify-center gap-6 mb-8">
+          {['flights', 'hotels', 'experiences', 'cars'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as any)}
+              className={`pb-2 text-lg font-medium ${activeTab === tab ? 'border-b-2 border-white' : 'text-gray-400'}`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
-            Create Unforgettable Moments
-          </h1>
+        {/* SEARCH AREA */}
+        <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+          {activeTab === 'flights' && <FlightSearch />}
+          {activeTab === 'hotels' && <HotelSearch />}
+          {activeTab === 'experiences' && <ExperienceSearch />}
+          {activeTab === 'cars' && (
+            <CarSearch
+              pickupLocation={pickupLocation}
+              pickupDate={pickupDate}
+              dropoffDate={dropoffDate}
+              setPickupLocation={setPickupLocation}
+              setPickupDate={setPickupDate}
+              setDropoffDate={setDropoffDate}
+              loading={loading}
+              onSearch={handleCarSearch}
+            />
+          )}
+        </div>
 
-          <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
-            Choose from hundreds of destinations around the world.
-          </p>
-
-          {/* SEARCH TABS (kept exactly as your Hotels hero) */}
-          <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
-            {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
-                  activeTab === tab
-                    ? 'bg-white text-[#232e4e] shadow-sm'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          {/* SEARCH AREA (unchanged) */}
-          <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
-            {activeTab === 'flights' && <FlightSearch />}
-            {activeTab === 'hotels' && <HotelSearch />}
-            {activeTab === 'experiences' && <ExperienceSearch />}
-            {activeTab === 'cars' && (
-              <CarSearch
-                pickupLocation={pickupLocation}
-                pickupDate={pickupDate}
-                dropoffDate={dropoffDate}
-                setPickupLocation={setPickupLocation}
-                setPickupDate={setPickupDate}
-                setDropoffDate={setDropoffDate}
-                loading={loading}
-                onSearch={handleCarSearch}
-              />
-            )}
-          </div>
-
-          {/* Trust indicators (unchanged) */}
-          <div className="flex justify-center gap-8 mt-8 text-sm text-gray-300">
-            <span>Fully Bespoke Offers</span>
-            <span>No hidden fees</span>
-            <span>Competitive price guarantee</span>
-          </div>
+        {/* Trust indicators */}
+        <div className="flex justify-center gap-8 mt-8 text-sm text-gray-300">
+          <span>Fully Bespoke Offers</span>
+          <span>No hidden fees</span>
+          <span>Competitive price guarantee</span>
         </div>
       </section>
 
-      {/* EVERYTHING BELOW IS UNCHANGED */}
       {/* SEARCH RESULTS (Cars only) */}
       {searched && (
         <section className="py-16 px-6 bg-gray-50">
@@ -156,20 +127,20 @@ export default function Home() {
         </section>
       )}
 
-      {/* FEATURED DEALS */}
-      {!searched && (
-        <section className="hidden md:block py-16 px-6 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
-              Popular Experiences
-            </h2>
-            <p className="text-center text-gray-500 mb-10">
-              Hand picked deals from top destinations
-            </p>
-            <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH"></div>
-          </div>
-        </section>
-      )}
+{/* FEATURED DEALS (when NOT searched) */}
+{!searched && (
+  <section className="hidden md:block py-16 px-6 bg-gray-50">
+    <div className="max-w-6xl mx-auto">
+      <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+        Popular Experiences
+      </h2>
+      <p className="text-center text-gray-500 mb-10">
+        Hand picked deals from top destinations
+      </p>
+      <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH"></div>
+    </div>
+  </section>
+)}
 
       {/* HOW IT WORKS */}
       <section className="py-16 px-6">
@@ -238,10 +209,12 @@ export default function Home() {
           <div className="text-center mt-8">
             <a href="/locations/continents" className="btn-primary inline-block">View All Destinations</a>
           </div>
-        </div>
-      </section>
 
-      {/* WHY CHOOSE US */}
+
+        </div>
+
+      </section>
+    {/* WHY CHOOSE US */}
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {[
@@ -257,7 +230,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-
+      
       <Footer />
 
     </main>

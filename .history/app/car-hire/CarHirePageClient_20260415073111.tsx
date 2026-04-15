@@ -449,41 +449,22 @@ export default function CarsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-     {/* HERO */}
-<section
-  className="relative overflow-hidden text-white py-24 px-6 text-center"
-  style={{ backgroundColor: '#232e4e' }}
->
-  {/* subtle grid texture */}
-  <div
-    className="absolute inset-0 opacity-[0.04]"
-    style={{
-      backgroundImage:
-        'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-      backgroundSize: '40px 40px',
-    }}
-  />
+      {/* HERO */}
+      <section
+        style={{ backgroundColor: '#232e4e' }}
+        className="text-white py-24 px-6 text-center"
+      >
+        <h1 className="text-5xl font-bold mb-4">
+          Find Your Perfect Hire Car!
+        </h1>
+        <p className="text-xl mb-10 text-gray-300 max-w-2xl mx-auto">
+          Compare hundreds of car hire deals instantly — great prices, no hidden fees.
+        </p>
 
-  <div className="relative z-10 max-w-3xl mx-auto">
-    <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-      Timms Travel · Car Hire
-    </p>
-
-    <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
-      Find Your Perfect Hire Car
-    </h1>
-
-    <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
-      Compare hundreds of car hire deals instantly — great prices, no hidden fees.
-    </p>
-
-    {/* SEARCH BOX */}
-    <div className="max-w-2xl mx-auto bg-white rounded-2xl p-6 shadow-xl text-black">
-      <CarSearch />
-    </div>
-  </div>
-</section>
-
+        <div className="max-w-2xl mx-auto">
+          <CarSearch />
+        </div>F
+      </section>
 
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">

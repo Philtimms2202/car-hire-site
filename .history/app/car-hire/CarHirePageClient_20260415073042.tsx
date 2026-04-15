@@ -449,7 +449,7 @@ export default function CarsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-     {/* HERO */}
+      {/* HERO */}
 <section
   className="relative overflow-hidden text-white py-24 px-6 text-center"
   style={{ backgroundColor: '#232e4e' }}
