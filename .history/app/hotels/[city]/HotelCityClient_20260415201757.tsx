@@ -208,6 +208,16 @@ useEffect(() => {
         </a>
       </section>
 
+      {/* INTRO */}
+      <section className="py-14 px-6 bg-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#232e4e' }}>
+            Finding the right area in {cityName}
+          </h2>
+          <p className="text-gray-600 leading-relaxed text-base">{introText}</p>
+        </div>
+      </section>
+
       {/* NEIGHBOURHOODS */}
       <section className="py-14 px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">
