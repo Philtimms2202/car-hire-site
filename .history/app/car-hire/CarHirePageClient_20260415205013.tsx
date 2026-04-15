@@ -484,6 +484,43 @@ export default function CarsPageClient() {
   </div>
 </section>
 
+          {/* SEARCH TABS (kept exactly as your Hotels hero) */}
+          <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+            {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+                  activeTab === tab
+                    ? 'bg-white text-[#232e4e] shadow-sm'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* SEARCH AREA (unchanged) */}
+          <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+            {activeTab === 'flights' && <FlightSearch />}
+            {activeTab === 'hotels' && <HotelSearch />}
+            {activeTab === 'experiences' && <ExperienceSearch />}
+            {activeTab === 'cars' && (
+              <CarSearch
+                pickupLocation={pickupLocation}
+                pickupDate={pickupDate}
+                dropoffDate={dropoffDate}
+                setPickupLocation={setPickupLocation}
+                setPickupDate={setPickupDate}
+                setDropoffDate={setDropoffDate}
+                loading={loading}
+                onSearch={handleCarSearch}
+              />
+            )}
+          </div>
+
+
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto text-center">

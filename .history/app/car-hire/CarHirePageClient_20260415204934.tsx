@@ -449,6 +449,45 @@ export default function CarsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
+      import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+const tabs = [
+  { key: "flights", label: "Flights", href: "/flights" },
+  { key: "hotels", label: "Hotels", href: "/hotels" },
+  { key: "experiences", label: "Experiences", href: "/experiences" },
+  { key: "cars", label: "Cars", href: "/car-hire" },
+]
+
+export default function CarsPageClient() {
+  const pathname = usePathname()
+
+  return (
+    <main className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* SEARCH TABS */}
+      <div className="flex justify-center gap-1 mt-6 mb-10 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+        {tabs.map(tab => {
+          const isActive = pathname.startsWith(tab.href)
+
+          return (
+            <Link
+              key={tab.key}
+              href={tab.href}
+              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl text-center transition-all capitalize ${
+                isActive
+                  ? "bg-white text-[#232e4e] shadow-sm"
+                  : "text-gray-300 hover:text-white"
+              }`}
+            >
+              {tab.label}
+            </Link>
+          )
+        })}
+      </div>
+
+
      {/* HERO */}
 <section
   className="relative overflow-hidden text-white py-24 px-6 text-center"
@@ -483,6 +522,7 @@ export default function CarsPageClient() {
     </div>
   </div>
 </section>
+
 
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">

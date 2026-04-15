@@ -61,7 +61,7 @@ async function getCityFromSanity(citySlug: string): Promise<CityData | null> {
       continentSlug: city.country?.continent?.slug,
     }
   } catch (err) {
-    console.error("SANITY FETCH ERROR:", err)
+    console.error('SANITY FETCH ERROR:', err)
     return null
   }
 }
@@ -94,13 +94,14 @@ function getCityFromAirports(citySlug: string): CityData | null {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ city: string }>
-}): Promise<Metadata> {
-  const { city } = await params
+  params: { city: string }
+const { city } = params
   const sanityCity = await getCityFromSanity(city)
   const cityData = sanityCity || getCityFromAirports(city)
 
-  if (!cityData) return { title: 'Hotels | Timms Travel' }
+  if (!cityData) {
+    return { title: 'Hotels | Timms Travel' }
+  }
 
   return {
     title: `Where to Stay in ${cityData.name} | Timms Travel`,
@@ -117,9 +118,9 @@ export async function generateMetadata({
 export default async function HotelCityPage({
   params,
 }: {
-  params: Promise<{ city: string }>
+  params: { city: string }
 }) {
-  const { city } = await params
+  const { city } = params
 
   const sanityCity = await getCityFromSanity(city)
   const cityData = sanityCity || getCityFromAirports(city)

@@ -121,65 +121,31 @@ export default function HotelCityClient({
   countrySlug,
   aiContent,
 }: Props) {
+  // Trigger background AI generation if content is missing
+  useEffect(() => {
+    const needsAI =
+      !aiContent?.intro ||
+      !aiContent?.neighbourhoods ||
+      aiContent.neighbourhoods.length === 0
 
-  console.log("HotelCityClient ACTIVE:", citySlug)
-
-  
-// Trigger background AI generation if content is missing
-useEffect(() => {
-  const needsAI =
-    !aiContent?.intro ||
-    !aiContent?.neighbourhoods ||
-    aiContent.neighbourhoods.length === 0
-
-  if (needsAI) {
-    console.log("AI TRIGGER RUNNING:", citySlug)
-
-    fetch(`/api/generate-ai?city=${citySlug}`, { method: "POST" })
-      .then(async (res) => {
-        const data = await res.json()
-
-        // Only reload if AI was actually generated
-        if (data.status === "created") {
-          console.log("AI GENERATED — refreshing page")
-          window.location.reload()
-        } else {
-          console.log("AI EXISTS — no refresh")
-        }
-      })
-      .catch((err) => {
-        console.error("AI GENERATION ERROR:", err)
-      })
-  }
-}, []) // IMPORTANT: run only once
-
-
+    if (needsAI) {
+      fetch(`/api/generate-ai?city=${citySlug}`, { method: 'POST' }).catch(() => {})
+    }
+  }, [aiContent, citySlug])
 
   const introText =
     aiContent.intro ||
     `The best neighbourhoods, areas and hotels in ${cityName}, ${country} — for every budget and travel style.`
 
   const neighbourhoods =
-  aiContent.neighbourhoods && aiContent.neighbourhoods.length > 0
-    ? aiContent.neighbourhoods
-    : [
-        {
-          name: `Central ${cityName}`,
-          description: `A convenient base close to major attractions, restaurants and transport.`,
-        },
-        {
-          name: `Historic Quarter`,
-          description: `Full of culture, museums and traditional architecture — ideal for exploring on foot.`,
-        },
-        {
-          name: `Waterfront District`,
-          description: `Scenic, lively and packed with restaurants, cafés and evening strolls.`,
-        },
-        {
-          name: `Residential Suburbs`,
-          description: `Quiet, spacious and great for families or longer stays.`,
-        },
-      ]
+    aiContent.neighbourhoods && aiContent.neighbourhoods.length > 0
+      ? aiContent.neighbourhoods
+      : [
+          {
+            name: `Central ${cityName}`,
+            description: `A convenient base close to major attractions, restaurants and transport.`,
+          },
+        ]
 
   return (
     <main className="min-h-screen bg-white">
@@ -396,18 +362,15 @@ useEffect(() => {
             </span>
           </nav>
 
-          {typeof continentSlug === "string" &&
- typeof countrySlug === "string" &&
- typeof citySlug === "string" && (
-    <Link
-      href={`/locations/${continentSlug}/${countrySlug}/${citySlug}`}
-      className="text-sm font-semibold hover:opacity-75 transition"
-      style={{ color: '#2f797c' }}
-    >
-      Explore more in {cityName}
-    </Link>
-)}
-
+          {continentSlug && countrySlug && (
+            <Link
+              href={`/locations/${continentSlug}/${countrySlug}/${citySlug}`}
+              className="text-sm font-semibold hover:opacity-75 transition"
+              style={{ color: '#2f797c' }}
+            >
+              View full {cityName} travel guide →
+            </Link>
+          )}
         </div>
       </section>
 

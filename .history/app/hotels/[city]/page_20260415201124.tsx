@@ -100,7 +100,9 @@ export async function generateMetadata({
   const sanityCity = await getCityFromSanity(city)
   const cityData = sanityCity || getCityFromAirports(city)
 
-  if (!cityData) return { title: 'Hotels | Timms Travel' }
+  if (!cityData) {
+    return { title: 'Hotels | Timms Travel' }
+  }
 
   return {
     title: `Where to Stay in ${cityData.name} | Timms Travel`,

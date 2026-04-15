@@ -41,14 +41,6 @@ export default {
     },
     { name: "metaDescription", type: "text" },
 
-    {
-    name: "airport",
-    title: "Airport Name",
-    type: "string",
-    description: "Full name of the primary airport (e.g. Abu Dhabi International Airport)"
-    },
-
-
     // AI-generated (auto-populated on first page visit, never regenerated)
     {
       name: "aiIntro",

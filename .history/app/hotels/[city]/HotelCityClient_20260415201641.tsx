@@ -396,18 +396,15 @@ useEffect(() => {
             </span>
           </nav>
 
-          {typeof continentSlug === "string" &&
- typeof countrySlug === "string" &&
- typeof citySlug === "string" && (
-    <Link
-      href={`/locations/${continentSlug}/${countrySlug}/${citySlug}`}
-      className="text-sm font-semibold hover:opacity-75 transition"
-      style={{ color: '#2f797c' }}
-    >
-      Explore more in {cityName}
-    </Link>
-)}
-
+          {continentSlug && countrySlug && (
+            <Link
+              href={`/locations/${continentSlug}/${countrySlug}/${citySlug}`}
+              className="text-sm font-semibold hover:opacity-75 transition"
+              style={{ color: '#2f797c' }}
+            >
+              View full {cityName} travel guide →
+            </Link>
+          )}
         </div>
       </section>
 

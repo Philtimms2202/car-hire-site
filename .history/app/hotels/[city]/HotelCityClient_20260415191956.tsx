@@ -125,35 +125,18 @@ export default function HotelCityClient({
   console.log("HotelCityClient ACTIVE:", citySlug)
 
   
-// Trigger background AI generation if content is missing
-useEffect(() => {
-  const needsAI =
-    !aiContent?.intro ||
-    !aiContent?.neighbourhoods ||
-    aiContent.neighbourhoods.length === 0
+  // Trigger background AI generation if content is missing
+  useEffect(() => {
+    const needsAI =
+      !aiContent?.intro ||
+      !aiContent?.neighbourhoods ||
+      aiContent.neighbourhoods.length === 0
 
-  if (needsAI) {
-    console.log("AI TRIGGER RUNNING:", citySlug)
-
-    fetch(`/api/generate-ai?city=${citySlug}`, { method: "POST" })
-      .then(async (res) => {
-        const data = await res.json()
-
-        // Only reload if AI was actually generated
-        if (data.status === "created") {
-          console.log("AI GENERATED — refreshing page")
-          window.location.reload()
-        } else {
-          console.log("AI EXISTS — no refresh")
-        }
-      })
-      .catch((err) => {
-        console.error("AI GENERATION ERROR:", err)
-      })
-  }
-}, []) // IMPORTANT: run only once
-
-
+    if (needsAI) {
+      console.log("AI TRIGGER RUNNING:", citySlug
+      fetch(`/api/generate-ai?city=${citySlug}`, { method: 'POST' }).catch(() => {})
+    }
+  }, [aiContent, citySlug])
 
   const introText =
     aiContent.intro ||
@@ -396,18 +379,15 @@ useEffect(() => {
             </span>
           </nav>
 
-          {typeof continentSlug === "string" &&
- typeof countrySlug === "string" &&
- typeof citySlug === "string" && (
-    <Link
-      href={`/locations/${continentSlug}/${countrySlug}/${citySlug}`}
-      className="text-sm font-semibold hover:opacity-75 transition"
-      style={{ color: '#2f797c' }}
-    >
-      Explore more in {cityName}
-    </Link>
-)}
-
+          {continentSlug && countrySlug && (
+            <Link
+              href={`/locations/${continentSlug}/${countrySlug}/${citySlug}`}
+              className="text-sm font-semibold hover:opacity-75 transition"
+              style={{ color: '#2f797c' }}
+            >
+              View full {cityName} travel guide →
+            </Link>
+          )}
         </div>
       </section>
 

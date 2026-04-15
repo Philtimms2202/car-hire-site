@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
@@ -19,7 +19,7 @@ type Neighbourhood = {
 }
 
 type AIContent = {
-  intro: string | null
+  intro: string
   neighbourhoods: Neighbourhood[]
 }
 
@@ -121,66 +121,6 @@ export default function HotelCityClient({
   countrySlug,
   aiContent,
 }: Props) {
-
-  console.log("HotelCityClient ACTIVE:", citySlug)
-
-  
-// Trigger background AI generation if content is missing
-useEffect(() => {
-  const needsAI =
-    !aiContent?.intro ||
-    !aiContent?.neighbourhoods ||
-    aiContent.neighbourhoods.length === 0
-
-  if (needsAI) {
-    console.log("AI TRIGGER RUNNING:", citySlug)
-
-    fetch(`/api/generate-ai?city=${citySlug}`, { method: "POST" })
-      .then(async (res) => {
-        const data = await res.json()
-
-        // Only reload if AI was actually generated
-        if (data.status === "created") {
-          console.log("AI GENERATED — refreshing page")
-          window.location.reload()
-        } else {
-          console.log("AI EXISTS — no refresh")
-        }
-      })
-      .catch((err) => {
-        console.error("AI GENERATION ERROR:", err)
-      })
-  }
-}, []) // IMPORTANT: run only once
-
-
-
-  const introText =
-    aiContent.intro ||
-    `The best neighbourhoods, areas and hotels in ${cityName}, ${country} — for every budget and travel style.`
-
-  const neighbourhoods =
-  aiContent.neighbourhoods && aiContent.neighbourhoods.length > 0
-    ? aiContent.neighbourhoods
-    : [
-        {
-          name: `Central ${cityName}`,
-          description: `A convenient base close to major attractions, restaurants and transport.`,
-        },
-        {
-          name: `Historic Quarter`,
-          description: `Full of culture, museums and traditional architecture — ideal for exploring on foot.`,
-        },
-        {
-          name: `Waterfront District`,
-          description: `Scenic, lively and packed with restaurants, cafés and evening strolls.`,
-        },
-        {
-          name: `Residential Suburbs`,
-          description: `Quiet, spacious and great for families or longer stays.`,
-        },
-      ]
-
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
@@ -195,7 +135,8 @@ useEffect(() => {
           Where to Stay in {cityName}
         </h1>
         <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-          {heroDescription || introText}
+          {heroDescription ||
+            `The best neighbourhoods, areas and hotels in ${cityName}, ${country} — for every budget and travel style.`}
         </p>
         <a
           href={EXPEDIA_AFFILIATE_URL}
@@ -214,7 +155,7 @@ useEffect(() => {
           <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#232e4e' }}>
             Finding the right area in {cityName}
           </h2>
-          <p className="text-gray-600 leading-relaxed text-base">{introText}</p>
+          <p className="text-gray-600 leading-relaxed text-base">{aiContent.intro}</p>
         </div>
       </section>
 
@@ -228,7 +169,7 @@ useEffect(() => {
             A guide to the key neighbourhoods and what each one suits.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {neighbourhoods.map(n => (
+            {aiContent.neighbourhoods.map(n => (
               <NeighbourhoodCard key={n.name} neighbourhood={n} />
             ))}
           </div>
@@ -396,18 +337,15 @@ useEffect(() => {
             </span>
           </nav>
 
-          {typeof continentSlug === "string" &&
- typeof countrySlug === "string" &&
- typeof citySlug === "string" && (
-    <Link
-      href={`/locations/${continentSlug}/${countrySlug}/${citySlug}`}
-      className="text-sm font-semibold hover:opacity-75 transition"
-      style={{ color: '#2f797c' }}
-    >
-      Explore more in {cityName}
-    </Link>
-)}
-
+          {continentSlug && countrySlug && (
+            <Link
+              href={`/locations/${continentSlug}/${countrySlug}/${citySlug}`}
+              className="text-sm font-semibold hover:opacity-75 transition"
+              style={{ color: '#2f797c' }}
+            >
+              View full {cityName} travel guide →
+            </Link>
+          )}
         </div>
       </section>
 

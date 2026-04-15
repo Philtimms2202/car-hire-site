@@ -449,6 +449,8 @@ export default function CarsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
+      
+
      {/* HERO */}
 <section
   className="relative overflow-hidden text-white py-24 px-6 text-center"
@@ -483,6 +485,7 @@ export default function CarsPageClient() {
     </div>
   </div>
 </section>
+
 
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">

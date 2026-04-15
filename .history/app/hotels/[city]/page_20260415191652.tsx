@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { client } from '@/sanity/lib/client'
+import { client } from '../../../sanity/lib/client'
 import airports from '@/data/airports.json'
-import HotelCityClient from './HotelCityClient'
+import HotelCityClient from '.app/HotelCityClient'
 
 export const revalidate = 86400
 
@@ -32,36 +32,36 @@ type CityData = {
 // ---------------------------------------------
 async function getCityFromSanity(citySlug: string): Promise<CityData | null> {
   try {
-    const city = await client.fetch(
-      `*[_type == "city" && slug.current == $slug][0]{
+    const data = await client.fetch(
+      `*[_type == "city" && slug.current == $citySlug][0]{
         _id,
         name,
-        slug,
-        country->{name, slug, continent->{slug}},
+        "slug": slug.current,
         emoji,
         heroDescription,
         aiIntro,
-        aiNeighbourhoods
+        aiNeighbourhoods,
+        country->{ name, "slug": slug.current },
+        country->continent->{ "slug": slug.current }
       }`,
-      { slug: citySlug }
+      { citySlug }
     )
 
-    if (!city) return null
+    if (!data) return null
 
     return {
-      _id: city._id,
-      name: city.name,
-      country: city.country?.name || '',
-      emoji: city.emoji,
-      heroDescription: city.heroDescription,
-      aiIntro: city.aiIntro || null,
-      aiNeighbourhoods: city.aiNeighbourhoods || null,
-      slug: city.slug,
-      countrySlug: city.country?.slug,
-      continentSlug: city.country?.continent?.slug,
+      _id: data._id,
+      name: data.name,
+      country: data.country?.name || '',
+      emoji: data.emoji,
+      heroDescription: data.heroDescription,
+      aiIntro: data.aiIntro || null,
+      aiNeighbourhoods: data.aiNeighbourhoods || null,
+      slug: data.slug,
+      countrySlug: data.country?.slug,
+      continentSlug: data.country?.continent?.slug,
     }
-  } catch (err) {
-    console.error("SANITY FETCH ERROR:", err)
+  } catch {
     return null
   }
 }
@@ -99,7 +99,6 @@ export async function generateMetadata({
   const { city } = await params
   const sanityCity = await getCityFromSanity(city)
   const cityData = sanityCity || getCityFromAirports(city)
-
   if (!cityData) return { title: 'Hotels | Timms Travel' }
 
   return {
@@ -136,7 +135,7 @@ export default async function HotelCityPage({
       continentSlug={cityData.continentSlug}
       countrySlug={cityData.countrySlug}
       aiContent={{
-        intro: cityData.aiIntro,
+        intro: cityData.aiIntro || null,
         neighbourhoods: cityData.aiNeighbourhoods || [],
       }}
     />

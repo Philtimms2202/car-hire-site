@@ -484,6 +484,9 @@ export default function CarsPageClient() {
   </div>
 </section>
 
+
+
+
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto text-center">
