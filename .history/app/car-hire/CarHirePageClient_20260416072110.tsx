@@ -1,13 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CarSearch from '@/app/components/Search/CarSearch'
-import FlightSearch from '@/app/components/Search/FlightSearch'
-import HotelSearch from '@/app/components/Search/HotelSearch'
-import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 
 // -----------------------------
 // CAR CATEGORIES
@@ -449,71 +445,60 @@ const roadTripSeasons: { season: string; emoji: string; items: CarDest[] }[] = [
 // PAGE
 // -----------------------------
 export default function CarsPageClient() {
-  const router = useRouter()
-  const [activeTab, setActiveTab] = useState<'flights' | 'hotels' | 'experiences' | 'cars'>('cars')
-
-  const handleTabClick = (tab: 'flights' | 'hotels' | 'experiences' | 'cars') => {
-    if (tab === 'flights') router.push('/')
-    else if (tab === 'hotels') router.push('/hotels')
-    else if (tab === 'experiences') router.push('/experiences')
-    else setActiveTab(tab)
-  }
-
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
 
-      {/* ── HERO ── */}
-      <section
-        className="relative overflow-hidden text-white py-24 px-6 text-center"
-        style={{ backgroundColor: '#232e4e' }}
-      >
-        {/* subtle grid texture */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-        />
+{/* ── HERO ── */}
+<section
+  className="relative overflow-hidden text-white py-24 px-6 text-center"
+  style={{ backgroundColor: '#232e4e' }}
+>
+  {/* subtle grid texture */}
+  <div
+    className="absolute inset-0 opacity-[0.04]"
+    style={{
+      backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+      backgroundSize: '40px 40px',
+    }}
+  />
 
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-            Timms Travel · Car Hire
-          </p>
-          <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
-            Find Your Perfect Hire Car
-          </h1>
-          <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
-            Compare hundreds of car hire deals instantly — great prices, no hidden fees.
-          </p>
+  <div className="relative z-10 max-w-3xl mx-auto">
+    <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
+      Timms Travel · Car Hire
+    </p>
+    <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
+      Find Your Perfect Hire Car
+    </h1>
+    <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
+      Compare hundreds of car hire deals instantly — great prices, no hidden fees.
+    </p>
 
-          {/* SEARCH TABS */}
-          <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
-            {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => handleTabClick(tab)}
-                className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
-                  activeTab === tab
-                    ? 'bg-white text-[#232e4e] shadow-sm'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+    {/* SEARCH TABS */}
+    <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+      {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+        <button
+          key={tab}
+          onClick={() => setActiveTab(tab)}
+          className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+            activeTab === tab
+              ? 'bg-white text-[#232e4e] shadow-sm'
+              : 'text-gray-300 hover:text-white'
+          }`}
+        >
+          {tab}
+        </button>
+      ))}
+    </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">
-            {activeTab === 'flights'     && <FlightSearch />}
-            {activeTab === 'hotels'      && <HotelSearch />}
-            {activeTab === 'experiences' && <ExperienceSearch />}
-            {activeTab === 'cars'        && <CarSearch />}
-          </div>
-        </div>
-      </section>
+    <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">
+      {activeTab === 'flights'     && <FlightSearch />}
+      {activeTab === 'hotels'      && <HotelSearch />}
+      {activeTab === 'experiences' && <ExperienceSearch />}
+      {activeTab === 'cars'        && <CarSearch />}
+    </div>
+  </div>
+</section>
 
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">
