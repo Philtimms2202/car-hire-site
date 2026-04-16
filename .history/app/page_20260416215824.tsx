@@ -52,14 +52,20 @@ export default function Home() {
       />
 
       {/* ──────────────────────────────── */}
-{/* NEW HERO (NO GRID TEXTURE) */}
-{/* ──────────────────────────────── */}
-<section
-  className="relative overflow-hidden text-white py-24 px-6 text-center"
-  style={{ backgroundColor: '#232e4e' }}
->
-  {/* no grid overlay */}
-
+      {/* NEW HERO (REPLACES OLD HERO) */}
+      {/* ──────────────────────────────── */}
+      <section
+        className="relative overflow-hidden text-white py-24 px-6 text-center"
+        style={{ backgroundColor: '#232e4e' }}
+      >
+        {/* ──────────────────────────────── */}
+      {/* NEW HERO (NO GRID TEXTURE) */}
+      {/* ──────────────────────────────── */}
+      <section
+        className="relative overflow-hidden text-white py-24 px-6 text-center"
+        style={{ backgroundColor: '#232e4e' }}
+      >
+        {/* no grid overlay */}
 
         <div className="relative z-10 max-w-3xl mx-auto">
           <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">

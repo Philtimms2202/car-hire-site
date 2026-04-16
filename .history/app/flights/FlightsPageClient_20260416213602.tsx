@@ -193,17 +193,6 @@ export default function FlightsPageClient() {
   const [open, setOpen] = useState(false)
   const [geoLoading, setGeoLoading] = useState(false)
   const [geoError, setGeoError] = useState<string | null>(null)
-// -----------------------------
-// Car Hire Tab COMPONENT
-// -----------------------------
-    const [pickupLocation, setPickupLocation] = useState('');
-    const [pickupDate, setPickupDate] = useState('');
-    const [dropoffDate, setDropoffDate] = useState('');
-    const [loading, setLoading] = useState(false);
-
-    const handleCarSearch = () => {
-      // whatever logic you want here
-    };
 
   // Default to MAN
   useEffect(() => {
@@ -265,16 +254,22 @@ export default function FlightsPageClient() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-     
       {/* ──────────────────────────────── */}
-{/* NEW HERO (NO GRID TEXTURE) */}
-{/* ──────────────────────────────── */}
-<section
-  className="relative overflow-hidden text-white py-24 px-6 text-center"
-  style={{ backgroundColor: '#232e4e' }}
->
-  {/* no grid overlay */}
-
+      {/* NEW HERO (REPLACES OLD HERO) */}
+      {/* ──────────────────────────────── */}
+      <section
+        className="relative overflow-hidden text-white py-24 px-6 text-center"
+        style={{ backgroundColor: '#232e4e' }}
+      >
+        {/* subtle grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
 
         <div className="relative z-10 max-w-3xl mx-auto">
           <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">

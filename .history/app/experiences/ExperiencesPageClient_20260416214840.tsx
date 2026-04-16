@@ -128,29 +128,26 @@ export default function ExperiencesPage() {
     return matchSearch && (activeCategory === 'all' || exp.category === activeCategory)
   })
 
-    const [pickupLocation, setPickupLocation] = useState('');
-    const [pickupDate, setPickupDate] = useState('');
-    const [dropoffDate, setDropoffDate] = useState('');
-    const [loading, setLoading] = useState(false);
-
-    const handleCarSearch = () => {
-      // whatever logic you want here
-    };
-
-
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
 
             {/* ──────────────────────────────── */}
-{/* NEW HERO (NO GRID TEXTURE) */}
-{/* ──────────────────────────────── */}
-<section
-  className="relative overflow-hidden text-white py-24 px-6 text-center"
-  style={{ backgroundColor: '#232e4e' }}
->
-  {/* no grid overlay */}
-
+      {/* NEW HERO (REPLACES OLD HERO) */}
+      {/* ──────────────────────────────── */}
+      <section
+        className="relative overflow-hidden text-white py-24 px-6 text-center"
+        style={{ backgroundColor: '#232e4e' }}
+      >
+        {/* subtle grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
 
         <div className="relative z-10 max-w-3xl mx-auto">
           <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
@@ -158,7 +155,7 @@ export default function ExperiencesPage() {
           </p>
 
           <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
-            Experiences & Tours Around the World!
+            Discover Unique Experie
           </h1>
 
           <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
@@ -266,12 +263,12 @@ export default function ExperiencesPage() {
     />
   </div>
   {search.trim() && (
-    <a
+    
       href={buildGygSearchUrl(search)}
       target="_blank"
       rel="noopener noreferrer sponsored"
       className="flex items-center justify-center px-5 py-2.5 rounded-lg text-white text-sm font-semibold whitespace-nowrap transition-opacity hover:opacity-90"
-      style={{ backgroundColor:'#232e4e' }}
+      style={{ backgroundColor: '#232e4e' }}
     >
       Search on GYG →
     </a>

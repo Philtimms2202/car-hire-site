@@ -267,13 +267,22 @@ export default function FlightsPageClient() {
       <Navbar />
      
       {/* ──────────────────────────────── */}
-{/* NEW HERO (NO GRID TEXTURE) */}
-{/* ──────────────────────────────── */}
-<section
+      {/* NEW HERO (REPLACES OLD HERO) */}
+      {/* ──────────────────────────────── */}
+      <section
+        className="relative overflow-hidden text-white py-24 px-6 text-center"
+        style={{ backgroundColor: '#232e4e' }}
+      >
+        {/* subtle grid texture */}
+        <section
   className="relative overflow-hidden text-white py-24 px-6 text-center"
-  style={{ backgroundColor: '#232e4e' }}
+  style={{
+    backgroundColor: '#232e4e',
+    backgroundImage: "url('/images/hero-travel.jpg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
 >
-  {/* no grid overlay */}
 
 
         <div className="relative z-10 max-w-3xl mx-auto">
