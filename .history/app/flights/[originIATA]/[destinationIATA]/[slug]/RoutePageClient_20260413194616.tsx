@@ -27,14 +27,9 @@ type Props = {
   originIATA: string
   destinationIATA: string
   slug: string
-  origin: any
-  destination: any
+  origin: City | null
+  destination: City | null
   sanityCities: any[]
-  flightInfo: {
-    distanceKm: number
-    timeHours: number
-    durationLabel: string
-  } | null
 }
 
 // ─────────────────────────────────────────────
@@ -526,7 +521,6 @@ export default function RoutePageClient({
   origin,
   destination,
   sanityCities,
-  flightInfo={flightInfo}
 }: Props) {
   const originName = resolveCityName(originIATA, origin)
   const destinationName = resolveCityName(destinationIATA, destination)
@@ -632,77 +626,6 @@ export default function RoutePageClient({
           <TravelTips />
         </div>
       </section>
-
-      {/* FLIGHT TIMES */}
-<section className="py-16 px-6 bg-gray-50">
-  <div className="max-w-5xl mx-auto">
-    <h2
-      className="text-3xl font-bold text-center mb-2"
-      style={{ color: '#232e4e' }}
-    >
-      Flight Time from {originName} to {destinationName}
-    </h2>
-
-    <p className="text-center text-gray-500 mb-10 max-w-2xl mx-auto">
-      Here’s a quick look at the key details for your journey from {originName} to {destinationName}. 
-      These estimates are based on typical commercial jet speeds and great‑circle routing.
-    </p>
-
-    {/* VISUAL CARD */}
-    <div className="bg-white shadow-md rounded-xl p-8 flex flex-col md:flex-row items-center gap-10">
-      
-      {/* ICON / VISUAL */}
-      <div className="flex-shrink-0">
-        <div className="w-28 h-28 bg-[#232e4e] rounded-full flex items-center justify-center">
-          <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-14 w-14 text-white"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M2 16l20-5-20-5 5 5-5 5z"
-          />
-        </svg>
-
-        </div>
-      </div>
-
-      {/* TEXTUAL FACTS */}
-      <div className="flex-1">
-        <ul className="space-y-4 text-lg text-gray-700">
-          <li>
-            <strong className="font-semibold text-[#232e4e]">Distance:</strong>{' '}
-            {Math.round(flightInfo?.distanceKm || 0).toLocaleString()} km
-          </li>
-          <li>
-            <strong className="font-semibold text-[#232e4e]">Typical Flight Time:</strong>{' '}
-            {flightInfo?.durationLabel}
-          </li>
-          <li>
-            <strong className="font-semibold text-[#232e4e]">Route Type:</strong>{' '}
-            {flightInfo?.distanceKm && flightInfo.distanceKm > 3500
-              ? 'Long‑haul'
-              : flightInfo?.distanceKm && flightInfo.distanceKm > 1500
-              ? 'Medium‑haul'
-              : 'Short‑haul'}
-          </li>
-        </ul>
-
-        <p className="mt-6 text-gray-600 leading-relaxed">
-          These figures are based on direct, great‑circle routing, the shortest path between two 
-          points on the globe. Actual flight times may vary depending on winds, aircraft type, and 
-          air‑traffic conditions, but this gives you a reliable benchmark for planning your trip.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
 
       {/* FINAL CTA */}
       <section

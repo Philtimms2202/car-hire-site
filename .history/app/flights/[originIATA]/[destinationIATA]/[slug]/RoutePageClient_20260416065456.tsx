@@ -27,14 +27,9 @@ type Props = {
   originIATA: string
   destinationIATA: string
   slug: string
-  origin: any
-  destination: any
+  origin: City | null
+  destination: City | null
   sanityCities: any[]
-  flightInfo: {
-    distanceKm: number
-    timeHours: number
-    durationLabel: string
-  } | null
 }
 
 // ─────────────────────────────────────────────
@@ -526,7 +521,6 @@ export default function RoutePageClient({
   origin,
   destination,
   sanityCities,
-  flightInfo={flightInfo}
 }: Props) {
   const originName = resolveCityName(originIATA, origin)
   const destinationName = resolveCityName(destinationIATA, destination)
@@ -633,14 +627,14 @@ export default function RoutePageClient({
         </div>
       </section>
 
-      {/* FLIGHT TIMES */}
+      {/* FLIGHT FACTS */}
 <section className="py-16 px-6 bg-gray-50">
   <div className="max-w-5xl mx-auto">
     <h2
       className="text-3xl font-bold text-center mb-2"
       style={{ color: '#232e4e' }}
     >
-      Flight Time from {originName} to {destinationName}
+      Flight Facts for This Route
     </h2>
 
     <p className="text-center text-gray-500 mb-10 max-w-2xl mx-auto">
@@ -655,20 +649,19 @@ export default function RoutePageClient({
       <div className="flex-shrink-0">
         <div className="w-28 h-28 bg-[#232e4e] rounded-full flex items-center justify-center">
           <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-14 w-14 text-white"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M2 16l20-5-20-5 5 5-5 5z"
-          />
-        </svg>
-
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-14 w-14 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={1.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12m-19.5 0l8.954 8.955c.44.439 1.152.439 1.591 0L21.75 12m-19.5 0h19.5"
+            />
+          </svg>
         </div>
       </div>
 
@@ -694,7 +687,7 @@ export default function RoutePageClient({
         </ul>
 
         <p className="mt-6 text-gray-600 leading-relaxed">
-          These figures are based on direct, great‑circle routing, the shortest path between two 
+          These figures are based on direct, great‑circle routing — the shortest path between two 
           points on the globe. Actual flight times may vary depending on winds, aircraft type, and 
           air‑traffic conditions, but this gives you a reliable benchmark for planning your trip.
         </p>

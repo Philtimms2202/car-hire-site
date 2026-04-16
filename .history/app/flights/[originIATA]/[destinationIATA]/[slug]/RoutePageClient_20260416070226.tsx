@@ -655,19 +655,24 @@ export default function RoutePageClient({
       <div className="flex-shrink-0">
         <div className="w-28 h-28 bg-[#232e4e] rounded-full flex items-center justify-center">
           <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-14 w-14 text-white"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M2 16l20-5-20-5 5 5-5 5z"
-          />
-        </svg>
+  xmlns="http://www.w3.org/2000/svg"
+  className="h-14 w-14 text-white"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  strokeWidth={1.5}
+>
+  <circle cx="12" cy="12" r="9" stroke="currentColor" />
+  <path
+    d="M3 12a9 9 0 0 1 18 0"
+    strokeLinecap="round"
+  />
+  <path
+    d="M8 12l10-3-2 3 2 3-10-3z"
+    fill="currentColor"
+    stroke="none"
+  />
+</svg>
 
         </div>
       </div>
