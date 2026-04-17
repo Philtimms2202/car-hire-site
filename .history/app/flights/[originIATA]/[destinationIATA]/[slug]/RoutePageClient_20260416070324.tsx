@@ -577,8 +577,63 @@ export default function RoutePageClient({
         />
       </section>
 
-    
-           {/* FLIGHT TIMES */}
+      {/* ROUTE INFO STRIP */}
+      <section className="py-12 px-6 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-8" style={{ color: '#232e4e' }}>
+            About This Route
+          </h2>
+          <RouteInfoStrip originIATA={originIATA} destinationIATA={destinationIATA} />
+        </div>
+      </section>
+
+      {/* SEO CONTENT */}
+      <section className="py-16 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-6" style={{ color: '#232e4e' }}>
+            Flights from {originName} to {destinationName}
+          </h2>
+          <SeoTextBlock
+            originName={originName}
+            destinationName={destinationName}
+            originCountry={originCountry}
+            destinationCountry={destinationCountry}
+            destinationDescription={destination?.heroDescription}
+          />
+        </div>
+      </section>
+
+      {/* POPULAR ROUTES FROM ORIGIN */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+            More Popular Flights from {originName}
+          </h2>
+          <p className="text-center text-gray-500 mb-10">
+            Explore other top routes departing from {originName}
+          </p>
+          <PopularRoutesGrid
+            originIATA={originIATA}
+            destinationName={destinationName}
+            sanityCities={sanityCities}
+          />
+        </div>
+      </section>
+
+      {/* TRAVEL TIPS */}
+      <section className="py-16 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+            Travel Tips for This Route
+          </h2>
+          <p className="text-center text-gray-500 mb-10">
+            Make the most of your {originName} to {destinationName} flight
+          </p>
+          <TravelTips />
+        </div>
+      </section>
+
+      {/* FLIGHT TIMES */}
 <section className="py-16 px-6 bg-gray-50">
   <div className="max-w-5xl mx-auto">
     <h2
@@ -648,63 +703,8 @@ export default function RoutePageClient({
   </div>
 </section>
 
-      {/* SEO CONTENT */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-6" style={{ color: '#232e4e' }}>
-            Flights from {originName} to {destinationName}
-          </h2>
-          <SeoTextBlock
-            originName={originName}
-            destinationName={destinationName}
-            originCountry={originCountry}
-            destinationCountry={destinationCountry}
-            destinationDescription={destination?.heroDescription}
-          />
-        </div>
-      </section>
 
-      {/* POPULAR ROUTES FROM ORIGIN */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
-            More Popular Flights from {originName}
-          </h2>
-          <p className="text-center text-gray-500 mb-10">
-            Explore other top routes departing from {originName}
-          </p>
-          <PopularRoutesGrid
-            originIATA={originIATA}
-            destinationName={destinationName}
-            sanityCities={sanityCities}
-          />
-        </div>
-      </section>
-
-      {/* TRAVEL TIPS */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
-            Travel Tips for This Route
-          </h2>
-          <p className="text-center text-gray-500 mb-10">
-            Make the most of your {originName} to {destinationName} flight
-          </p>
-          <TravelTips />
-        </div>
-      </section>
-
-{/* ROUTE INFO STRIP */}
-      <section className="py-12 px-6 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8" style={{ color: '#232e4e' }}>
-            About This Route
-          </h2>
-          <RouteInfoStrip originIATA={originIATA} destinationIATA={destinationIATA} />
-        </div>
-      </section>
-
-       {/* FINAL CTA */}
+      {/* FINAL CTA */}
       <section
         style={{ backgroundColor: '#232e4e' }}
         className="py-16 px-6 text-center text-white"

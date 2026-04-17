@@ -577,7 +577,16 @@ export default function RoutePageClient({
         />
       </section>
 
-    
+      {/* ROUTE INFO STRIP */}
+      <section className="py-12 px-6 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-8" style={{ color: '#232e4e' }}>
+            About This Route
+          </h2>
+          <RouteInfoStrip originIATA={originIATA} destinationIATA={destinationIATA} />
+        </div>
+      </section>
+
            {/* FLIGHT TIMES */}
 <section className="py-16 px-6 bg-gray-50">
   <div className="max-w-5xl mx-auto">
@@ -691,16 +700,6 @@ export default function RoutePageClient({
             Make the most of your {originName} to {destinationName} flight
           </p>
           <TravelTips />
-        </div>
-      </section>
-
-{/* ROUTE INFO STRIP */}
-      <section className="py-12 px-6 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8" style={{ color: '#232e4e' }}>
-            About This Route
-          </h2>
-          <RouteInfoStrip originIATA={originIATA} destinationIATA={destinationIATA} />
         </div>
       </section>
 
