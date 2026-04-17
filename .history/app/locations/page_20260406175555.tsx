@@ -292,4 +292,4 @@ export default function Locations() {
       <Footer />
     </main>
   )
-}6
+}

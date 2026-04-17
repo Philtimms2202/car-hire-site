@@ -558,7 +558,7 @@ const HOTEL_TYPES = [
     color: '#b8860b',
     bg: '#b8860b15',
     headline: 'Five-star from the moment you arrive.',
-    body: 'Luxury hotels are defined by impeccable service, premium locations and facilities that go far beyond the basics. Think white-glove concierge, spa access, fine dining restaurants and rooms designed down to the last detail. These are hotels that become part of the trip itself, not just a place to sleep. Expect to pay a premium, but expect to feel every penny of it.',
+    body: 'Luxury hotels are defined by impeccable service, premium locations and facilities that go far beyond the basics. Think white-glove concierge, spa access, fine dining restaurants and rooms designed down to the last detail. These are hotels that become part of the trip itself - not just a place to sleep. Expect to pay a premium, but expect to feel every penny of it.',
     examples: 'The Ritz, Four Seasons, Mandarin Oriental, Aman',
     idealFor: 'Honeymoons, milestone celebrations, business travel on expenses',
   },

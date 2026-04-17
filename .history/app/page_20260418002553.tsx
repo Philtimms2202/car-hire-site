@@ -167,7 +167,7 @@ export default function Home() {
                 href: '/hotels',
                 color: '#03989e',
                 bg: '#03989e12',
-                body: 'From five-star luxury to smart budget stays, browse curated hotel picks across every major destination -with live prices and no booking fees.',
+                body: 'From five-star luxury to smart budget stays, browse curated hotel picks across every major destination — with live prices and no booking fees.',
               },
               {
                 emoji: '🎟️',
@@ -180,10 +180,10 @@ export default function Home() {
               {
                 emoji: '🚗',
                 title: 'Car Hire',
-                href: '/car-hire',
+                href: '/cars',
                 color: '#5a7a52',
                 bg: '#5a7a5212',
-                body: 'Compare rental cars from leading providers worldwide. Pick up at the airport or in the city -flexibility built in from the start.',
+                body: 'Compare rental cars from leading providers worldwide. Pick up at the airport or in the city — flexibility built in from the start.',
               },
             ].map(({ emoji, title, href, color, bg, body }) => (
               <a
@@ -258,7 +258,7 @@ export default function Home() {
               {
                 n: 3,
                 title: 'Book',
-                text: 'Build your perfect trip and book with confidence. Flights, hotels, experiences and car hire all in one place -no juggling multiple websites or hidden charges at checkout.',
+                text: 'Build your perfect trip and book with confidence. Flights, hotels, experiences and car hire all in one place — no juggling multiple websites or hidden charges at checkout.',
               },
             ].map(({ n, title, text }) => (
               <div key={n} className="text-center">
@@ -299,7 +299,7 @@ export default function Home() {
               Popular Destinations
             </h2>
             <p className="text-center text-gray-500 mt-2">
-              Some of our most searched destinations -click to explore hotels, flights and more.
+              Some of our most searched destinations — click to explore hotels, flights and more.
             </p>
           </div>
 
@@ -348,21 +348,21 @@ export default function Home() {
               {
                 emoji: '🏛️',
                 title: 'City Breaks',
-                body: 'A long weekend in a great city is one of life\'s simple pleasures. Flights on Friday, back by Monday -with the best boutique hotels in between.',
+                body: 'A long weekend in a great city is one of life\'s simple pleasures. Flights on Friday, back by Monday — with the best boutique hotels in between.',
                 cta: 'Search city breaks',
                 href: '/hotels',
               },
               {
                 emoji: '🧗',
                 title: 'Adventure & Outdoors',
-                body: 'Trek, ski, dive or climb -the world\'s most thrilling destinations are closer than you think. We\'ll get you there and find you somewhere to sleep.',
+                body: 'Trek, ski, dive or climb — the world\'s most thrilling destinations are closer than you think. We\'ll get you there and find you somewhere to sleep.',
                 cta: 'Explore experiences',
                 href: '/experiences',
               },
               {
                 emoji: '🍽️',
                 title: 'Food & Culture',
-                body: 'Some trips are really just an excuse to eat well and see great art. Tokyo, Lisbon, Bologna -we know exactly where to send you.',
+                body: 'Some trips are really just an excuse to eat well and see great art. Tokyo, Lisbon, Bologna — we know exactly where to send you.',
                 cta: 'Discover destinations',
                 href: '/locations/continents',
               },
@@ -449,15 +449,15 @@ export default function Home() {
               Built for real travellers
             </h2>
             <p className="text-gray-500 mt-2 max-w-lg mx-auto">
-              We built Timms Travel because booking a trip should be straightforward -not a battle across a dozen different websites.
+              We built Timms Travel because booking a trip should be straightforward — not a battle across a dozen different websites.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-12">
             {[
-              { emoji: '🌍', title: 'Worldwide Locations', text: 'Available in 100+ countries -from capital cities to coastlines most sites don\'t bother covering.' },
+              { emoji: '🌍', title: 'Worldwide Locations', text: 'Available in 100+ countries — from capital cities to coastlines most sites don\'t bother covering.' },
               { emoji: '💰', title: 'Competitive Pricing', text: 'We compare all major providers in real time so you\'re always seeing the best available price, not a padded one.' },
-              { emoji: '🛡️', title: 'Flexible Bookings', text: 'Plans change and we get it. We work with providers who offer real flexibility -not fine print that traps you.' },
+              { emoji: '🛡️', title: 'Flexible Bookings', text: 'Plans change and we get it. We work with providers who offer real flexibility — not fine print that traps you.' },
             ].map(({ emoji, title, text }) => (
               <div key={title}>
                 <div className="text-4xl mb-3">{emoji}</div>
@@ -473,7 +473,7 @@ export default function Home() {
                 Timms Travel was built in the United Kingdom with one goal in mind: making travel planning genuinely simple. Too many booking platforms bury the best deals behind endless upsells, confusing filters and prices that look great until checkout. We do things differently.
               </p>
               <p>
-                Whether you are searching for a last-minute city break, comparing hotel options for a family holiday or looking for something to do when you land, Timms Travel gives you honest results from trusted providers -all in one place.
+                Whether you are searching for a last-minute city break, comparing hotel options for a family holiday or looking for something to do when you land, Timms Travel gives you honest results from trusted providers — all in one place.
               </p>
               <p>
                 We partner with Expedia, GetYourGuide and other leading travel companies to bring you live availability and genuine prices. No markup, no hidden platform fees. What you see is what you pay.
@@ -520,7 +520,7 @@ export default function Home() {
                 color: '#b8860b',
               },
               {
-                href: '/car-hire',
+                href: '/cars',
                 emoji: '🚗',
                 title: 'Car Hire Hub',
                 body: 'Compare rental cars across providers. Filter by car type, pickup location and budget. No surprise fees at the counter.',

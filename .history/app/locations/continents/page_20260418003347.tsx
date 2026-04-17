@@ -54,7 +54,7 @@ export default async function ContinentsPage() {
         </p>
         <h1 className="text-5xl font-bold mb-4">Explore by Continent</h1>
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          Discover the world one continent at a time - from iconic cities to hidden gems.
+          Discover the world one continent at a time — from iconic cities to hidden gems.
         </p>
       </section>
 
@@ -86,7 +86,7 @@ export default async function ContinentsPage() {
               {
                 emoji: '🌍',
                 title: 'Match your travel style',
-                body: 'From the ancient history of Europe to the wildlife of Africa and the temples of Asia - different continents suit different kinds of traveller.',
+                body: 'From the ancient history of Europe to the wildlife of Africa and the temples of Asia — different continents suit different kinds of traveller.',
               },
             ].map(({ emoji, title, body }) => (
               <div key={title} className="rounded-2xl bg-white border border-gray-100 p-6 shadow-sm">
@@ -154,7 +154,7 @@ export default async function ContinentsPage() {
                 continent: 'Europe',
                 slug: 'europe',
                 headline: 'History, culture and some of the world\'s great cities.',
-                body: 'Europe packs extraordinary variety into a relatively compact space. You can eat your way through the trattorias of Bologna, walk the medieval lanes of Prague, stand on the white cliffs of the Algarve and take a sleeper train through the Alps - all within the same two-week trip. The infrastructure is excellent, the food is world-class and the density of UNESCO heritage sites is unlike anywhere else on earth.',
+                body: 'Europe packs extraordinary variety into a relatively compact space. You can eat your way through the trattorias of Bologna, walk the medieval lanes of Prague, stand on the white cliffs of the Algarve and take a sleeper train through the Alps — all within the same two-week trip. The infrastructure is excellent, the food is world-class and the density of UNESCO heritage sites is unlike anywhere else on earth.',
                 bestFor: 'City breaks, food travel, history and art',
                 mustSee: 'Paris, Rome, Amsterdam, Lisbon, Edinburgh',
               },
@@ -163,7 +163,7 @@ export default async function ContinentsPage() {
                 continent: 'Asia',
                 slug: 'asia',
                 headline: 'Ancient temples, dazzling food and relentless energy.',
-                body: 'Asia is the world\'s largest and most diverse continent - and that diversity is exactly what makes it so compelling. Tokyo\'s ordered precision sits alongside the beautiful chaos of Bangkok\'s street markets. The spiritual calm of Kyoto\'s temples is a world away from the neon towers of Hong Kong. Whether you want beach, jungle, mountain or megacity, Asia has it - often all within the same country.',
+                body: 'Asia is the world\'s largest and most diverse continent — and that diversity is exactly what makes it so compelling. Tokyo\'s ordered precision sits alongside the beautiful chaos of Bangkok\'s street markets. The spiritual calm of Kyoto\'s temples is a world away from the neon towers of Hong Kong. Whether you want beach, jungle, mountain or megacity, Asia has it — often all within the same country.',
                 bestFor: 'Adventure, food, culture, backpacking',
                 mustSee: 'Tokyo, Bangkok, Bali, Singapore, Vietnam',
               },
@@ -181,7 +181,7 @@ export default async function ContinentsPage() {
                 continent: 'South America',
                 slug: 'south-america',
                 headline: 'Rainforests, ruins and the planet\'s most dramatic landscapes.',
-                body: 'South America rewards travellers who lean into the unexpected. The Amazon is the world\'s greatest wilderness. Patagonia\'s granite spires are unlike anything else on earth. Machu Picchu is genuinely worth the hype. And in between - the tango bars of Buenos Aires, the carnival energy of Rio, the colonial splendour of Cartagena - there is a richness of culture that few continents can match.',
+                body: 'South America rewards travellers who lean into the unexpected. The Amazon is the world\'s greatest wilderness. Patagonia\'s granite spires are unlike anything else on earth. Machu Picchu is genuinely worth the hype. And in between — the tango bars of Buenos Aires, the carnival energy of Rio, the colonial splendour of Cartagena — there is a richness of culture that few continents can match.',
                 bestFor: 'Adventure, wildlife, culture, history',
                 mustSee: 'Buenos Aires, Rio de Janeiro, Machu Picchu, Cartagena',
               },
@@ -198,8 +198,8 @@ export default async function ContinentsPage() {
                 emoji: '🦘',
                 continent: 'Oceania',
                 slug: 'oceania',
-                headline: 'The ends of the earth - and worth every hour of the flight.',
-                body: 'Australia and New Zealand are long-haul destinations, but they deliver in proportion to the journey. Sydney\'s harbour is one of the world\'s great urban backdrops. The Great Barrier Reef remains a genuine wonder. New Zealand\'s South Island offers the most cinematic landscapes on earth - fjords, glaciers, vineyards and mountains within an hour of each other. The Pacific islands add a slower, more remote kind of paradise.',
+                headline: 'The ends of the earth — and worth every hour of the flight.',
+                body: 'Australia and New Zealand are long-haul destinations, but they deliver in proportion to the journey. Sydney\'s harbour is one of the world\'s great urban backdrops. The Great Barrier Reef remains a genuine wonder. New Zealand\'s South Island offers the most cinematic landscapes on earth — fjords, glaciers, vineyards and mountains within an hour of each other. The Pacific islands add a slower, more remote kind of paradise.',
                 bestFor: 'Nature, adventure, beach, long stays',
                 mustSee: 'Sydney, Melbourne, Queenstown, Fiji, Great Barrier Reef',
               },
@@ -244,7 +244,7 @@ export default async function ContinentsPage() {
             Popular Destinations Around the World
           </h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
-            A curated selection of iconic cities across the globe - perfect for planning your next adventure.
+            A curated selection of iconic cities across the globe — perfect for planning your next adventure.
           </p>
 
           <div className="grid md:grid-cols-3 gap-12 text-left">
@@ -323,7 +323,7 @@ export default async function ContinentsPage() {
               Not sure which continent is right for you?
             </h2>
             <p className="text-gray-500 mt-2 max-w-xl mx-auto">
-              Sometimes it helps to start with what you want to do - then find the continent that delivers it best.
+              Sometimes it helps to start with what you want to do — then find the continent that delivers it best.
             </p>
           </div>
 
@@ -377,7 +377,7 @@ export default async function ContinentsPage() {
               {
                 emoji: '🎒',
                 tip: 'Open-ended travel',
-                detail: 'South America and Southeast Asia are the classic backpacker circuits for good reason - affordable, well-connected and endlessly rewarding.',
+                detail: 'South America and Southeast Asia are the classic backpacker circuits for good reason — affordable, well-connected and endlessly rewarding.',
               },
             ].map(({ emoji, tip, detail }) => (
               <div key={tip} className="rounded-2xl bg-white/10 border border-white/10 p-5">
