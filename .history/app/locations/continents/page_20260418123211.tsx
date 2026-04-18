@@ -46,19 +46,22 @@ export default async function ContinentsPage() {
       <Navbar />
 
       {/* ── HERO ── */}
-<section
-  style={{ backgroundColor: '#232e4e' }}
-  className="text-white py-24 px-6 text-center"
->
-  <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-    Timms Travel · Destinations
-  </p>
-  <h1 className="text-5xl font-bold mb-4">Explore by Continent</h1>
-  <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
-    Discover the world one continent at a time — from iconic cities to hidden gems.
-  </p>
-  <LocationSearch />
-</section>
+      <section
+        style={{ backgroundColor: '#232e4e' }}
+        className="text-white py-20 px-6 text-center"
+      >
+        <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
+          Timms Travel · Destinations
+        </p>
+        <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+  Discover the world one continent at a time - from iconic cities to hidden gems.
+</p>
+<LocationSearch />
+        <h1 className="text-5xl font-bold mb-4">Explore by Continent</h1>
+        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          Discover the world one continent at a time - from iconic cities to hidden gems.
+        </p>
+      </section>
 
       {/* ── WHY EXPLORE BY CONTINENT ── */}
       <section className="py-16 px-6 bg-gray-50">
