@@ -3,34 +3,26 @@
 import { usePathname } from "next/navigation"
 
 const EXPEDIA_AFFILIATE_URL = "https://expedia.com/affiliate/KohMBZ5"
-const AFFILIATE_TAG = "affcid=UK.DIRECT.PHG.1011l428377"
+const AFFILIATE_TAG = "affcid=UK.DIRECT.PHG.1011l428377" // optional
 
 export default function HotelSearch() {
   const pathname = usePathname()
 
-  // /locations/[continent]/[country]/[city]
+  // Extract the city slug from /locations/[continent]/[country]/[city]
   const segments = pathname.split("/").filter(Boolean)
+  const citySlug = segments[3] // index 3 = city
 
-  const continentSlug = segments[1]
-  const countrySlug = segments[2]
-  const citySlug = segments[3]
+  // Convert slug → readable city name
+  const cityName = citySlug
+    ? citySlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+    : null
 
-  // Convert slug → readable name
-  const toName = (slug?: string) =>
-    slug
-      ? slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
-      : null
-
-  const cityName = toName(citySlug)
-  const countryName = toName(countrySlug)
-
-  // Build precise Expedia URL
-  const dynamicUrl =
-    cityName && countryName
-      ? `https://www.expedia.com/Hotel-Search?destination=${encodeURIComponent(
-          `${cityName}, ${countryName}`
-        )}&${AFFILIATE_TAG}`
-      : EXPEDIA_AFFILIATE_URL
+  // Build dynamic Expedia URL
+  const dynamicUrl = cityName
+    ? `https://www.expedia.com/Hotel-Search?destination=${encodeURIComponent(
+        cityName
+      )}&${AFFILIATE_TAG}`
+    : EXPEDIA_AFFILIATE_URL
 
   return (
     <div className="flex flex-col items-center justify-center py-8 gap-5">
