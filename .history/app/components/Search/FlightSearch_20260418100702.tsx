@@ -267,21 +267,14 @@ export default function FlightSearch() {
       {/* RETURN */}
       {roundTrip && (
         <div>
-    <label
-      htmlFor="returnDate"
-      className="block text-gray-600 text-sm mb-1"
-    >
-      Return
-    </label>
-
-    <input
-      id="returnDate"
-      type="date"
-      className="input-field bg-white text-gray-900 w-full"
-      value={returnDate}
-      min={depart || today}
-      onChange={(e) => setReturnDate(e.target.value)}
-    />
+          <label className="block text-gray-600 text-sm mb-1">Return</label>
+          <input
+            type="date"
+            className="input-field bg-white text-gray-900 w-full"
+            value={returnDate}
+            min={depart || today}
+            onChange={(e) => setReturnDate(e.target.value)}
+          />
         </div>
       )}
     </div>

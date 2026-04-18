@@ -193,7 +193,7 @@ export async function generateMetadata({ params }: { params: Promise<RouteParams
   const originCountry = resolveCountryFromIATA(originIATA, origin)
   const destinationCountry = resolveCountryFromIATA(destinationIATA, destination)
 
-  const title = `Compare Flights from ${originName} to ${destinationName} | Timms Travel`
+  const title = `Cheap Flights from ${originName} to ${destinationName} | Timms Travel`
 
   const description =
     destination?.metaDescription ??
