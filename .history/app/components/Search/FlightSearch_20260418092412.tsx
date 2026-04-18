@@ -185,56 +185,44 @@ export default function FlightSearch() {
     </div>
 
     {/* Row 1: From / Swap / To */}
-<div className="flex flex-col md:flex-row md:items-end gap-3">
+    <div className="flex items-end gap-2">
+      {/* FROM */}
+      <div className="relative flex-1">
+        <label className="block text-gray-600 text-sm mb-1">From</label>
+        <input
+          className="input-field bg-white text-gray-900 w-full"
+          placeholder="City or airport"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+        {renderDropdown(fromResults, setFromResults, setFrom, (a) => {
+          selectedFromRef.current = a
+        })}
+      </div>
 
-  {/* FROM */}
-  <div className="relative flex-1 order-1">
-    <label className="block text-gray-600 text-sm mb-1">From</label>
-    <input
-      className="input-field bg-white text-gray-900 w-full"
-      placeholder="City or airport"
-      value={from}
-      onChange={(e) => setFrom(e.target.value)}
-    />
-    {renderDropdown(fromResults, setFromResults, setFrom, (a) => {
-      selectedFromRef.current = a
-    })}
-  </div>
+      {/* SWAP BUTTON */}
+      <button
+        className="flex-shrink-0 mb-[1px] w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 bg-white text-gray-600 hover:bg-gray-100 transition"
+        onClick={handleSwap}
+        aria-label="Swap origin and destination"
+      >
+        ⇄
+      </button>
 
-  {/* SWAP BUTTON */}
-  <button
-    className="
-      order-2 
-      md:order-none 
-      mx-auto md:mx-0 
-      w-10 h-10 
-      flex items-center justify-center 
-      rounded-full border border-gray-300 
-      bg-white text-gray-600 
-      hover:bg-gray-100 transition
-    "
-    onClick={handleSwap}
-    aria-label="Swap origin and destination"
-  >
-    ⇄
-  </button>
-
-  {/* TO */}
-  <div className="relative flex-1 order-3">
-    <label className="block text-gray-600 text-sm mb-1">To</label>
-    <input
-      className="input-field bg-white text-gray-900 w-full"
-      placeholder="City or airport"
-      value={to}
-      onChange={(e) => setTo(e.target.value)}
-    />
-    {renderDropdown(toResults, setToResults, setTo, (a) => {
-      selectedToRef.current = a
-    })}
-  </div>
-
-</div>
-
+      {/* TO */}
+      <div className="relative flex-1">
+        <label className="block text-gray-600 text-sm mb-1">To</label>
+        <input
+          className="input-field bg-white text-gray-900 w-full"
+          placeholder="City or airport"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+        {renderDropdown(toResults, setToResults, setTo, (a) => {
+          selectedToRef.current = a
+        })}
+      </div>
+    </div>
 
     {/* Row 2: Dates */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
