@@ -166,26 +166,11 @@ export default function FlightSearch() {
   }
 
   return (
-  <div className="card space-y-6">
+  <div className="card">
 
-    {/* Trip type */}
-    <div className="flex gap-4">
-      <button
-        className={`px-4 py-2 rounded ${roundTrip ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-        onClick={() => setRoundTrip(true)}
-      >
-        Return
-      </button>
-      <button
-        className={`px-4 py-2 rounded ${!roundTrip ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-        onClick={() => setRoundTrip(false)}
-      >
-        One way
-      </button>
-    </div>
+    {/* HORIZONTAL SEARCH BAR */}
+    <div className="w-full flex flex-col md:flex-row md:items-end gap-4">
 
-    {/* Row 1: From / Swap / To */}
-    <div className="flex items-end gap-2">
       {/* FROM */}
       <div className="relative flex-1">
         <label className="block text-gray-600 text-sm mb-1">From</label>
@@ -222,13 +207,10 @@ export default function FlightSearch() {
           selectedToRef.current = a
         })}
       </div>
-    </div>
 
-    {/* Row 2: Dates */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {/* DEPART */}
-      <div>
-        <label className="block text-gray-600 text-sm mb-1">Departure</label>
+      <div className="flex-1">
+        <label className="block text-gray-600 text-sm mb-1">Depart</label>
         <input
           type="date"
           className="input-field bg-white text-gray-900 w-full"
@@ -246,7 +228,7 @@ export default function FlightSearch() {
 
       {/* RETURN */}
       {roundTrip && (
-        <div>
+        <div className="flex-1">
           <label className="block text-gray-600 text-sm mb-1">Return</label>
           <input
             type="date"
@@ -257,102 +239,103 @@ export default function FlightSearch() {
           />
         </div>
       )}
-    </div>
 
-    {/* Row 3: Travellers & cabin */}
-    <div className="relative" ref={travellerRef}>
-      <label className="block text-gray-600 text-sm mb-1">Travellers & cabin</label>
+      {/* TRAVELLERS */}
+      <div className="relative flex-1" ref={travellerRef}>
+        <label className="block text-gray-600 text-sm mb-1">Travellers & cabin</label>
 
+        <button
+          className="input-field bg-white text-gray-900 w-full text-left"
+          onClick={() => setTravellerOpen(!travellerOpen)}
+        >
+          {adults} Adult{adults > 1 ? 's' : ''}
+          {children > 0 ? `, ${children} Child` : ''}
+          {infants > 0 ? `, ${infants} Infant` : ''} · {cabin.replace('_', ' ')}
+        </button>
+
+        {travellerOpen && (
+          <div className="absolute left-0 right-0 z-40 bg-white border border-gray-200 rounded-xl shadow-xl mt-2 p-4 space-y-4">
+
+            {/* Cabin */}
+            <div>
+              <div className="font-semibold text-gray-800 mb-2">Cabin class</div>
+              <select
+                className="input-field bg-white text-gray-900 w-full"
+                value={cabin}
+                onChange={(e) => setCabin(e.target.value)}
+              >
+                <option value="economy">Economy</option>
+                <option value="premium">Premium Economy</option>
+                <option value="business">Business</option>
+                <option value="first">First</option>
+              </select>
+            </div>
+
+            {/* Adults */}
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="font-semibold text-gray-800">Adults</div>
+                <div className="text-gray-500 text-sm">Aged 18+</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <button className="px-3 py-1 bg-gray-200 rounded" disabled={adults <= 1} onClick={() => setAdults(adults - 1)}>-</button>
+                <span className="w-6 text-center">{adults}</span>
+                <button className="px-3 py-1 bg-gray-200 rounded" onClick={() => setAdults(adults + 1)}>+</button>
+              </div>
+            </div>
+
+            {/* Children */}
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="font-semibold text-gray-800">Children</div>
+                <div className="text-gray-500 text-sm">Aged 0–17</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <button className="px-3 py-1 bg-gray-200 rounded" disabled={children <= 0} onClick={() => setChildren(children - 1)}>-</button>
+                <span className="w-6 text-center">{children}</span>
+                <button className="px-3 py-1 bg-gray-200 rounded" onClick={() => setChildren(children + 1)}>+</button>
+              </div>
+            </div>
+
+            {/* Infants */}
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="font-semibold text-gray-800">Infants</div>
+                <div className="text-gray-500 text-sm">Under 2</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <button className="px-3 py-1 bg-gray-200 rounded" disabled={infants <= 0} onClick={() => setInfants(infants - 1)}>-</button>
+                <span className="w-6 text-center">{infants}</span>
+                <button className="px-3 py-1 bg-gray-200 rounded" onClick={() => setInfants(infants + 1)}>+</button>
+              </div>
+            </div>
+
+            <button className="btn-primary w-full mt-2" onClick={() => setTravellerOpen(false)}>
+              Apply
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* SEARCH BUTTON */}
       <button
-        className="input-field bg-white text-gray-900 w-full text-left"
-        onClick={() => setTravellerOpen(!travellerOpen)}
+        onClick={handleSearch}
+        className="btn-primary px-6 py-3 whitespace-nowrap disabled:opacity-60"
+        disabled={loading}
       >
-        {adults} Adult{adults > 1 ? 's' : ''}
-        {children > 0 ? `, ${children} Child` : ''}
-        {infants > 0 ? `, ${infants} Infant` : ''} · {cabin.replace('_', ' ')}
+        {loading ? 'Searching…' : 'Search'}
       </button>
-
-      {travellerOpen && (
-        <div className="absolute left-0 right-0 z-40 bg-white border border-gray-200 rounded-xl shadow-xl mt-2 p-4 space-y-4">
-
-          {/* Cabin */}
-          <div>
-            <div className="font-semibold text-gray-800 mb-2">Cabin class</div>
-            <select
-              className="input-field bg-white text-gray-900 w-full"
-              value={cabin}
-              onChange={(e) => setCabin(e.target.value)}
-            >
-              <option value="economy">Economy</option>
-              <option value="premium">Premium Economy</option>
-              <option value="business">Business</option>
-              <option value="first">First</option>
-            </select>
-          </div>
-
-          {/* Adults */}
-          <div className="flex justify-between items-center">
-            <div>
-              <div className="font-semibold text-gray-800">Adults</div>
-              <div className="text-gray-500 text-sm">Aged 18+</div>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="px-3 py-1 bg-gray-200 rounded" disabled={adults <= 1} onClick={() => setAdults(adults - 1)}>-</button>
-              <span className="w-6 text-center">{adults}</span>
-              <button className="px-3 py-1 bg-gray-200 rounded" onClick={() => setAdults(adults + 1)}>+</button>
-            </div>
-          </div>
-
-          {/* Children */}
-          <div className="flex justify-between items-center">
-            <div>
-              <div className="font-semibold text-gray-800">Children</div>
-              <div className="text-gray-500 text-sm">Aged 0–17</div>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="px-3 py-1 bg-gray-200 rounded" disabled={children <= 0} onClick={() => setChildren(children - 1)}>-</button>
-              <span className="w-6 text-center">{children}</span>
-              <button className="px-3 py-1 bg-gray-200 rounded" onClick={() => setChildren(children + 1)}>+</button>
-            </div>
-          </div>
-
-          {/* Infants */}
-          <div className="flex justify-between items-center">
-            <div>
-              <div className="font-semibold text-gray-800">Infants</div>
-              <div className="text-gray-500 text-sm">Under 2</div>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="px-3 py-1 bg-gray-200 rounded" disabled={infants <= 0} onClick={() => setInfants(infants - 1)}>-</button>
-              <span className="w-6 text-center">{infants}</span>
-              <button className="px-3 py-1 bg-gray-200 rounded" onClick={() => setInfants(infants + 1)}>+</button>
-            </div>
-          </div>
-
-          <button className="btn-primary w-full mt-2" onClick={() => setTravellerOpen(false)}>
-            Apply
-          </button>
-        </div>
-      )}
     </div>
-
-    {/* Search button */}
-    <button
-      onClick={handleSearch}
-      className="btn-primary w-full disabled:opacity-60"
-      disabled={loading}
-    >
-      {loading ? 'Searching…' : 'Search flights'}
-    </button>
 
     {/* Popular routes */}
     <a
       href="/flights/popular-routes"
-      className="w-full block text-center mt-2 px-4 py-3 rounded-lg border border-[#03989e] text-[#03989e] bg-white font-semibold hover:bg-[#e6f7f7] transition"
+      className="w-full block text-center mt-4 px-4 py-3 rounded-lg border border-[#03989e] text-[#03989e] bg-white font-semibold hover:bg-[#e6f7f7] transition"
     >
       View popular routes
     </a>
 
   </div>
-  )
+)
+
 }

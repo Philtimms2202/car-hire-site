@@ -4,7 +4,7 @@ export const metadata = {
   title: "Find Cheap Flights | Timms Travel",
   description: "Search and compare flights worldwide with Timms Travel.",
   openGraph: {
-    title: "Compare Flights Across Worldwide Routes",
+    title: "Find Cheap Flights",
     description: "Search and compare flights worldwide with Timms Travel.",
     url: "https://timmstravel.com/go/flights",
     siteName: "Timms Travel",
