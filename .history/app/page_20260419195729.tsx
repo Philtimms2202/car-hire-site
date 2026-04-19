@@ -61,7 +61,7 @@ export default function Home() {
           src="https://images.unsplash.com/photo-1501426026826-31c667bdf23d"
           alt="Travel destination"
           fill
-          className="object-cover object-[center_40%]"
+          className="object-top object-cover"
           priority
         />
 

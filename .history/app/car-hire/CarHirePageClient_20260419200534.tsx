@@ -471,7 +471,7 @@ export default function CarsPageClient() {
     src="https://images.unsplash.com/photo-1667926829143-a9b83ce9fb62?q=80"
     alt="Car driving on an open road"
     fill
-    className="object-cover object-[center_60%]"
+    className="object-cover object-[center_30%]"
     priority
   />
 

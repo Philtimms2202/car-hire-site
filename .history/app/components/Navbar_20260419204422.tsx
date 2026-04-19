@@ -35,7 +35,9 @@ export default function Navbar() {
     { label: 'Experiences', href: '/experiences' },
     { label: 'Car Hire', href: '/car-hire' },
     { label: 'Blog', href: '/blog' },
-    { label: 'About', href: '/about' },
+    { label: 'About', href: '/about' },const moreLinks = [
+    { label: 'eSIMs', href: '/other-services/esims' },
+    { label: 'Travel Insurance', href: '/other-services/travel-insurance' },
     { label: 'Contact Us', href: '/contact' },
   ]
 

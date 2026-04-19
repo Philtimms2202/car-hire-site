@@ -55,7 +55,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/other-services/travel-insurance" className="hover:text-dark transition">
+                <a href="/travel-insurance" className="hover:text-dark transition">
                   Travel Insurance
                 </a>
               </li>

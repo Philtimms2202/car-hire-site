@@ -41,7 +41,7 @@ export default function Navbar() {
 
   const moreLinks = [
     { label: 'eSIMs', href: '/other-services/esims' },
-    { label: 'Travel Insurance', href: '/other-services/travel-insurance' },
+    { label: 'Travel Insurance', href: '/travel-insurance' },
   ]
 
   return (

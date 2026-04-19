@@ -36,6 +36,7 @@ export default function Navbar() {
     { label: 'Car Hire', href: '/car-hire' },
     { label: 'Blog', href: '/blog' },
     { label: 'About', href: '/about' },
+    
     { label: 'Contact Us', href: '/contact' },
   ]
 

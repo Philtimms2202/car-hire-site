@@ -467,10 +467,10 @@ export default function FlightsPageClient() {
 <section className="relative overflow-hidden text-white py-24 px-6 text-center">
   {/* Unsplash background image */}
   <NextImage
-    src="https://images.unsplash.com/photo-1532364158125-02d75a0f7fb9?q=80&w=1548"
+    src="https://images.unsplash.com/photo-1519666336592-e225a99dcd2f?q=80&w=776"
     alt="Airplane wing above the clouds"
     fill
-    className="object-cover object-[center_30%]"
+    className="object-cover object-center"
     priority
   />
 
