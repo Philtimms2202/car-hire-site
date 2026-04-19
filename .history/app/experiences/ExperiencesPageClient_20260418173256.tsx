@@ -147,7 +147,7 @@ export default function ExperiencesPage() {
 <section className="relative overflow-hidden text-white py-24 px-6 text-center">
   {/* Unsplash background image */}
   <NextImage
-    src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1600&q=80"
+    src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80"
     alt="Travel experiences around the world"
     fill
     className="object-cover object-center"

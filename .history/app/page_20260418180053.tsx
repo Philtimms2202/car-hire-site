@@ -3,7 +3,7 @@
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Script from 'next/script'
-import NextImage from 'next/image'
+import Image as NextImage from 'next/image';
 
 import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import FlightSearch from '@/app/components/Search/FlightSearch'
@@ -57,8 +57,8 @@ export default function Home() {
         className="relative overflow-hidden text-white py-24 px-6 text-center"
       >
         {/* Unsplash background image */}
-        <NextImage
-          src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1600&q=80"
+        <Image
+          src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80"
           alt="Travel destination"
           fill
           className="object-cover object-center"
@@ -68,7 +68,7 @@ export default function Home() {
         {/* Dark overlay so text stays legible */}
         <div className="absolute inset-0 bg-[#232e4e]/70 z-0" />
 
-        <div className="relative z-10 max-w-5xl mx-auto">
+        <div className="relative z-10 max-w-3xl mx-auto">
           <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
             Timms Travel
           </p>

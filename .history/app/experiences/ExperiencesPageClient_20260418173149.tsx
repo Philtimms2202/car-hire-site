@@ -143,11 +143,11 @@ export default function ExperiencesPage() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-    {/* ── HERO ── */}
+{/* ── HERO ── */}
 <section className="relative overflow-hidden text-white py-24 px-6 text-center">
   {/* Unsplash background image */}
   <NextImage
-    src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1600&q=80"
+    src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80"
     alt="Travel experiences around the world"
     fill
     className="object-cover object-center"
@@ -212,8 +212,29 @@ export default function ExperiencesPage() {
       <span>No hidden fees</span>
       <span>Competitive price guarantee</span>
     </div>
+  </div>
+</section>
 
-         {/* Trust indicators (unchanged) */}
+          {/* SEARCH AREA (unchanged) */}
+          <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+            {activeTab === 'flights' && <FlightSearch />}
+            {activeTab === 'hotels' && <HotelSearch />}
+            {activeTab === 'experiences' && <ExperienceSearch />}
+            {activeTab === 'cars' && (
+              <CarSearch
+                pickupLocation={pickupLocation}
+                pickupDate={pickupDate}
+                dropoffDate={dropoffDate}
+                setPickupLocation={setPickupLocation}
+                setPickupDate={setPickupDate}
+                setDropoffDate={setDropoffDate}
+                loading={loading}
+                onSearch={handleCarSearch}
+              />
+            )}
+          </div>
+
+          {/* Trust indicators (unchanged) */}
           <div className="flex justify-center gap-8 mt-8 text-sm text-gray-300">
             <span>Fully Bespoke Offers</span>
             <span>No hidden fees</span>

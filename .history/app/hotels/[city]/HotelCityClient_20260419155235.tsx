@@ -223,7 +223,7 @@ export default function HotelCityClient(props: Props) {
               { name: `Best Boutique Hotel in ${cityName}`, desc: `A stylish, design‑led property with character and a strong sense of place.` },
               { name: `Best Budget Hotel in ${cityName}`,   desc: `A clean, comfortable and great‑value option close to transport and key sights.` },
             ].map((hotel) => (
-              <a
+              
                 key={hotel.name}
                 href={cityExpediaUrl}
                 target="_blank"
@@ -298,7 +298,7 @@ export default function HotelCityClient(props: Props) {
           <p className="text-gray-500 text-sm mb-6">
             Search live prices, availability and guest reviews on Expedia.
           </p>
-          <a
+          
             href={cityExpediaUrl}
             target="_blank"
             rel="noopener noreferrer"

@@ -1099,47 +1099,38 @@ export default function HotelsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-{/* ── HERO ── */}
-<section className="relative overflow-hidden text-white py-24 px-6 text-center">
-  {/* Unsplash background image */}
-  <NextImage
-    src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600&q=80"
-    alt="Luxury hotel lobby"
-    fill
-    className="object-cover object-center"
-    priority
-  />
+      {/* ── HERO ── */}
+      <section
+        className="relative overflow-hidden text-white py-24 px-6 text-center"
+        style={{ backgroundColor: '#232e4e' }}
+      >
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
+            Timms Travel · Hotels
+          </p>
+          <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
+            Compare Hotels Worldwide!
+          </h1>
+          <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
+            Search hotels in any city worldwide. Curated picks, live prices and no booking fees.
+          </p>
 
-  {/* Dark overlay */}
-  <div className="absolute inset-0 bg-[#232e4e]/75 z-0" />
-
-  <div className="relative z-10 max-w-3xl mx-auto">
-    <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-      Timms Travel · Hotels
-    </p>
-    <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
-      Compare Hotels Worldwide!
-    </h1>
-    <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
-      Search hotels in any city worldwide. Curated picks, live prices and no booking fees.
-    </p>
-
-    {/* SEARCH TABS */}
-    <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
-      {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-        <button
-          key={tab}
-          onClick={() => setActiveTab(tab)}
-          className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
-            activeTab === tab
-              ? 'bg-white text-[#232e4e] shadow-sm'
-              : 'text-gray-300 hover:text-white'
-          }`}
-        >
-          {tab}
-        </button>
-      ))}
-    </div>
+          {/* SEARCH TABS */}
+          <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+            {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+                  activeTab === tab
+                    ? 'bg-white text-[#232e4e] shadow-sm'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">
             {activeTab === 'flights'     && <FlightSearch />}

@@ -170,11 +170,11 @@ export default function FlightSearch() {
         ))}
       </div>
 
-    {/* ── SINGLE LINE ROW ── */}
-<div className="flex flex-col lg:flex-row items-stretch gap-2">
+  {/* ── SINGLE LINE ROW ── */}
+<div className="grid grid-cols-2 md:grid-cols-[1fr_auto_1fr_1fr_1fr_1fr_auto] items-end gap-2">
 
   {/* FROM */}
-  <div className="relative flex-[2] min-w-0">
+  <div className="relative col-span-1">
     <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">From</label>
     <input
       className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#03989e] focus:border-transparent placeholder-gray-400"
@@ -188,14 +188,14 @@ export default function FlightSearch() {
   {/* SWAP */}
   <button
     onClick={handleSwap}
-    className="self-end mb-0.5 xl:self-center w-9 h-9 shrink-0 mx-auto flex items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:border-gray-300 transition text-base"
+    className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:border-gray-300 transition text-base mb-0.5"
     aria-label="Swap airports"
   >
     ⇄
   </button>
 
   {/* TO */}
-  <div className="relative flex-[2] min-w-0">
+  <div className="relative col-span-1">
     <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">To</label>
     <input
       className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#03989e] focus:border-transparent placeholder-gray-400"
@@ -207,7 +207,7 @@ export default function FlightSearch() {
   </div>
 
   {/* DEPART */}
-  <div className="flex-[1.2] min-w-0">
+  <div>
     <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Depart</label>
     <input
       type="date"
@@ -221,9 +221,9 @@ export default function FlightSearch() {
     />
   </div>
 
-  {/* RETURN — only shown for round trip */}
+  {/* RETURN */}
   {roundTrip && (
-    <div className="flex-[1.2] min-w-0">
+    <div>
       <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Return</label>
       <input
         type="date"
@@ -236,17 +236,17 @@ export default function FlightSearch() {
   )}
 
   {/* TRAVELLERS */}
-  <div className="relative flex-[1.5] min-w-0" ref={travellerRef}>
+  <div className="relative" ref={travellerRef}>
     <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Passengers</label>
     <button
-      className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 bg-white text-left focus:outline-none focus:ring-2 focus:ring-[#03989e] hover:border-gray-300 transition overflow-hidden text-ellipsis whitespace-nowrap"
+      className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 bg-white text-left focus:outline-none focus:ring-2 focus:ring-[#03989e] hover:border-gray-300 transition whitespace-nowrap overflow-hidden text-ellipsis"
       onClick={() => setTravellerOpen(!travellerOpen)}
     >
       {travellerSummary}
     </button>
 
     {travellerOpen && (
-      <div className="absolute right-0 bottom-full mb-2 z-40 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 space-y-4 w-72">
+      <div className="absolute right-0 z-40 bg-white border border-gray-200 rounded-2xl shadow-xl mt-1 p-4 space-y-4 w-72">
         <div>
           <p className="font-semibold text-gray-800 text-sm mb-2">Cabin class</p>
           <select
@@ -260,7 +260,6 @@ export default function FlightSearch() {
             <option value="first">First</option>
           </select>
         </div>
-
         {[
           { label: 'Adults', sub: 'Aged 18+', val: adults, set: setAdults, min: 1 },
           { label: 'Children', sub: 'Aged 2–17', val: children, set: setChildren, min: 0 },
@@ -272,38 +271,24 @@ export default function FlightSearch() {
               <p className="text-gray-400 text-xs">{sub}</p>
             </div>
             <div className="flex items-center gap-3">
-              <button
-                className="w-8 h-8 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition text-lg leading-none"
-                disabled={val <= min}
-                onClick={() => set(val - 1)}
-              >−</button>
+              <button className="w-8 h-8 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition text-lg leading-none" disabled={val <= min} onClick={() => set(val - 1)}>−</button>
               <span className="w-5 text-center text-sm font-semibold">{val}</span>
-              <button
-                className="w-8 h-8 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 transition text-lg leading-none"
-                onClick={() => set(val + 1)}
-              >+</button>
+              <button className="w-8 h-8 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 transition text-lg leading-none" onClick={() => set(val + 1)}>+</button>
             </div>
           </div>
         ))}
-
-        <button
-          className="w-full py-2 rounded-xl text-white text-sm font-semibold transition hover:opacity-90"
-          style={{ backgroundColor: '#232e4e' }}
-          onClick={() => setTravellerOpen(false)}
-        >
-          Done
-        </button>
+        <button className="w-full py-2 rounded-xl text-white text-sm font-semibold transition hover:opacity-90" style={{ backgroundColor: '#232e4e' }} onClick={() => setTravellerOpen(false)}>Done</button>
       </div>
     )}
   </div>
 
   {/* SEARCH BUTTON */}
-  <div className="flex flex-col justify-end shrink-0">
+  <div>
     <label className="block text-[11px] font-bold text-transparent uppercase tracking-wider mb-1 px-1 select-none">Search</label>
     <button
       onClick={handleSearch}
       disabled={loading}
-      className="px-6 py-2.5 rounded-xl text-white text-sm font-bold transition hover:opacity-90 disabled:opacity-60 whitespace-nowrap"
+      className="w-full px-5 py-2.5 rounded-xl text-white text-sm font-bold transition hover:opacity-90 disabled:opacity-60 whitespace-nowrap"
       style={{ backgroundColor: '#03989e' }}
     >
       {loading ? 'Searching…' : 'Search flights'}

@@ -11,6 +11,7 @@ import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import { client } from '@/sanity/lib/client'
 import NextImage from 'next/image'
+
 // ---------------------------------------------
 // TYPES
 // ---------------------------------------------
@@ -1139,6 +1140,13 @@ export default function HotelsPageClient() {
           {tab}
         </button>
       ))}
+    </div>
+
+    <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">
+      {activeTab === 'flights'     && <FlightSearch />}
+      {activeTab === 'hotels'      && <HotelSearch />}
+      {activeTab === 'experiences' && <ExperienceSearch />}
+      {activeTab === 'cars'        && <CarSearch />}
     </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">

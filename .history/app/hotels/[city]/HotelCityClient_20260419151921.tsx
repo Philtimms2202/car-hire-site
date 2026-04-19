@@ -5,6 +5,9 @@ import Link from 'next/link'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 
+// ---------------------------------------------
+// AFFILIATE HELPERS
+// ---------------------------------------------
 const EXPEDIA_CAMREF = '1110lCmpb'
 const EXPEDIA_CREATIVEREF = '1011l87747'
 const EXPEDIA_ADREF = 'PZZ928vica'
@@ -28,6 +31,9 @@ function buildExpediaDeepLink(city: string, country: string): string {
   return `https://expedia.com/affiliate?${affiliateParams.toString()}`
 }
 
+// ---------------------------------------------
+// TYPES
+// ---------------------------------------------
 type Neighbourhood = {
   name: string
   description: string
@@ -49,6 +55,9 @@ type Props = {
   aiContent: AIContent
 }
 
+// ---------------------------------------------
+// HOTEL TYPE PILLS
+// ---------------------------------------------
 const hotelTypes = [
   { label: 'Luxury',   emoji: '⭐️', description: 'Five-star stays and iconic hotels' },
   { label: 'Boutique', emoji: '🛎️', description: 'Characterful, design-led properties' },
@@ -56,8 +65,10 @@ const hotelTypes = [
   { label: 'Budget',   emoji: '💸', description: 'Great value without compromise' },
 ]
 
-function NeighbourhoodCard(props: { neighbourhood: Neighbourhood }) {
-  const { neighbourhood } = props
+// ---------------------------------------------
+// NEIGHBOURHOOD CARD
+// ---------------------------------------------
+function NeighbourhoodCard({ neighbourhood }: { neighbourhood: Neighbourhood }) {
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
       <h3 className="font-bold text-base mb-1" style={{ color: '#232e4e' }}>
@@ -68,21 +79,21 @@ function NeighbourhoodCard(props: { neighbourhood: Neighbourhood }) {
   )
 }
 
-function HotelTypeCard(props: {
-  label: string
-  emoji: string
-  description: string
-  href: string
+// ---------------------------------------------
+// HOTEL TYPE CARD
+// ---------------------------------------------
+function HotelTypeCard({
+  label, emoji, description, href,
+}: {
+  label: string; emoji: string; description: string; href: string
 }) {
-  const { label, emoji, description, href } = props
   return (
-    <a
     
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-2"
-    >
+    <a>
       <span className="text-2xl">{emoji}</span>
       <span className="font-bold text-sm" style={{ color: '#232e4e' }}>{label}</span>
       <span className="text-xs text-gray-500">{description}</span>
@@ -93,20 +104,26 @@ function HotelTypeCard(props: {
   )
 }
 
-export default function HotelCityClient(props: Props) {
-  const {
-    cityName,
-    country,
-    emoji,
-    heroDescription,
-    citySlug,
-    continentSlug,
-    countrySlug,
-    aiContent,
-  } = props
+// ---------------------------------------------
+// PAGE
+// ---------------------------------------------
+export default function HotelCityClient({
+  cityName,
+  country,
+  emoji,
+  heroDescription,
+  citySlug,
+  continentSlug,
+  countrySlug,
+  aiContent,
+}: Props) {
 
+  console.log('HotelCityClient ACTIVE:', citySlug)
+
+  // Build city-specific Expedia URL
   const cityExpediaUrl = buildExpediaDeepLink(cityName, country)
 
+  // Trigger background AI generation if content is missing
   useEffect(() => {
     const needsAI =
       !aiContent?.intro ||
@@ -114,11 +131,15 @@ export default function HotelCityClient(props: Props) {
       aiContent.neighbourhoods.length === 0
 
     if (needsAI) {
+      console.log('AI TRIGGER RUNNING:', citySlug)
       fetch(`/api/generate-ai?city=${citySlug}`, { method: 'POST' })
         .then(async (res) => {
           const data = await res.json()
           if (data.status === 'created') {
+            console.log('AI GENERATED — refreshing page')
             window.location.reload()
+          } else {
+            console.log('AI EXISTS — no refresh')
           }
         })
         .catch((err) => {
@@ -135,10 +156,10 @@ export default function HotelCityClient(props: Props) {
     aiContent.neighbourhoods && aiContent.neighbourhoods.length > 0
       ? aiContent.neighbourhoods
       : [
-          { name: `Central ${cityName}`,  description: `A convenient base close to major attractions, restaurants and transport.` },
-          { name: `Historic Quarter`,      description: `Full of culture, museums and traditional architecture — ideal for exploring on foot.` },
-          { name: `Waterfront District`,   description: `Scenic, lively and packed with restaurants, cafés and evening strolls.` },
-          { name: `Residential Suburbs`,   description: `Quiet, spacious and great for families or longer stays.` },
+          { name: `Central ${cityName}`,     description: `A convenient base close to major attractions, restaurants and transport.` },
+          { name: `Historic Quarter`,         description: `Full of culture, museums and traditional architecture — ideal for exploring on foot.` },
+          { name: `Waterfront District`,      description: `Scenic, lively and packed with restaurants, cafés and evening strolls.` },
+          { name: `Residential Suburbs`,      description: `Quiet, spacious and great for families or longer stays.` },
         ]
 
   return (
@@ -157,7 +178,7 @@ export default function HotelCityClient(props: Props) {
         <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto mb-8">
           {heroDescription || introText}
         </p>
-        <a
+        
           href={cityExpediaUrl}
           target="_blank"
           rel="noopener noreferrer"
@@ -178,7 +199,7 @@ export default function HotelCityClient(props: Props) {
             A guide to the key neighbourhoods and what each one suits.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {neighbourhoods.map((n) => (
+            {neighbourhoods.map(n => (
               <NeighbourhoodCard key={n.name} neighbourhood={n} />
             ))}
           </div>
@@ -195,14 +216,8 @@ export default function HotelCityClient(props: Props) {
             Browse by hotel type — all links open on Expedia with live availability.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {hotelTypes.map((type) => (
-              <HotelTypeCard
-                key={type.label}
-                label={type.label}
-                emoji={type.emoji}
-                description={type.description}
-                href={cityExpediaUrl}
-              />
+            {hotelTypes.map(type => (
+              <HotelTypeCard key={type.label} {...type} href={cityExpediaUrl} />
             ))}
           </div>
         </div>
@@ -219,11 +234,11 @@ export default function HotelCityClient(props: Props) {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { name: `Best Luxury Hotel in ${cityName}`,   desc: `A five‑star stay offering exceptional service, refined rooms and a prime location.` },
+              { name: `Best Luxury Hotel in ${cityName}`,  desc: `A five‑star stay offering exceptional service, refined rooms and a prime location.` },
               { name: `Best Boutique Hotel in ${cityName}`, desc: `A stylish, design‑led property with character and a strong sense of place.` },
-              { name: `Best Budget Hotel in ${cityName}`,   desc: `A clean, comfortable and great‑value option close to transport and key sights.` },
-            ].map((hotel) => (
-              <a
+              { name: `Best Budget Hotel in ${cityName}`,  desc: `A clean, comfortable and great‑value option close to transport and key sights.` },
+            ].map(hotel => (
+              
                 key={hotel.name}
                 href={cityExpediaUrl}
                 target="_blank"
@@ -249,13 +264,13 @@ export default function HotelCityClient(props: Props) {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { label: 'Nightlife',         emoji: '🍸' },
-              { label: 'Families',          emoji: '👨‍👩‍👧' },
-              { label: 'First‑timers',      emoji: '📍' },
-              { label: 'Food lovers',       emoji: '🍽️' },
-              { label: 'Culture',           emoji: '🎭' },
-              { label: 'Budget travellers', emoji: '💸' },
-            ].map((item) => (
+              { label: 'Nightlife',          emoji: '🍸' },
+              { label: 'Families',           emoji: '👨‍👩‍👧' },
+              { label: 'First‑timers',       emoji: '📍' },
+              { label: 'Food lovers',        emoji: '🍽️' },
+              { label: 'Culture',            emoji: '🎭' },
+              { label: 'Budget travellers',  emoji: '💸' },
+            ].map(item => (
               <div
                 key={item.label}
                 className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow flex items-center gap-3"
@@ -298,7 +313,7 @@ export default function HotelCityClient(props: Props) {
           <p className="text-gray-500 text-sm mb-6">
             Search live prices, availability and guest reviews on Expedia.
           </p>
-          <a
+          
             href={cityExpediaUrl}
             target="_blank"
             rel="noopener noreferrer"

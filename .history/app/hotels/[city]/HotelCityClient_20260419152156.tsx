@@ -76,13 +76,12 @@ function HotelTypeCard(props: {
 }) {
   const { label, emoji, description, href } = props
   return (
-    <a
     
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-2"
-    >
+    <a>
       <span className="text-2xl">{emoji}</span>
       <span className="font-bold text-sm" style={{ color: '#232e4e' }}>{label}</span>
       <span className="text-xs text-gray-500">{description}</span>
@@ -157,7 +156,7 @@ export default function HotelCityClient(props: Props) {
         <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto mb-8">
           {heroDescription || introText}
         </p>
-        <a
+        
           href={cityExpediaUrl}
           target="_blank"
           rel="noopener noreferrer"
@@ -223,7 +222,7 @@ export default function HotelCityClient(props: Props) {
               { name: `Best Boutique Hotel in ${cityName}`, desc: `A stylish, design‑led property with character and a strong sense of place.` },
               { name: `Best Budget Hotel in ${cityName}`,   desc: `A clean, comfortable and great‑value option close to transport and key sights.` },
             ].map((hotel) => (
-              <a
+              
                 key={hotel.name}
                 href={cityExpediaUrl}
                 target="_blank"
@@ -298,7 +297,7 @@ export default function HotelCityClient(props: Props) {
           <p className="text-gray-500 text-sm mb-6">
             Search live prices, availability and guest reviews on Expedia.
           </p>
-          <a
+          
             href={cityExpediaUrl}
             target="_blank"
             rel="noopener noreferrer"

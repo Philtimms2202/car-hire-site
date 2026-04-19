@@ -53,10 +53,7 @@ export default function Home() {
       />
 
       {/* ── HERO ── */}
-      <section
-        className="relative overflow-hidden text-white py-24 px-6 text-center"
-      >
-        {/* Unsplash background image */}
+      <section className="relative overflow-hidden text-white py-24 px-6 text-center">
         <NextImage
           src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1600&q=80"
           alt="Travel destination"
@@ -64,11 +61,9 @@ export default function Home() {
           className="object-cover object-center"
           priority
         />
-
-        {/* Dark overlay so text stays legible */}
         <div className="absolute inset-0 bg-[#232e4e]/70 z-0" />
 
-        <div className="relative z-10 max-w-5xl mx-auto">
+        <div className="relative z-10 w-full max-w-6xl mx-auto">
           <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
             Timms Travel
           </p>
@@ -95,7 +90,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+          <div className="bg-white rounded-2xl p-4 md:p-6 w-[95%] mx-auto shadow-xl text-black">
             {activeTab === 'flights' && <FlightSearch />}
             {activeTab === 'hotels' && <HotelSearch />}
             {activeTab === 'experiences' && <ExperienceSearch />}
@@ -198,7 +193,7 @@ export default function Home() {
                 body: 'Compare rental cars from leading providers worldwide. Pick up at the airport or in the city -flexibility built in from the start.',
               },
             ].map(({ emoji, title, href, color, bg, body }) => (
-              <a
+              
                 key={title}
                 href={href}
                 className="group rounded-2xl border border-gray-100 p-6 hover:shadow-lg transition-all"
@@ -231,7 +226,7 @@ export default function Home() {
             </div>
             <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH"></div>
             <div className="text-center mt-8">
-              <a
+              
                 href="/experiences"
                 className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 shadow-md"
                 style={{ backgroundColor: '#03989e' }}
@@ -317,7 +312,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {destinations.map((dest) => (
-              <a
+              
                 key={dest.city}
                 href={`/locations/${dest.continent}/${dest.country}/${dest.slug}`}
                 className="card text-center hover:shadow-xl transition cursor-pointer"
@@ -393,7 +388,7 @@ export default function Home() {
                 href: '/hotels',
               },
             ].map(({ emoji, title, body, cta, href }) => (
-              <a
+              
                 key={title}
                 href={href}
                 className="group rounded-2xl border border-gray-100 bg-gray-50 p-6 hover:border-teal-200 hover:bg-teal-50/30 transition-all"
@@ -539,7 +534,7 @@ export default function Home() {
                 color: '#5a7a52',
               },
             ].map(({ href, emoji, title, body, color }) => (
-              <a
+              
                 key={title}
                 href={href}
                 className="group flex items-start gap-5 rounded-2xl border border-gray-100 bg-white p-6 hover:shadow-lg transition-all"

@@ -76,13 +76,12 @@ function HotelTypeCard(props: {
 }) {
   const { label, emoji, description, href } = props
   return (
-    <a
-    
+    <a>
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-2"
-    >
+    
       <span className="text-2xl">{emoji}</span>
       <span className="font-bold text-sm" style={{ color: '#232e4e' }}>{label}</span>
       <span className="text-xs text-gray-500">{description}</span>
@@ -157,13 +156,14 @@ export default function HotelCityClient(props: Props) {
         <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto mb-8">
           {heroDescription || introText}
         </p>
-        <a
+        
+        <a>
           href={cityExpediaUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-semibold text-base transition-all hover:opacity-90 hover:scale-[1.02] shadow-md"
           style={{ backgroundColor: '#03989e' }}
-        >
+        
           View hotels in {cityName} →
         </a>
       </section>
@@ -223,13 +223,14 @@ export default function HotelCityClient(props: Props) {
               { name: `Best Boutique Hotel in ${cityName}`, desc: `A stylish, design‑led property with character and a strong sense of place.` },
               { name: `Best Budget Hotel in ${cityName}`,   desc: `A clean, comfortable and great‑value option close to transport and key sights.` },
             ].map((hotel) => (
-              <a
+              
+              <a>
                 key={hotel.name}
                 href={cityExpediaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col"
-              >
+              
                 <h3 className="font-bold text-base mb-1" style={{ color: '#232e4e' }}>{hotel.name}</h3>
                 <p className="text-sm text-gray-500 mb-4">{hotel.desc}</p>
                 <span className="text-xs font-semibold mt-auto pt-2" style={{ color: '#03989e' }}>
@@ -298,13 +299,14 @@ export default function HotelCityClient(props: Props) {
           <p className="text-gray-500 text-sm mb-6">
             Search live prices, availability and guest reviews on Expedia.
           </p>
-          <a
+          
+          <a>
             href={cityExpediaUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-semibold text-base transition-all hover:opacity-90 hover:scale-[1.02] shadow-md"
             style={{ backgroundColor: '#03989e' }}
-          >
+          
             View all hotels in {cityName} →
           </a>
           <p className="text-xs text-gray-400 mt-4">

@@ -171,7 +171,7 @@ export default function FlightSearch() {
       </div>
 
     {/* ── SINGLE LINE ROW ── */}
-<div className="flex flex-col lg:flex-row items-stretch gap-2">
+<div className="flex flex-col xl:flex-row items-stretch gap-2">
 
   {/* FROM */}
   <div className="relative flex-[2] min-w-0">
@@ -246,7 +246,7 @@ export default function FlightSearch() {
     </button>
 
     {travellerOpen && (
-      <div className="absolute right-0 bottom-full mb-2 z-40 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 space-y-4 w-72">
+      <div className="absolute right-0 z-40 bg-white border border-gray-200 rounded-2xl shadow-xl mt-1 p-4 space-y-4 w-72">
         <div>
           <p className="font-semibold text-gray-800 text-sm mb-2">Cabin class</p>
           <select

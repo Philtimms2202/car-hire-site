@@ -464,56 +464,52 @@ export default function CarsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-{/* ── HERO ── */}
-<section className="relative overflow-hidden text-white py-24 px-6 text-center">
-  {/* Unsplash background image */}
-  <NextImage
-    src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1600&q=80"
-    alt="Car driving on an open road"
-    fill
-    className="object-cover object-center"
-    priority
-  />
+     {/* ──────────────────────────────── */}
+    {/* NEW HERO (NO GRID TEXTURE) */}
+    {/* ──────────────────────────────── */}
+    <section
+      className="relative overflow-hidden text-white py-24 px-6 text-center"
+      style={{ backgroundColor: '#232e4e' }}
+    >
+    {/* no grid overlay */}
 
-  {/* Dark overlay */}
-  <div className="absolute inset-0 bg-[#232e4e]/75 z-0" />
 
-  <div className="relative z-10 max-w-3xl mx-auto">
-    <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-      Timms Travel · Car Hire
-    </p>
-    <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
-      Find Your Perfect Hire Car
-    </h1>
-    <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
-      Compare hundreds of car hire deals instantly - great prices, no hidden fees.
-    </p>
+        <div className="relative z-10 max-w-3xl mx-auto">
+          <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
+            Timms Travel · Car Hire
+          </p>
+          <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
+            Find Your Perfect Hire Car
+          </h1>
+          <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
+            Compare hundreds of car hire deals instantly - great prices, no hidden fees.
+          </p>
 
-    {/* SEARCH TABS */}
-    <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
-      {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-        <button
-          key={tab}
-          onClick={() => handleTabClick(tab)}
-          className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
-            activeTab === tab
-              ? 'bg-white text-[#232e4e] shadow-sm'
-              : 'text-gray-300 hover:text-white'
-          }`}
-        >
-          {tab}
-        </button>
-      ))}
-    </div>
+          {/* SEARCH TABS */}
+          <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+            {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => handleTabClick(tab)}
+                className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+                  activeTab === tab
+                    ? 'bg-white text-[#232e4e] shadow-sm'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
 
-    <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">
-      {activeTab === 'flights'     && <FlightSearch />}
-      {activeTab === 'hotels'      && <HotelSearch />}
-      {activeTab === 'experiences' && <ExperienceSearch />}
-      {activeTab === 'cars'        && <CarSearch />}
-    </div>
-  </div>
-</section>
+          <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">
+            {activeTab === 'flights'     && <FlightSearch />}
+            {activeTab === 'hotels'      && <HotelSearch />}
+            {activeTab === 'experiences' && <ExperienceSearch />}
+            {activeTab === 'cars'        && <CarSearch />}
+          </div>
+        </div>
+      </section>
 
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">

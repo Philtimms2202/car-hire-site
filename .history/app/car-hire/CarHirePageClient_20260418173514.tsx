@@ -464,7 +464,7 @@ export default function CarsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-{/* ── HERO ── */}
+  {/* ── HERO ── */}
 <section className="relative overflow-hidden text-white py-24 px-6 text-center">
   {/* Unsplash background image */}
   <NextImage
@@ -512,8 +512,7 @@ export default function CarsPageClient() {
       {activeTab === 'experiences' && <ExperienceSearch />}
       {activeTab === 'cars'        && <CarSearch />}
     </div>
-  </div>
-</section>
+      </section>
 
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">

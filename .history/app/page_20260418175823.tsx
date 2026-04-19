@@ -68,7 +68,7 @@ export default function Home() {
         {/* Dark overlay so text stays legible */}
         <div className="absolute inset-0 bg-[#232e4e]/70 z-0" />
 
-        <div className="relative z-10 max-w-5xl mx-auto">
+        <div className="relative z-10 max-w-8xl mx-auto">
           <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
             Timms Travel
           </p>

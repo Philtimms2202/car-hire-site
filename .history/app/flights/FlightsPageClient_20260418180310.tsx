@@ -477,7 +477,7 @@ export default function FlightsPageClient() {
   {/* Dark overlay */}
   <div className="absolute inset-0 bg-[#232e4e]/75 z-0" />
 
-  <div className="relative z-10 max-w-3xl mx-auto">
+  <<div className="bg-white rounded-2xl p-6 max-w-5xl mx-auto shadow-xl text-black">
     <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
       Timms Travel
     </p>

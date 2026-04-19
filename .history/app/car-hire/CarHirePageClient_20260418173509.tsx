@@ -512,8 +512,6 @@ export default function CarsPageClient() {
       {activeTab === 'experiences' && <ExperienceSearch />}
       {activeTab === 'cars'        && <CarSearch />}
     </div>
-  </div>
-</section>
 
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">

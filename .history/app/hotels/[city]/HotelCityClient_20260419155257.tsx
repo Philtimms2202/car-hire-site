@@ -298,7 +298,7 @@ export default function HotelCityClient(props: Props) {
           <p className="text-gray-500 text-sm mb-6">
             Search live prices, availability and guest reviews on Expedia.
           </p>
-          <a
+          
             href={cityExpediaUrl}
             target="_blank"
             rel="noopener noreferrer"

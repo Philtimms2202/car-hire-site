@@ -512,8 +512,15 @@ export default function CarsPageClient() {
       {activeTab === 'experiences' && <ExperienceSearch />}
       {activeTab === 'cars'        && <CarSearch />}
     </div>
-  </div>
-</section>
+
+          <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">
+            {activeTab === 'flights'     && <FlightSearch />}
+            {activeTab === 'hotels'      && <HotelSearch />}
+            {activeTab === 'experiences' && <ExperienceSearch />}
+            {activeTab === 'cars'        && <CarSearch />}
+          </div>
+        </div>
+      </section>
 
       {/* WHY HIRE A CAR */}
       <section className="py-14 px-6 bg-gray-50">
