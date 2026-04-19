@@ -40,7 +40,7 @@ export default function Navbar() {
   ]
 
   const moreLinks = [
-    { label: 'Other Services', href: '/other-services/' },
+    { label: 'Other Travel Services', href: '/other-services/' },
     { label: 'eSIMs', href: '/other-services/esims' },
     { label: 'Travel Insurance', href: '/other-services/travel-insurance' },
   ]

@@ -15,9 +15,6 @@ export async function GET() {
     "/blog",
     "/about",
     "/contact",
-    "/other-services",
-    "/other-services/esims",
-    "/other-services/travel-insurance",
   ]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

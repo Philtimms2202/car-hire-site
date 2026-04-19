@@ -61,7 +61,7 @@ const SERVICES: Service[] = [
     emoji: '🛡️',
     color: '#232e4e',
     bg: '#232e4e15',
-    href: '/other-services/travel-insurance',
+    href: '/other-services//travel-insurance',
     cta: 'Get a Quote',
     features: [
       'Medical emergency cover',
@@ -141,7 +141,7 @@ const SERVICES: Service[] = [
     emoji: '🚗',
     color: '#dc6b19',
     bg: '#dc6b1915',
-    href: '/car-hire',
+    href: '/cars',
     cta: 'Compare Car Hire',
     features: [
       'Airports and city locations',
@@ -335,7 +335,7 @@ function EsimSpotlight() {
             </h2>
           </div>
           <Link
-            href="/other-services/esims"
+            href="/esims"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
             style={{ backgroundColor: '#03989e' }}
           >
@@ -558,7 +558,7 @@ function InsuranceSpotlight() {
           </div>
 
           <Link
-            href="/other-services/travel-insurance"
+            href="/travel-insurance"
             className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 hover:scale-[1.02] shadow-md"
             style={{ backgroundColor: tier.color }}
           >
