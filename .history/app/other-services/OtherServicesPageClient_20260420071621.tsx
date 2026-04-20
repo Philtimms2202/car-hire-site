@@ -72,7 +72,7 @@ const SERVICES: Service[] = [
       '24/7 emergency helpline',
     ],
   },
-    {
+  {
     id: 'airport-transfers',
     title: 'Airport Transfers',
     tagline: 'Transfers, rides, and more, available worldwide.',
@@ -173,6 +173,13 @@ const SERVICES: Service[] = [
     ],
   },
 ]
+
+// ---------------------------------------------
+// NEW COLLAPSIBLE LOGIC
+// ---------------------------------------------
+const VISIBLE_SERVICES = SERVICES.slice(0, 6)   // Up to Experiences
+const HIDDEN_SERVICES = SERVICES.slice(6)       // Car Hire
+
 
 // ---------------------------------------------
 // FAQS

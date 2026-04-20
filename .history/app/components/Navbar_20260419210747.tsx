@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import { useLocale } from '@/context/localeContext'
 import { LANGUAGES, CURRENCIES } from '@/data/locale-options'
 
@@ -50,7 +49,6 @@ export default function Navbar() {
     { label: 'Other Services', href: '/other-services' },
     { label: 'eSIMs', href: '/other-services/esims' },
     { label: 'Travel Insurance', href: '/other-services/travel-insurance' },
-    { label: 'Airport Transfers', href: '/other-services/airport-transfers' },
   ]
 
   return (
@@ -61,13 +59,11 @@ export default function Navbar() {
       <div className="flex items-center justify-between">
 
         {/* Logo */}
-        <a href="/" className="flex items-center">
-          <Image
+        <a href="/">
+          <img
             src="/timms-travel-logo.png"
             alt="Timms Travel Logo"
-            width={160}
-            height={64}
-            priority
+            className="h-16 w-auto"
           />
         </a>
 
@@ -121,16 +117,16 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Hamburger — hidden until hydration */}
+        {/* Mobile Hamburger — hidden until hydration to prevent flashing */}
         {hydrated && (
           <button
             onClick={() => setMenuOpen(prev => !prev)}
             className="md:hidden flex flex-col gap-1.5 p-2"
             aria-label="Toggle menu"
           >
-            <span className={`block h-0.5 w-6 bg-[#232e4e] transition-all will-change-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-            <span className={`block h-0.5 w-6 bg-[#232e4e] transition-all will-change-transform ${menuOpen ? 'opacity-0' : ''}`}></span>
-            <span className={`block h-0.5 w-6 bg-[#232e4e] transition-all will-change-transform ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+            <span className={`block h-0.5 w-6 bg-[#232e4e] transition-all ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+            <span className={`block h-0.5 w-6 bg-[#232e4e] transition-all ${menuOpen ? 'opacity-0' : ''}`}></span>
+            <span className={`block h-0.5 w-6 bg-[#232e4e] transition-all ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
           </button>
         )}
       </div>

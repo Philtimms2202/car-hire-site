@@ -72,7 +72,7 @@ const SERVICES: Service[] = [
       '24/7 emergency helpline',
     ],
   },
-    {
+  {
     id: 'airport-transfers',
     title: 'Airport Transfers',
     tagline: 'Transfers, rides, and more, available worldwide.',
@@ -173,6 +173,14 @@ const SERVICES: Service[] = [
     ],
   },
 ]
+
+// ---------------------------------------------
+// NEW COLLAPSIBLE LOGIC
+// ---------------------------------------------
+const VISIBLE_SERVICES = SERVICES.slice(0, 6)   // Up to Experiences
+const HIDDEN_SERVICES = SERVICES.slice(6)       // Car Hire
+
+
 
 // ---------------------------------------------
 // FAQS
@@ -295,18 +303,10 @@ function ServiceCard({ service }: { service: Service }) {
           </li>
         ))}
       </ul>
-
-      {/* CTA */}
-      <Link
-        href={service.href}
-        className="inline-flex items-center justify-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all hover:opacity-90 hover:scale-[1.02]"
-        style={{ backgroundColor: service.color }}
-      >
-        {service.cta} →
-      </Link>
     </div>
   )
 }
+
 
 // ---------------------------------------------
 // ESIM SPOTLIGHT (Saily)

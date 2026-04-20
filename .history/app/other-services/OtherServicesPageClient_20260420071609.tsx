@@ -72,7 +72,7 @@ const SERVICES: Service[] = [
       '24/7 emergency helpline',
     ],
   },
-    {
+  {
     id: 'airport-transfers',
     title: 'Airport Transfers',
     tagline: 'Transfers, rides, and more, available worldwide.',
@@ -175,6 +175,13 @@ const SERVICES: Service[] = [
 ]
 
 // ---------------------------------------------
+// NEW COLLAPSIBLE LOGIC
+// ---------------------------------------------
+const VISIBLE_SERVICES = SERVICES.slice(0, 6)   // Up to Experiences
+const HIDDEN_SERVICES = SERVICES.slice(6)       // Car Hire
+
+
+// ---------------------------------------------
 // FAQS
 // ---------------------------------------------
 const FAQS: FaqItem[] = [
@@ -239,74 +246,176 @@ const WHY_POINTS = [
 ]
 
 // ---------------------------------------------
-// SERVICE CARD
+// SERVICE CARD (NOW ONLY HANDLES VIEW MORE)
 // ---------------------------------------------
-function ServiceCard({ service }: { service: Service }) {
+function ServiceCardList({
+  visible,
+  hidden,
+  showMore,
+  setShowMore,
+}: {
+  visible: Service[]
+  hidden: Service[]
+  showMore: boolean
+  setShowMore: (v: boolean) => void
+}) {
   return (
-    <div className="group rounded-3xl border border-gray-100 bg-white p-8 shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-5">
+    <div className="space-y-6">
+
+      {/* Always visible services */}
+      {visible.map(service => (
         <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0"
-          style={{ backgroundColor: service.bg }}
+          key={service.id}
+          className="group rounded-3xl border border-gray-100 bg-white p-8 shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col"
         >
-          {service.emoji}
-        </div>
-        {service.badge && (
-          <span
-            className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full"
-            style={{ backgroundColor: service.bg, color: service.color }}
-          >
-            {service.badge}
-          </span>
-        )}
-      </div>
-
-      {/* Title & tagline */}
-      <h3 className="text-xl font-bold mb-1" style={{ color: '#232e4e' }}>
-        {service.title}
-      </h3>
-      <p className="text-sm font-medium mb-3" style={{ color: service.color }}>
-        {service.tagline}
-      </p>
-      <p className="text-sm text-gray-500 leading-relaxed mb-6 flex-1">
-        {service.description}
-      </p>
-
-      {/* Feature list */}
-      <ul className="space-y-2 mb-8">
-        {service.features.map(f => (
-          <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-            <span
-              className="shrink-0 w-4 h-4 rounded-full flex items-center justify-center"
+          {/* Header */}
+          <div className="flex items-start justify-between mb-5">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0"
               style={{ backgroundColor: service.bg }}
             >
-              <svg
-                className="w-2.5 h-2.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                style={{ color: service.color }}
+              {service.emoji}
+            </div>
+            {service.badge && (
+              <span
+                className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full"
+                style={{ backgroundColor: service.bg, color: service.color }}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-              </svg>
-            </span>
-            {f}
-          </li>
-        ))}
-      </ul>
+                {service.badge}
+              </span>
+            )}
+          </div>
 
-      {/* CTA */}
-      <Link
-        href={service.href}
-        className="inline-flex items-center justify-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-bold text-white transition-all hover:opacity-90 hover:scale-[1.02]"
-        style={{ backgroundColor: service.color }}
-      >
-        {service.cta} →
-      </Link>
+          {/* Title & tagline */}
+          <h3 className="text-xl font-bold mb-1" style={{ color: '#232e4e' }}>
+            {service.title}
+          </h3>
+          <p className="text-sm font-medium mb-3" style={{ color: service.color }}>
+            {service.tagline}
+          </p>
+          <p className="text-sm text-gray-500 leading-relaxed mb-6 flex-1">
+            {service.description}
+          </p>
+
+          {/* Feature list */}
+          <ul className="space-y-2 mb-8">
+            {service.features.map(f => (
+              <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
+                <span
+                  className="shrink-0 w-4 h-4 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: service.bg }}
+                >
+                  <svg
+                    className="w-2.5 h-2.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    style={{ color: service.color }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </span>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      {/* View More button */}
+      {!showMore && hidden.length > 0 && (
+        <button
+          onClick={() => setShowMore(true)}
+          className="text-blue-600 underline font-medium mt-2"
+        >
+          View More
+        </button>
+      )}
+
+      {/* Hidden services */}
+      {showMore && (
+        <div className="space-y-6 mt-4">
+          {hidden.map(service => (
+            <div
+              key={service.id}
+              className="group rounded-3xl border border-gray-100 bg-white p-8 shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col"
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between mb-5">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0"
+                  style={{ backgroundColor: service.bg }}
+                >
+                  {service.emoji}
+                </div>
+                {service.badge && (
+                  <span
+                    className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full"
+                    style={{ backgroundColor: service.bg, color: service.color }}
+                  >
+                    {service.badge}
+                  </span>
+                )}
+              </div>
+
+              {/* Title & tagline */}
+              <h3 className="text-xl font-bold mb-1" style={{ color: '#232e4e' }}>
+                {service.title}
+              </h3>
+              <p className="text-sm font-medium mb-3" style={{ color: service.color }}>
+                {service.tagline}
+              </p>
+              <p className="text-sm text-gray-500 leading-relaxed mb-6 flex-1">
+                {service.description}
+              </p>
+
+              {/* Feature list */}
+              <ul className="space-y-2 mb-8">
+                {service.features.map(f => (
+                  <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
+                    <span
+                      className="shrink-0 w-4 h-4 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: service.bg }}
+                    >
+                      <svg
+                        className="w-2.5 h-2.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        style={{ color: service.color }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={3}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          <button
+            onClick={() => setShowMore(false)}
+            className="text-blue-600 underline font-medium mt-2"
+          >
+            View Less
+          </button>
+        </div>
+      )}
     </div>
   )
 }
+
 
 // ---------------------------------------------
 // ESIM SPOTLIGHT (Saily)

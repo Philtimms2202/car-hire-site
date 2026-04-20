@@ -50,7 +50,6 @@ export default function Navbar() {
     { label: 'Other Services', href: '/other-services' },
     { label: 'eSIMs', href: '/other-services/esims' },
     { label: 'Travel Insurance', href: '/other-services/travel-insurance' },
-    { label: 'Airport Transfers', href: '/other-services/airport-transfers' },
   ]
 
   return (
