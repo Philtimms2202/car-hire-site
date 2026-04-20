@@ -1287,7 +1287,7 @@ export default function FlightsPageClient() {
           <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
         </summary>
         <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-          No - what you see is what you pay. We aim to show the full price upfront, including taxes and charges, so there are no surprises when you go to book.
+          No — what you see is what you pay. We aim to show the full price upfront, including taxes and charges, so there are no surprises when you go to book.
         </p>
       </details>
 
@@ -1307,7 +1307,7 @@ export default function FlightsPageClient() {
           <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
         </summary>
         <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-          Yes - you can either type your departure airport or use your current location to find the closest one. We support hundreds of UK and international airports, making it easy to start your journey wherever you are.
+          Yes — you can either type your departure airport or use your current location to find the closest one. We support hundreds of UK and international airports, making it easy to start your journey wherever you are.
         </p>
       </details>
 
@@ -1317,7 +1317,7 @@ export default function FlightsPageClient() {
           <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
         </summary>
         <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-          Going direct means checking one airline at a time. We bring everything together - routes, prices, and options - so you can compare quickly and make a confident choice without missing a better deal elsewhere.
+          Going direct means checking one airline at a time. We bring everything together — routes, prices, and options — so you can compare quickly and make a confident choice without missing a better deal elsewhere.
         </p>
       </details>
 
@@ -1327,7 +1327,7 @@ export default function FlightsPageClient() {
           <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
         </summary>
         <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-          Yes - our flight search is completely free. We earn a small commission from partners when you book, which helps us keep the service running without charging you anything extra.
+          Yes — our flight search is completely free. We earn a small commission from partners when you book, which helps us keep the service running without charging you anything extra.
         </p>
       </details>
 
