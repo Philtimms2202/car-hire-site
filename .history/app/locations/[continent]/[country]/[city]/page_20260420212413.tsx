@@ -3,9 +3,15 @@ import Footer from '../../../../components/Footer'
 import Script from 'next/script'
 import { client } from '../../../../../sanity/lib/client'
 import { PortableText } from '@portabletext/react'
+
+import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import FlightSearch from '@/app/components/Search/FlightSearch'
+import HotelSearch from '@/app/components/Search/HotelSearch'
+import CarSearch from '@/app/components/Search/CarSearch'
+
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { useState } from 'react'
 
 export const revalidate = 60
 
@@ -115,7 +121,6 @@ export default async function CityPage({ params }: any) {
       redirect(`/locations/${correct.continentSlug}/${correct.countrySlug}/${correct.slug}`)
     }
 
-    // Truly not found
     return (
       <main className="min-h-screen bg-white">
         <Navbar />
@@ -142,6 +147,66 @@ export default async function CityPage({ params }: any) {
   const emoji = cityDoc.emoji
   const heroDescription = cityDoc.heroDescription
   const mainContent = cityDoc.mainContent
+
+  // -----------------------------
+  // LOCAL STATE FOR TABS
+  // -----------------------------
+  const SearchTabs = () => {
+    const [activeTab, setActiveTab] = useState<'flights' | 'hotels' | 'experiences' | 'cars'>('flights')
+    const [pickupLocation, setPickupLocation] = useState('')
+    const [pickupDate, setPickupDate] = useState('')
+    const [dropoffDate, setDropoffDate] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const handleCarSearch = () => {
+      if (!pickupLocation || !pickupDate || !dropoffDate) return
+      const affiliateCode = 'YOURAFFILIATETOKEN'
+      const url = `https://www.rentalcars.com/?affiliateCode=${affiliateCode}&preflocation=${encodeURIComponent(
+        pickupLocation
+      )}&puDay=${pickupDate}&doDay=${dropoffDate}`
+      window.open(url, '_blank')
+    }
+
+    return (
+      <>
+        {/* TABS */}
+        <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+          {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+                activeTab === tab
+                  ? 'bg-white text-[#232e4e] shadow-sm'
+                  : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* SEARCH BOX */}
+        <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+          {activeTab === 'flights' && <FlightSearch />}
+          {activeTab === 'hotels' && <HotelSearch />}
+          {activeTab === 'experiences' && <ExperienceSearch />}
+          {activeTab === 'cars' && (
+            <CarSearch
+              pickupLocation={pickupLocation}
+              pickupDate={pickupDate}
+              dropoffDate={dropoffDate}
+              setPickupLocation={setPickupLocation}
+              setPickupDate={setPickupDate}
+              setDropoffDate={setDropoffDate}
+              loading={loading}
+              onSearch={handleCarSearch}
+            />
+          )}
+        </div>
+      </>
+    )
+  }
 
   return (
     <main className="min-h-screen bg-white">
@@ -182,11 +247,9 @@ export default async function CityPage({ params }: any) {
             `Discover top attractions, tours, and unforgettable experiences in ${cityName}, ${countryName}.`}
         </p>
 
-        {/* REPLACED CITYSEARCHBAR → FLIGHTSEARCH */}
+        {/* FULL TABBED SEARCH BAR */}
         <div className="mt-10">
-          <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
-            <FlightSearch />
-          </div>
+          <SearchTabs />
         </div>
       </section>
 

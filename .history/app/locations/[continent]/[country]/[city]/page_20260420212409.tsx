@@ -3,7 +3,12 @@ import Footer from '../../../../components/Footer'
 import Script from 'next/script'
 import { client } from '../../../../../sanity/lib/client'
 import { PortableText } from '@portabletext/react'
+
+import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import FlightSearch from '@/app/components/Search/FlightSearch'
+import HotelSearch from '@/app/components/Search/HotelSearch'
+import CarSearch from '@/app/components/Search/CarSearch'
+
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
@@ -115,7 +120,6 @@ export default async function CityPage({ params }: any) {
       redirect(`/locations/${correct.continentSlug}/${correct.countrySlug}/${correct.slug}`)
     }
 
-    // Truly not found
     return (
       <main className="min-h-screen bg-white">
         <Navbar />
@@ -142,6 +146,66 @@ export default async function CityPage({ params }: any) {
   const emoji = cityDoc.emoji
   const heroDescription = cityDoc.heroDescription
   const mainContent = cityDoc.mainContent
+
+  // -----------------------------
+  // LOCAL STATE FOR TABS
+  // -----------------------------
+  const SearchTabs = () => {
+    const [activeTab, setActiveTab] = useState<'flights' | 'hotels' | 'experiences' | 'cars'>('flights')
+    const [pickupLocation, setPickupLocation] = useState('')
+    const [pickupDate, setPickupDate] = useState('')
+    const [dropoffDate, setDropoffDate] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const handleCarSearch = () => {
+      if (!pickupLocation || !pickupDate || !dropoffDate) return
+      const affiliateCode = 'YOURAFFILIATETOKEN'
+      const url = `https://www.rentalcars.com/?affiliateCode=${affiliateCode}&preflocation=${encodeURIComponent(
+        pickupLocation
+      )}&puDay=${pickupDate}&doDay=${dropoffDate}`
+      window.open(url, '_blank')
+    }
+
+    return (
+      <>
+        {/* TABS */}
+        <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+          {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+                activeTab === tab
+                  ? 'bg-white text-[#232e4e] shadow-sm'
+                  : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* SEARCH BOX */}
+        <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
+          {activeTab === 'flights' && <FlightSearch />}
+          {activeTab === 'hotels' && <HotelSearch />}
+          {activeTab === 'experiences' && <ExperienceSearch />}
+          {activeTab === 'cars' && (
+            <CarSearch
+              pickupLocation={pickupLocation}
+              pickupDate={pickupDate}
+              dropoffDate={dropoffDate}
+              setPickupLocation={setPickupLocation}
+              setPickupDate={setPickupDate}
+              setDropoffDate={setDropoffDate}
+              loading={loading}
+              onSearch={handleCarSearch}
+            />
+          )}
+        </div>
+      </>
+    )
+  }
 
   return (
     <main className="min-h-screen bg-white">
@@ -170,69 +234,28 @@ export default async function CityPage({ params }: any) {
         }}
       />
 
-      {/* HERO */}
-      <section
-        style={{ backgroundColor: '#232e4e' }}
-        className="text-white py-20 px-6 text-center"
-      >
-        <div className="text-6xl mb-4">{emoji}</div>
-        <h1 className="text-5xl font-bold mb-4">Explore {cityName}</h1>
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          {heroDescription ||
-            `Discover top attractions, tours, and unforgettable experiences in ${cityName}, ${countryName}.`}
-        </p>
+  {/* HERO */}
+<section
+  style={{ backgroundColor: '#232e4e' }}
+  className="text-white py-20 px-6 text-center"
+>
+  {/* City Emoji */}
+  <div className="text-6xl mb-4">{emoji}</div>
 
-        {/* REPLACED CITYSEARCHBAR → FLIGHTSEARCH */}
-        <div className="mt-10">
-          <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
-            <FlightSearch />
-          </div>
-        </div>
-      </section>
+  {/* Title */}
+  <h1 className="text-5xl font-bold mb-4">Explore {cityName}</h1>
 
-      {/* HIGHLIGHTS */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6" style={{ color: '#232e4e' }}>
-            Highlights of {cityName}
-          </h2>
-          <p className="text-gray-600 mb-8 leading-relaxed">
-            {cityName} is one of the most iconic destinations in {countryName}. Whether you are
-            visiting for culture, food, nightlife or history, the city offers something for every
-            traveller. Here are some of the reasons people love visiting {cityName}.
-          </p>
-          <ul className="grid md:grid-cols-2 gap-6 text-gray-700">
-            <li className="p-4 border rounded-lg shadow-sm">
-              <strong>Top Attractions in {cityName}</strong>
-              <p className="text-sm mt-1 text-gray-500">
-                Explore world-famous landmarks, museums and must-see sights that make {cityName} one
-                of the most visited cities in {countryName}.
-              </p>
-            </li>
-            <li className="p-4 border rounded-lg shadow-sm">
-              <strong>Culture &amp; Local Life</strong>
-              <p className="text-sm mt-1 text-gray-500">
-                Experience the traditions, neighbourhoods and cultural highlights that define{' '}
-                {cityName} — seen through its own unique lens.
-              </p>
-            </li>
-            <li className="p-4 border rounded-lg shadow-sm">
-              <strong>Food &amp; Dining</strong>
-              <p className="text-sm mt-1 text-gray-500">
-                From regional dishes to modern cuisine, {cityName} showcases some of the best
-                flavours {countryName} has to offer.
-              </p>
-            </li>
-            <li className="p-4 border rounded-lg shadow-sm">
-              <strong>Day Trips from {cityName}</strong>
-              <p className="text-sm mt-1 text-gray-500">
-                Discover nearby towns, natural wonders and coastal escapes — all easily accessible
-                from {cityName}.
-              </p>
-            </li>
-          </ul>
-        </div>
-      </section>
+  {/* Description */}
+  <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+    {heroDescription ||
+      `Discover top attractions, tours, and unforgettable experiences in ${cityName}, ${countryName}.`}
+  </p>
+
+  {/* TABBED SEARCH BAR (CitySearchBar) */}
+  <div className="mt-10">
+    <CitySearchBar defaultCity={cityName} />
+  </div>
+</section>
 
       {/* GYG EXPERIENCES WIDGET */}
       <section className="py-16 px-6 bg-gray-50">

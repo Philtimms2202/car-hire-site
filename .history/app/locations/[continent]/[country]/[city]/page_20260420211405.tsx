@@ -3,7 +3,7 @@ import Footer from '../../../../components/Footer'
 import Script from 'next/script'
 import { client } from '../../../../../sanity/lib/client'
 import { PortableText } from '@portabletext/react'
-import FlightSearch from '@/app/components/Search/FlightSearch'
+import CitySearchBar from '../../../../components/Search/CitySearchBar'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
@@ -181,15 +181,30 @@ export default async function CityPage({ params }: any) {
           {heroDescription ||
             `Discover top attractions, tours, and unforgettable experiences in ${cityName}, ${countryName}.`}
         </p>
-
-        {/* REPLACED CITYSEARCHBAR → FLIGHTSEARCH */}
         <div className="mt-10">
-          <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
-            <FlightSearch />
-          </div>
+          <CitySearchBar defaultCity={cityName} />
         </div>
       </section>
 
+{/* ── SEARCH TABS ── */}
+            <nav aria-label="Search type" className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+              {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  aria-pressed={activeTab === tab}
+                  aria-label={`Search ${tab}`}
+                  className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+                    activeTab === tab
+                      ? 'bg-white text-[#232e4e] shadow-sm'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </nav>
+            
       {/* HIGHLIGHTS */}
       <section className="py-16 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
