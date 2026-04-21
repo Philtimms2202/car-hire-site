@@ -193,37 +193,35 @@ export default function FlightSearch() {
       {/* ROW */}
       <div className="flex flex-col lg:flex-row items-stretch gap-2">
 
-       {/* FROM */}
-<div className="relative flex-[2] min-w-0">
-  <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">
-    From
-  </label>
-  <input
-    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm"
-    placeholder="City or Airport"
-    value={from}
-    onChange={(e) => setFrom(e.target.value)}
-  />
-  {renderDropdown(fromResults, setFromResults, setFrom, (a) => {
-    selectedFromRef.current = a
-  })}
-</div>
+        {/* FROM */}
+        <div className="relative flex-[2] min-w-0">
+          <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">
+            From
+          </label>
+          <input
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          />
+          {renderDropdown(fromResults, setFromResults, setFrom, (a) => {
+            selectedFromRef.current = a
+          })}
+        </div>
 
-{/* TO */}
-<div className="relative flex-[2] min-w-0">
-  <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">
-    To
-  </label>
-  <input
-    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm"
-    placeholder="City or Airport"
-    value={to}
-    onChange={(e) => setTo(e.target.value)}
-  />
-  {renderDropdown(toResults, setToResults, setTo, (a) => {
-    selectedToRef.current = a
-  })}
-</div>
+        {/* TO */}
+        <div className="relative flex-[2] min-w-0">
+          <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">
+            To
+          </label>
+          <input
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
+          {renderDropdown(toResults, setToResults, setTo, (a) => {
+            selectedToRef.current = a
+          })}
+        </div>
 
         {/* DEPART */}
         <div className="flex-[1.2]">
