@@ -8,8 +8,6 @@ import HotelSearch from '@/app/components/Search/HotelSearch'
 import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import NextImage from 'next/image'
-import Link from "next/link"
-
 
 const GYG_PARTNER_ID = 'P7B7GRH'
 const GYG_BASE = 'https://www.getyourguide.com'
@@ -145,7 +143,8 @@ export default function ExperiencesPage() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-         {/* ── BREADCRUMB ─────────────────────────────────────────────────────── */}
+      
+        {/* ── BREADCRUMB ─────────────────────────────────────────────────────── */}
         <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-100 px-6 py-2">
           <ol className="max-w-6xl mx-auto flex items-center gap-2 text-sm text-gray-500" itemScope itemType="https://schema.org/BreadcrumbList">
             <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
@@ -156,12 +155,12 @@ export default function ExperiencesPage() {
             </li>
             <li aria-hidden="true" className="text-gray-300">/</li>
             <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-              <span className="text-gray-800 font-medium" itemProp="name">Experiences</span>
+              <span className="text-gray-800 font-medium" itemProp="name">Hotels</span>
               <meta itemProp="position" content="2" />
-              <link itemProp="item" href="https://timmstravel.com/experiences" />
+              <link itemProp="item" href="https://timmstravel.com/hotels" />
             </li>
           </ol>
-        </nav>     
+        </nav>
 
     {/* ── HERO ── */}
 <section className="relative overflow-hidden text-white py-24 px-6 text-center">

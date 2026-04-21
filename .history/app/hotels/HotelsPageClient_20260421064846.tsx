@@ -1099,24 +1099,6 @@ export default function HotelsPageClient() {
     <main className="min-h-screen bg-white">
       <Navbar />
 
-        {/* ── BREADCRUMB ─────────────────────────────────────────────────────── */}
-        <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-100 px-6 py-2">
-          <ol className="max-w-6xl mx-auto flex items-center gap-2 text-sm text-gray-500" itemScope itemType="https://schema.org/BreadcrumbList">
-            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-              <Link href="/" className="hover:text-blue-600 transition-colors" itemProp="item">
-                <span itemProp="name">Home</span>
-              </Link>
-              <meta itemProp="position" content="1" />
-            </li>
-            <li aria-hidden="true" className="text-gray-300">/</li>
-            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-              <span className="text-gray-800 font-medium" itemProp="name">Hotels</span>
-              <meta itemProp="position" content="2" />
-              <link itemProp="item" href="https://timmstravel.com/hotels" />
-            </li>
-          </ol>
-        </nav>
-
 {/* ── HERO ── */}
 <section className="relative overflow-hidden text-white py-24 px-6 text-center">
   {/* Unsplash background image */}
@@ -1168,7 +1150,23 @@ export default function HotelsPageClient() {
         </div>
       </section>
 
-
+              {/* ── BREADCRUMB ─────────────────────────────────────────────────────── */}
+        <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-100 px-6 py-2">
+          <ol className="max-w-6xl mx-auto flex items-center gap-2 text-sm text-gray-500" itemScope itemType="https://schema.org/BreadcrumbList">
+            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <Link href="/" className="hover:text-blue-600 transition-colors" itemProp="item">
+                <span itemProp="name">Home</span>
+              </Link>
+              <meta itemProp="position" content="1" />
+            </li>
+            <li aria-hidden="true" className="text-gray-300">/</li>
+            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <span className="text-gray-800 font-medium" itemProp="name">Flights</span>
+              <meta itemProp="position" content="2" />
+              <link itemProp="item" href="https://timmstravel.com/hotels" />
+            </li>
+          </ol>
+        </nav>
 
       {/* ── SEARCH + RESULTS ── */}
       <section className="py-16 px-6 bg-gray-50">

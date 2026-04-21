@@ -8,8 +8,6 @@ import HotelSearch from '@/app/components/Search/HotelSearch'
 import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import NextImage from 'next/image'
-import Link from "next/link"
-
 
 const GYG_PARTNER_ID = 'P7B7GRH'
 const GYG_BASE = 'https://www.getyourguide.com'

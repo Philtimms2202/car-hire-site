@@ -477,9 +477,9 @@ export default function CarsPageClient() {
             </li>
             <li aria-hidden="true" className="text-gray-300">/</li>
             <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-              <span className="text-gray-800 font-medium" itemProp="name">Car Hire</span>
+              <span className="text-gray-800 font-medium" itemProp="name">Experiences</span>
               <meta itemProp="position" content="2" />
-              <link itemProp="item" href="https://timmstravel.com/car-hire" />
+              <link itemProp="item" href="https://timmstravel.com/experiences" />
             </li>
           </ol>
         </nav>  
