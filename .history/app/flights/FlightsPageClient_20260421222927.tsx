@@ -11,6 +11,7 @@ import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import airports from '@/data/airports.json'
 import NextImage from 'next/image'
+import SearchShell from '@/app/components/Search/SearchShell'
 
 // -----------------------------
 // TYPES
@@ -770,98 +771,78 @@ export default function FlightsPageClient() {
           </ol>
         </nav>
 
- {/* ── HERO ───────────────────────────────────────────────────────────── */}
-<section
-  className="relative overflow-hidden text-white py-24 px-6 text-center"
-  aria-labelledby="hero-heading"
->
-  <NextImage
-    src="https://images.unsplash.com/photo-1532364158125-02d75a0f7fb9?q=80&w=1548"
-    alt="View from an airplane window above the clouds on a clear day"
-    fill
-    className="object-cover object-[center_30%]"
-    priority
-  />
-
-  {/* Dark overlay */}
-  <div className="absolute inset-0 bg-[#232e4e]/75 z-0" aria-hidden="true" />
-
-  {/* Content container */}
-  <div className="relative z-10 max-w-4xl mx-auto">
-    {/* Label */}
-    <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-      Timms Travel
-    </p>
-
-    {/* Heading */}
-    <h1
-      id="hero-heading"
-      className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight"
-    >
-      Compare Flights Worldwide
-    </h1>
-
-    {/* Subheading */}
-    <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
-      Search hundreds of airlines and find cheap flights to over 700 destinations from UK airports – with no hidden fees.
-    </p>
-
-    {/* ── SEARCH TABS ── */}
-    <nav
-      aria-label="Search type"
-      className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto"
-    >
-      {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-        <button
-          key={tab}
-          onClick={() => setActiveTab(tab)}
-          aria-pressed={activeTab === tab}
-          aria-label={`Search ${tab}`}
-          className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
-            activeTab === tab
-              ? 'bg-white text-[#232e4e] shadow-sm'
-              : 'text-gray-300 hover:text-white'
-          }`}
+        {/* ── HERO ───────────────────────────────────────────────────────────── */}
+        <section
+          className="relative overflow-hidden text-white py-24 px-6 text-center"
+          aria-labelledby="hero-heading"
         >
-          {tab}
-        </button>
-      ))}
-    </nav>
+          <NextImage
+            src="https://images.unsplash.com/photo-1532364158125-02d75a0f7fb9?q=80&w=1548"
+            alt="View from an airplane window above the clouds on a clear day"
+            fill
+            className="object-cover object-[center_30%]"
+            priority
+          />
+          <div className="absolute inset-0 bg-[#232e4e]/75 z-0" aria-hidden="true" />
 
-    {/* ── SEARCH WIDGET (IDENTICAL TO HOMEPAGE) ── */}
-    <div
-      className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black"
-      role="search"
-      aria-label="Travel search"
-    >
-      {activeTab === 'flights'     && <FlightSearch />}
-      {activeTab === 'hotels'      && <HotelSearch />}
-      {activeTab === 'experiences' && <ExperienceSearch />}
-      {activeTab === 'cars'        && (
-        <CarSearch
-          pickupLocation={pickupLocation}
-          pickupDate={pickupDate}
-          dropoffDate={dropoffDate}
-          setPickupLocation={setPickupLocation}
-          setPickupDate={setPickupDate}
-          setDropoffDate={setDropoffDate}
-          loading={loading}
-          onSearch={handleCarSearch}
-        />
-      )}
-    </div>
+          <div className="relative z-10 max-w-3xl mx-auto">
+            <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
+              Timms Travel
+            </p>
+            <h1
+              id="hero-heading"
+              className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight"
+            >
+              Compare Flights Worldwide
+            </h1>
+            <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
+              Search hundreds of airlines and find cheap flights to over 700 destinations from UK airports - with no hidden fees.
+            </p>
 
-    {/* Trust signals */}
-    <p
-      className="flex justify-center gap-8 mt-8 text-sm text-gray-300"
-      aria-label="Trust signals"
-    >
-      <span>Fully Bespoke Offers</span>
-      <span>No hidden fees</span>
-      <span>Competitive price guarantee</span>
-    </p>
-  </div>
-</section>
+            {/* ── SEARCH TABS ── */}
+            <nav aria-label="Search type" className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+              {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  aria-pressed={activeTab === tab}
+                  aria-label={`Search ${tab}`}
+                  className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+                    activeTab === tab
+                      ? 'bg-white text-[#232e4e] shadow-sm'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </nav>
+
+            {/* ── SEARCH WIDGET ── */}
+            <SearchShell>
+              {activeTab === 'flights' && <FlightSearch />}
+              {activeTab === 'hotels' && <HotelSearch />}
+              {activeTab === 'experiences' && <ExperienceSearch />}
+              {activeTab === 'cars' && (
+                <CarSearch
+                  pickupLocation={pickupLocation}
+                  pickupDate={pickupDate}
+                  dropoffDate={dropoffDate}
+                  setPickupLocation={setPickupLocation}
+                  setPickupDate={setPickupDate}
+                  setDropoffDate={setDropoffDate}
+                  loading={loading}
+                  onSearch={handleCarSearch}
+                />
+              )}
+            </SearchShell>
+            <p className="flex justify-center gap-8 mt-8 text-sm text-gray-300" aria-label="Trust signals">
+              <span>Fully Bespoke Offers</span>
+              <span>No hidden fees</span>
+              <span>Competitive price guarantee</span>
+            </p>
+          </div>
+        </section>
 
         {/* ── STATS STRIP ────────────────────────────────────────────────────── */}
         <section style={{ backgroundColor: '#1a2540' }} className="py-6 px-6" aria-label="Timms Travel at a glance">
