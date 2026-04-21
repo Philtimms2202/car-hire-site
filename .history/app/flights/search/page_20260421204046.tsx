@@ -40,7 +40,7 @@ function FlightSearchIframe() {
   wlUrl.searchParams.set('infants', infants)
 
   // ✅ Correct cabin handling (no bad fallback)
-  wlUrl.searchParams.set('trip_class', cabinCode[cabin] ?? 'y')
+  wlUrl.searchParams.set('cabin', cabinCode[cabin] ?? 'y')
 
   wlUrl.searchParams.set('marker', '714930')
 

@@ -66,33 +66,34 @@ export default function FlightSearch() {
   useEffect(() => debouncedFromSearch(from), [from])
   useEffect(() => debouncedToSearch(to), [to])
 
-const handleSearch = () => {
-  const selectedFrom = selectedFromRef.current
-  const selectedTo = selectedToRef.current
+  const handleSearch = () => {
+    const selectedFrom = selectedFromRef.current
+    const selectedTo = selectedToRef.current
 
-  if (!selectedFrom || !selectedTo || !depart) {
-    alert('Please select valid airports and a departure date.')
-    return
+    if (!selectedFrom || !selectedTo || !depart) {
+      alert('Please select valid airports and a departure date.')
+      return
+    }
+
+    const params = new URLSearchParams({
+      from: selectedFrom.iata_code,
+      fromCity: selectedFrom.city,
+      to: selectedTo.iata_code,
+      toCity: selectedTo.city,
+      depart,
+      adults: adults.toString(),
+      children: children.toString(),
+      infants: infants.toString(),
+      cabin,
+      roundTrip: roundTrip.toString(),
+    })
+
+    if (roundTrip && returnDate) {
+      params.set('return', returnDate)
+    }
+
+    router.push(`/search?${params.toString()}`)
   }
-
-  const params = new URLSearchParams({
-    from: selectedFrom.iata_code,
-    to: selectedTo.iata_code,
-    depart,
-    adults: adults.toString(),
-    children: children.toString(),
-    infants: infants.toString(),
-    cabin,
-    roundTrip: roundTrip.toString(),
-  })
-
-  if (roundTrip && returnDate) {
-    params.set('return', returnDate)
-  }
-
-  router.push(`/flights/search?${params.toString()}`)
-}
-
 
   const handleSwap = () => {
     const tempVal = from
@@ -133,11 +134,12 @@ const handleSearch = () => {
     )
   }
 
- const cabinLabels: Record<string, string> = {
-  economy: 'Economy',
-  business: 'Business',
-}
-
+  const cabinLabels: Record<string, string> = {
+    economy: 'Economy',
+    premium: 'Premium',
+    business: 'Business',
+    first: 'First',
+  }
 
   const travellerSummary = `${adults + children + infants} passenger${adults + children + infants > 1 ? 's' : ''} · ${cabinLabels[cabin]}`
 
@@ -246,7 +248,9 @@ const handleSearch = () => {
                   onChange={(e) => setCabin(e.target.value)}
                 >
                   <option value="economy">Economy</option>
+                  <option value="premium">Premium Economy</option>
                   <option value="business">Business</option>
+                  <option value="first">First</option>
                 </select>
               </div>
 

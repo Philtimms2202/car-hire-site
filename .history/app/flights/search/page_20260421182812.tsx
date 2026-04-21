@@ -9,42 +9,37 @@ function FlightSearchIframe() {
   const from = params.get('from') ?? ''
   const to = params.get('to') ?? ''
   const depart = params.get('depart') ?? ''
-  const returnDate = params.get('return') ?? ''
-  const roundTrip = params.get('roundTrip') === 'true'
-
   const adults = params.get('adults') ?? '1'
   const children = params.get('children') ?? '0'
   const infants = params.get('infants') ?? '0'
-
+  const returnDate = params.get('return') ?? ''
+  const roundTrip = params.get('roundTrip') === 'true'
   const cabin = params.get('cabin') ?? 'economy'
 
-  // ✅ Only valid cabin codes
   const cabinCode: Record<string, string> = {
     economy: 'y',
-    business: 'c',
+    premium: 'w',
+    business: 'b',
+    first: 'f',
   }
 
+  // Build flightSearch param
+  const ddmm = depart ? depart.slice(8, 10) + depart.slice(5, 7) : ''
+  const retDdmm = returnDate && roundTrip ? returnDate.slice(8, 10) + returnDate.slice(5, 7) : ''
+
+  const pax =
+    (parseInt(children) > 0 ? `c${children}` : '') +
+    adults +
+    (parseInt(infants) > 0 ? infants : '')
+
+  const flightSearch = from && to && ddmm
+    ? `${from}${ddmm}${to}${retDdmm}${pax}${cabinCode[cabin] ?? 'y'}`
+    : ''
+
+  // Build the White Label URL
   const wlUrl = new URL('https://flights.timmstravel.com/')
-
-  // Core params
-  if (from) wlUrl.searchParams.set('origin', from)
-  if (to) wlUrl.searchParams.set('destination', to)
-  if (depart) wlUrl.searchParams.set('depart_date', depart)
-
-  if (roundTrip && returnDate) {
-    wlUrl.searchParams.set('return_date', returnDate)
-  }
-
-  wlUrl.searchParams.set('adults', adults)
-  wlUrl.searchParams.set('children', children)
-  wlUrl.searchParams.set('infants', infants)
-
-  // ✅ Correct cabin handling (no bad fallback)
-  wlUrl.searchParams.set('trip_class', cabinCode[cabin] ?? 'y')
-
+  if (flightSearch) wlUrl.searchParams.set('flightSearch', flightSearch)
   wlUrl.searchParams.set('marker', '714930')
-
-  console.log('FINAL URL:', wlUrl.toString())
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -62,11 +57,7 @@ function FlightSearchIframe() {
 
 export default function FlightSearchPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    }>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
       <FlightSearchIframe />
     </Suspense>
   )

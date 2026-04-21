@@ -133,11 +133,12 @@ const handleSearch = () => {
     )
   }
 
- const cabinLabels: Record<string, string> = {
-  economy: 'Economy',
-  business: 'Business',
-}
-
+  const cabinLabels: Record<string, string> = {
+    economy: 'Economy',
+    premium: 'Premium',
+    business: 'Business',
+    first: 'First',
+  }
 
   const travellerSummary = `${adults + children + infants} passenger${adults + children + infants > 1 ? 's' : ''} · ${cabinLabels[cabin]}`
 
@@ -246,7 +247,9 @@ const handleSearch = () => {
                   onChange={(e) => setCabin(e.target.value)}
                 >
                   <option value="economy">Economy</option>
+                  <option value="premium">Premium Economy</option>
                   <option value="business">Business</option>
+                  <option value="first">First</option>
                 </select>
               </div>
 
