@@ -34,6 +34,7 @@ export default function FlightSearch() {
 
   const today = new Date().toISOString().split('T')[0]
 
+  // Close traveller dropdown
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (travellerRef.current && !travellerRef.current.contains(e.target as Node)) {
@@ -68,6 +69,7 @@ export default function FlightSearch() {
   useEffect(() => debouncedFromSearch(from), [from])
   useEffect(() => debouncedToSearch(to), [to])
 
+  // FORMAT DATE -> DDMM
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr)
     const dd = String(d.getDate()).padStart(2, '0')
@@ -75,17 +77,13 @@ export default function FlightSearch() {
     return `${dd}${mm}`
   }
 
+  // PASSENGER ENCODING (IMPORTANT)
   const buildPassengerCode = () => {
     let code = ''
 
     if (adults > 0) code += String(adults)
     if (children > 0) code += String(children)
     if (infants > 0) code += String(infants)
-
-    // ✅ ONLY change requested: cabin handling
-    if (cabin === 'business') {
-      code += 'c'
-    }
 
     return code
   }
@@ -104,8 +102,10 @@ export default function FlightSearch() {
 
     const passengerCode = buildPassengerCode()
 
+    // BUILD CORE FLIGHT STRING
     let flightSearch = `${fromAirport.iata_code}${dep}${toAirport.iata_code}${ret}`
 
+    // append passengers ONLY if exist
     if (passengerCode) {
       flightSearch += passengerCode
     }
@@ -135,7 +135,7 @@ export default function FlightSearch() {
     if (!results.length) return null
 
     return (
-      <div className="absolute left-0 right-0 md:min-w-[420px] z-30 bg-white border border-gray-200 rounded-xl shadow-xl mt-1 max-h-80 overflow-y-auto">
+      <div className="absolute left-0 right-0 z-30 bg-white border border-gray-200 rounded-xl shadow-xl mt-1 max-h-72 overflow-y-auto">
         {results.map((a) => (
           <div
             key={`${a.iata_code}-${a.name}`}
@@ -173,6 +173,7 @@ export default function FlightSearch() {
   return (
     <div className="space-y-3">
 
+      {/* Trip toggle */}
       <div className="flex gap-2">
         {['Return', 'One way'].map((label) => (
           <button
@@ -189,44 +190,42 @@ export default function FlightSearch() {
         ))}
       </div>
 
+      {/* ROW */}
       <div className="flex flex-col lg:flex-row items-stretch gap-2">
 
-        {/* FROM */}
-        <div className="relative flex-[2] min-w-0">
-          <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">
-            From
-          </label>
+       {/* FROM */}
+<div className="relative flex-[2] min-w-0">
+  <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">
+    From
+  </label>
+  <input
+    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm"
+    placeholder="City or Airport"
+    value={from}
+    onChange={(e) => setFrom(e.target.value)}
+  />
+  {renderDropdown(fromResults, setFromResults, setFrom, (a) => {
+    selectedFromRef.current = a
+  })}
+</div>
 
-          <input
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#03989e] focus:border-transparent"
-            placeholder="City or Airport"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-          />
+{/* TO */}<div className="absolute left-0 right-0 z-30 bg-white border border-gray-200 rounded-xl shadow-xl mt-1 max-h-72 overflow-y-auto">
+<div className="relative flex-[2] min-w-0">
+  <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">
+    To
+  </label>
+  <input
+    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm"
+    placeholder="City or Airport"
+    value={to}
+    onChange={(e) => setTo(e.target.value)}
+  />
+  {renderDropdown(toResults, setToResults, setTo, (a) => {
+    selectedToRef.current = a
+  })}
+</div>
 
-          {renderDropdown(fromResults, setFromResults, setFrom, (a) => {
-            selectedFromRef.current = a
-          })}
-        </div>
-
-        {/* TO */}
-        <div className="relative flex-[2] min-w-0">
-          <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">
-            To
-          </label>
-
-          <input
-            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#03989e] focus:border-transparent"
-            placeholder="City or Airport"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-          />
-
-          {renderDropdown(toResults, setToResults, setTo, (a) => {
-            selectedToRef.current = a
-          })}
-        </div>
-
+        {/* DEPART */}
         <div className="flex-[1.2]">
           <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1 px-1">
             Depart
@@ -240,6 +239,7 @@ export default function FlightSearch() {
           />
         </div>
 
+        {/* RETURN */}
         {roundTrip && (
           <div className="flex-[1.2]">
             <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1 px-1">
@@ -255,6 +255,7 @@ export default function FlightSearch() {
           </div>
         )}
 
+        {/* PASSENGERS */}
         <div className="relative flex-[2] min-w-[180px]" ref={travellerRef}>
           <label className="block text-[11px] font-bold text-gray-400 uppercase mb-1 px-1">
             Passengers
@@ -270,7 +271,6 @@ export default function FlightSearch() {
           {travellerOpen && (
             <div className="absolute right-0 bottom-full mb-2 bg-white border rounded-xl shadow-xl p-4 w-72 z-40">
               <div className="mb-2 font-semibold">Cabin</div>
-
               <select
                 className="w-full border rounded-lg px-2 py-1 mb-4"
                 value={cabin}
@@ -305,6 +305,7 @@ export default function FlightSearch() {
           )}
         </div>
 
+        {/* SEARCH */}
         <div className="flex flex-col justify-end">
           <label className="text-[11px] text-transparent mb-1">Search</label>
           <button
@@ -318,6 +319,7 @@ export default function FlightSearch() {
 
       </div>
 
+      {/* LINK */}
       <a
         href="/flights/popular-routes"
         className="block text-center border border-[#03989e] text-[#03989e] rounded-xl py-2.5"
