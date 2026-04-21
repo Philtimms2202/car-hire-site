@@ -1335,28 +1335,29 @@ export default function FlightsPageClient() {
   </div>
 </section>
 
-{/* ── CTA BANNER ─────────────────────────────────────────────────────── */}
-<section
-  className="py-16 px-6 text-center text-white"
-  style={{ backgroundColor: '#232e4e' }}
-  aria-labelledby="cta-heading"
->
-  <div className="max-w-2xl mx-auto">
-    <h2 id="cta-heading" className="text-3xl font-bold mb-4">Ready to take off?</h2>
-    <p className="text-gray-300 mb-8">
-      Use our search above to compare hundreds of airlines and find the best price for your next adventure.
-      No hidden fees. No surprises.
-    </p>
-    <Link
-      href="/flights/search"
-      aria-label="Search flights with Timms Travel"
-      className="inline-block px-8 py-3 rounded-full font-semibold text-sm transition-all hover:opacity-90"
-      style={{ backgroundColor: '#2dd4bf', color: '#232e4e' }}
-    >
-      Search Flights Now →
-    </Link>
-  </div>
-</section>
+        {/* ── CTA BANNER ─────────────────────────────────────────────────────── */}
+        <section
+          className="py-16 px-6 text-center text-white"
+          style={{ backgroundColor: '#232e4e' }}
+          aria-labelledby="cta-heading"
+        >
+          <div className="max-w-2xl mx-auto">
+            <h2 id="cta-heading" className="text-3xl font-bold mb-4">Ready to take off?</h2>
+            <p className="text-gray-300 mb-8">
+              Use our search above to compare hundreds of airlines and find the best price for your next adventure.
+              No hidden fees. No surprises.
+            </p>
+            <button
+              type="button"
+              href="/flights/search"
+              aria-label="Scroll back to the flight search form at the top of the page"
+              className="px-8 py-3 rounded-full font-semibold text-sm transition-all hover:opacity-90"
+              style={{ backgroundColor: '#2dd4bf', color: '#232e4e' }}
+            >
+              Search Flights Now →
+            </button>
+          </div>
+        </section>
 
         <Footer />
       </main>
