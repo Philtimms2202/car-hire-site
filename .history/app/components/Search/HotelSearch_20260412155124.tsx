@@ -62,7 +62,7 @@ export default function FlightSearch() {
   }, [to])
 
   const buildUrl = () => {
-    if (!selectedFrom.current || !selectedTo.current) return ''
+    if (!selectedFrom.current || !selectedTo.current) return null
 
     const url = new URL(
       `https://www.kiwi.com/en/search/results/${selectedFrom.current.iata_code}/${selectedTo.current.iata_code}/${depart}`

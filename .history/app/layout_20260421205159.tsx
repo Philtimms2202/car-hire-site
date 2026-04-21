@@ -1,3 +1,5 @@
+'use client'
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -46,13 +48,14 @@ export default function RootLayout({
           }}
         />
 
-        {/* ✅ GetYourGuide */}
+        {/* ✅ GetYourGuide Analytics */}
         <Script
           src="https://widget.getyourguide.com/dist/pa.umd.production.min.js"
           data-gyg-partner-id="P7B7GRH"
           strategy="afterInteractive"
         />
 
+        {/* ✅ GetYourGuide Widget */}
         <Script
           src="https://widget.getyourguide.com/dist/gyg-widget.js"
           strategy="afterInteractive"
@@ -60,6 +63,7 @@ export default function RootLayout({
       </head>
 
       <body className="min-h-full flex flex-col">
+        {/* ✅ App wrapper */}
         <LocaleProvider>
           {children}
         </LocaleProvider>

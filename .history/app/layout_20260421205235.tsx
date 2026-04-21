@@ -4,6 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import { LocaleProvider } from '@/context/localeContext';
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -20,18 +21,14 @@ export const metadata: Metadata = {
     "Choose from thousands of destinations, compare hotel prices, and reserve your hire car before your trip begins.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* ✅ Google Tag Manager */}
+        {/* ⭐ Google Tag Manager (Next.js Safe Version) */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
@@ -46,20 +43,35 @@ export default function RootLayout({
           }}
         />
 
-        {/* ✅ GetYourGuide */}
+        {/* ⭐ GetYourGuide Analytics */}
         <Script
           src="https://widget.getyourguide.com/dist/pa.umd.production.min.js"
           data-gyg-partner-id="P7B7GRH"
           strategy="afterInteractive"
+          async
+          defer
         />
 
+        {/* ⭐ GetYourGuide Widget Engine */}
         <Script
           src="https://widget.getyourguide.com/dist/gyg-widget.js"
           strategy="afterInteractive"
+          async
         />
       </head>
 
       <body className="min-h-full flex flex-col">
+        {/* ⭐ Google Tag Manager (noscript) — MUST be directly inside <body> */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-K4RWSHXR"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+
+        {/* ⭐ Locale Provider wrapping entire app */}
         <LocaleProvider>
           {children}
         </LocaleProvider>

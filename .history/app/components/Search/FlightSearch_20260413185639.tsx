@@ -94,7 +94,7 @@ const buildKiwiUrl = async () => {
   const selectedFrom = selectedFromRef.current
   const selectedTo = selectedToRef.current
 
-  if (!selectedFrom || !selectedTo || !depart) return ''
+  if (!selectedFrom || !selectedTo || !depart) return null
 
   // Always fetch slugs in English — Kiwi only stable in EN
   const [originSlug, destinationSlug] = await Promise.all([
@@ -102,7 +102,7 @@ const buildKiwiUrl = async () => {
     fetchKiwiSlug(selectedTo.iata_code),
   ])
 
-  if (!originSlug || !destinationSlug) return ''
+  if (!originSlug || !destinationSlug) return null
 
   // Build the raw Kiwi deep link (your original logic)
   let kiwiPath = `https://www.kiwi.com/en/search/results/${originSlug}/${destinationSlug}/${depart}`

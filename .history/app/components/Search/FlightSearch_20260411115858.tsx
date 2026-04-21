@@ -88,14 +88,14 @@ export default function FlightSearch() {
 
   // Build Kiwi URL with language + currency
   const buildKiwiUrl = async () => {
-    if (!selectedFrom || !selectedTo || !depart) return ''
+    if (!selectedFrom || !selectedTo || !depart) return null
 
     const [originSlug, destinationSlug] = await Promise.all([
       fetchKiwiSlug(selectedFrom.iata_code),
       fetchKiwiSlug(selectedTo.iata_code),
     ])
 
-    if (!originSlug || !destinationSlug) return ''
+    if (!originSlug || !destinationSlug) return null
 
     // Dynamic language prefix
     let path = `https://www.kiwi.com/${language}/search/results/${originSlug}/${destinationSlug}/${depart}`

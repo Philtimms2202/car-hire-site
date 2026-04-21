@@ -118,14 +118,14 @@ export default function FlightSearch() {
     const selectedFrom = selectedFromRef.current
     const selectedTo = selectedToRef.current
 
-    if (!selectedFrom || !selectedTo || !depart) return ''
+    if (!selectedFrom || !selectedTo || !depart) return null
 
     const [originSlug, destinationSlug] = await Promise.all([
       fetchKiwiSlug(selectedFrom.iata_code),
       fetchKiwiSlug(selectedTo.iata_code),
     ])
 
-    if (!originSlug || !destinationSlug) return ''
+    if (!originSlug || !destinationSlug) return null
 
     let path = `https://www.kiwi.com/${language}/search/results/${originSlug}/${destinationSlug}/${depart}`
 

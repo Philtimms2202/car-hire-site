@@ -133,7 +133,7 @@ const buildKiwiUrl = async (origin: string, dest: string, affil: string) => {
     fetchKiwiSlug(dest),
   ])
 
-  if (!oSlug || !dSlug) return ''
+  if (!oSlug || !dSlug) return null
 
   const today = new Date()
   const yyyy = today.getFullYear()

@@ -68,7 +68,7 @@ export default function FlightSearch() {
   const buildKiwiUrl = async () => {
     const selectedFrom = selectedFromRef.current
     const selectedTo = selectedToRef.current
-    if (!selectedFrom || !selectedTo || !depart) return ''
+    if (!selectedFrom || !selectedTo || !depart) return null
 
     const kiwiDeep = new URL('https://www.kiwi.com/deep')
     kiwiDeep.searchParams.set('from', selectedFrom.iata_code)

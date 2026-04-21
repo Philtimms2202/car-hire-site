@@ -93,7 +93,7 @@ const buildKiwiUrl = async () => {
   const selectedFrom = selectedFromRef.current
   const selectedTo = selectedToRef.current
 
-  if (!selectedFrom || !selectedTo || !depart) return ''
+  if (!selectedFrom || !selectedTo || !depart) return null
 
   // Use IATA codes directly — kiwi.com/deep accepts them natively
   const from = selectedFrom.iata_code  // e.g. "LIS"

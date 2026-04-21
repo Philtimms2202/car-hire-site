@@ -79,7 +79,7 @@ export default function FlightSearch() {
   const buildKiwiUrl = async () => {
     const selectedFrom = selectedFromRef.current
     const selectedTo = selectedToRef.current
-    if (!selectedFrom || !selectedTo || !depart) return ''
+    if (!selectedFrom || !selectedTo || !depart) return null
 
     const fromCode = selectedFrom.iata_code
     const toCode = selectedTo.iata_code
