@@ -115,7 +115,10 @@ const handleSearch = () => {
   }
 
   const dep = formatDate(depart)
-  const ret = returnDate ? formatDate(returnDate) : ''
+
+  // Only include return date if round trip is selected
+  const ret = roundTrip && returnDate ? formatDate(returnDate) : ''
+
   const passengerCode = buildPassengerCode()
 
   let flightSearch = `${fromAirport.iata_code}${dep}${toAirport.iata_code}${ret}`
@@ -124,7 +127,14 @@ const handleSearch = () => {
     flightSearch += passengerCode
   }
 
-  window.location.assign(`https://flights.timmstravel.com/?flightSearch=${flightSearch}&marker=714930&trs=513651`)
+  // Build query string safely (prevents any &amp; / encoding nonsense)
+  const params = new URLSearchParams({
+    flightSearch,
+    marker: '714930',
+    trs: '513651',
+  })
+
+  window.location.assign(`https://flights.timmstravel.com/?${params.toString()}`)
 }
 
   const handleSwap = () => {
