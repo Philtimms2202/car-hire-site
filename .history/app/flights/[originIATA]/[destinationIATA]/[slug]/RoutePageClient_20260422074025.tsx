@@ -202,8 +202,8 @@ function buildPassengerCode(adults: number, children: number, infants: number, c
   let code = ''
   if (cabin === 'business') code += 'c'
   code += String(adults)
-  code += String(children)
-  code += String(infants)
+  if (children > 0 || infants > 0) code += String(children)
+  if (infants > 0) code += String(infants)
   return code
 }
 
@@ -230,7 +230,7 @@ function buildWhitelabelUrl({
   const ret = returnDate ? formatDateDDMM(returnDate) : ''
   const passengerCode = buildPassengerCode(adults, children, infants, cabin)
   const flightSearch = `${from.toUpperCase()}${dep}${to.toUpperCase()}${ret}${passengerCode}`
-  return `${WHITELABEL_BASE}/?flightSearch=${flightSearch}&shmarker=714930&trs=513651`
+  return `${WHITELABEL_BASE}/?flightSearch=${flightSearch}&destination_airports=0&origin_airports=1`
 }
 
 // ─────────────────────────────────────────────
@@ -357,7 +357,7 @@ function SearchBox({
           </label>
           <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-base">
             {originName}
-            <span className="ml-2 text-sm font-mono text-gray-400">{originIATA}</span>
+            <span className="ml-2 text-sm font-mono text-gray-400">{}</span>
           </div>
         </div>
 
