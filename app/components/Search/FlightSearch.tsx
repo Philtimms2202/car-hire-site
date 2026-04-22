@@ -105,32 +105,34 @@ const buildPassengerCode = () => {
   return code
 }
 
-  const handleSearch = () => {
-    const fromAirport = selectedFromRef.current
-    const toAirport = selectedToRef.current
+const handleSearch = () => {
+  const fromAirport = selectedFromRef.current
+  const toAirport = selectedToRef.current
 
-    if (!fromAirport || !toAirport || !depart) {
-      alert('Please select valid airports and departure date.')
-      return
+  if (!fromAirport || !toAirport || !depart) {
+    alert('Please select valid airports and departure date.')
+    return
+  }
+
+  const dep = formatDate(depart)
+  const ret = returnDate ? formatDate(returnDate) : ''
+  const passengerCode = buildPassengerCode()
+
+  let flightSearch = `${fromAirport.iata_code}${dep}${toAirport.iata_code}${ret}`
+
+  if (passengerCode) {
+    flightSearch += passengerCode
+  }
+
+  // Step 1: Open white label homepage in new tab to set TP tracking cookie
+  const homepage = window.open('https://flights.timmstravel.com', '_blank')
+
+  // Step 2: After a short delay, redirect that tab to the search results
+  setTimeout(() => {
+    if (homepage) {
+      homepage.location.href = `https://flights.timmstravel.com/?flightSearch=${flightSearch}`
     }
-
-    const dep = formatDate(depart)
-    const ret = returnDate ? formatDate(returnDate) : ''
-    const passengerCode = buildPassengerCode()
-
-    let flightSearch = `${fromAirport.iata_code}${dep}${toAirport.iata_code}${ret}`
-
-    if (passengerCode) {
-      flightSearch += passengerCode
-    }
-
-    const params = new URLSearchParams({
-  flightSearch,
-  destination_airports: '0',
-  origin_airports: '1',
-})
-
-window.location.assign(`https://flights.timmstravel.com/?${params.toString()}`)
+  }, 2000)
 }
 
   const handleSwap = () => {
