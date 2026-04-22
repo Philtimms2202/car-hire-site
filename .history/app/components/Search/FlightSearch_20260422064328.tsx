@@ -93,14 +93,14 @@ export default function FlightSearch() {
     return `${dd}${mm}`
   }
 
-const buildPassengerCode = () => {
+  const buildPassengerCode = () => {
   let code = ''
 
   if (cabin === 'business') code += 'c'
 
-  code += String(adults)
-  code += String(children)
-  code += String(infants)
+  if (adults > 0) code += String(adults)
+  if (children > 0) code += String(children)
+  if (infants > 0) code += String(infants)
 
   return code
 }
@@ -234,7 +234,7 @@ const buildPassengerCode = () => {
 
           <input
             className="w-full border rounded-xl px-4 py-2.5 text-sm"
-            placeholder="City/Airport"
+            placeholder="City or Airport"
             value={to}
             onChange={(e) => {
               setTo(e.target.value)

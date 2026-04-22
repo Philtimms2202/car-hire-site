@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useRef, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 
@@ -180,7 +180,7 @@ function seededShuffle<T>(items: T[], seed: string): T[] {
 
 // ─────────────────────────────────────────────
 // WHITELABEL URL BUILDER
-// Format: flights.timmstravel.com/?flightSearch=MEL2205SIN1
+// Format: flights.timmstravel.com/?flightSearch=MEL2205SIN2305100
 // ─────────────────────────────────────────────
 
 const WHITELABEL_BASE = 'https://flights.timmstravel.com'
@@ -242,10 +242,10 @@ const ROUTE_FACTS: {
   label: string
   getValue: (o: string, d: string) => string
 }[] = [
-  { icon: '✈️', label: 'Typical flight time', getValue: () => 'Varies by airline & route' },
-  { icon: '💺', label: 'Cabin classes',        getValue: () => 'Economy · Business · First' },
-  { icon: '🤝', label: 'Booking partner',      getValue: () => 'Compare From All Trusted Partners' },
-  { icon: '🔁', label: 'Trip types',           getValue: () => 'One-way · Return · Multi-city' },
+  { icon: '✈️', label: 'Typical flight time',  getValue: () => 'Varies by airline & route' },
+  { icon: '💺', label: 'Cabin classes',         getValue: () => 'Economy · Business · First' },
+  { icon: '🤝', label: 'Booking partner',       getValue: () => 'Compare From All Trusted Partners' },
+  { icon: '🔁', label: 'Trip types',            getValue: () => 'One-way · Return · Multi-city' },
 ]
 
 const TRAVEL_TIPS = [
@@ -262,7 +262,7 @@ const TRAVEL_TIPS = [
   {
     icon: '🔔',
     title: 'Set a price alert',
-    body: 'Prices fluctuate daily. Search regularly to find when fares drop on this route.',
+    body: 'Prices fluctuate daily. Use Kiwi.com price alerts to get notified when fares drop on this route.',
   },
   {
     icon: '🛂',
@@ -272,7 +272,7 @@ const TRAVEL_TIPS = [
 ]
 
 // ─────────────────────────────────────────────
-// SEARCH BOX
+// SUB-COMPONENTS
 // ─────────────────────────────────────────────
 
 function SearchBox({
@@ -352,9 +352,7 @@ function SearchBox({
 
         {/* FROM */}
         <div className="flex-1">
-          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-            From
-          </label>
+          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">From</label>
           <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-base">
             {originName}
             <span className="ml-2 text-sm font-mono text-gray-400">{originIATA}</span>
@@ -365,9 +363,7 @@ function SearchBox({
 
         {/* TO */}
         <div className="flex-1">
-          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-            To
-          </label>
+          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">To</label>
           <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-base">
             {destinationName}
             <span className="ml-2 text-sm font-mono text-gray-400">{destinationIATA}</span>
@@ -376,9 +372,7 @@ function SearchBox({
 
         {/* DEPART */}
         <div className="flex-1">
-          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-            Depart
-          </label>
+          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Depart</label>
           <input
             type="date"
             value={depart}
@@ -391,9 +385,7 @@ function SearchBox({
         {/* RETURN */}
         {roundTrip && (
           <div className="flex-1">
-            <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-              Return
-            </label>
+            <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Return</label>
             <input
               type="date"
               value={returnDate}
@@ -410,9 +402,7 @@ function SearchBox({
 
         {/* PASSENGERS DROPDOWN */}
         <div className="relative flex-1" ref={travellerRef}>
-          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-            Passengers
-          </label>
+          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Passengers</label>
           <button
             type="button"
             onClick={() => setTravellerOpen(!travellerOpen)}
@@ -444,7 +434,7 @@ function SearchBox({
                 ))}
               </div>
 
-              {/* Passenger counts */}
+              {/* Counts */}
               {[
                 { label: 'Adults', sub: '16+', val: adults, set: setAdults, min: 1 },
                 { label: 'Children', sub: '2–15', val: children, set: setChildren, min: 0 },
@@ -460,17 +450,13 @@ function SearchBox({
                       type="button"
                       onClick={() => p.set(Math.max(p.min, p.val - 1))}
                       className="w-8 h-8 rounded-full border border-gray-300 text-gray-600 font-bold hover:border-gray-500 transition flex items-center justify-center"
-                    >
-                      −
-                    </button>
+                    >−</button>
                     <span className="w-4 text-center font-semibold text-gray-800">{p.val}</span>
                     <button
                       type="button"
                       onClick={() => p.set(p.val + 1)}
                       className="w-8 h-8 rounded-full border border-gray-300 text-gray-600 font-bold hover:border-gray-500 transition flex items-center justify-center"
-                    >
-                      +
-                    </button>
+                    >+</button>
                   </div>
                 </div>
               ))}
@@ -497,11 +483,11 @@ function SearchBox({
           >
             Search Flights →
           </button>
-          <a
+          
             href="/flights"
             className="px-8 py-2 rounded-xl font-semibold text-sm text-center transition border whitespace-nowrap hover:bg-gray-50"
             style={{ borderColor: '#03989e', color: '#03989e' }}
-          >
+          
             Search a different route
           </a>
         </div>
@@ -514,9 +500,55 @@ function SearchBox({
   )
 }
 
-// ─────────────────────────────────────────────
-// ROUTE INFO STRIP
-// ─────────────────────────────────────────────
+  return (
+    <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-3xl mx-auto">
+      <div className="flex flex-col sm:flex-row items-center gap-3">
+        <div className="flex-1 w-full">
+          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
+            From
+          </label>
+          <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-lg">
+            {originName}
+            <span className="ml-2 text-sm font-mono text-gray-400">{originIATA}</span>
+          </div>
+        </div>
+
+        <div className="text-2xl text-gray-400 mt-4 sm:mt-0 select-none">⇄</div>
+
+        <div className="flex-1 w-full">
+          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
+            To
+          </label>
+          <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-lg">
+            {destinationName}
+            <span className="ml-2 text-sm font-mono text-gray-400">{destinationIATA}</span>
+          </div>
+        </div>
+
+        <div className="mt-4 sm:mt-6 flex flex-col gap-2 shrink-0">
+          <button
+            onClick={handleSearch}
+            className="px-8 py-3 rounded-xl text-white font-bold text-lg transition hover:opacity-90 whitespace-nowrap"
+            style={{ backgroundColor: '#03989e' }}
+          >
+            Search Flights →
+          </button>
+          <a
+            href="/flights"
+            className="px-8 py-2 rounded-xl font-semibold text-sm text-center transition border whitespace-nowrap hover:bg-gray-50"
+            style={{ borderColor: '#03989e', color: '#03989e' }}
+          >
+            Search a different route
+          </a>
+        </div>
+      </div>
+
+      <p className="text-center text-xs text-gray-400 mt-4">
+        · Prices updated in real time · No hidden fees
+      </p>
+    </div>
+  )
+}
 
 function RouteInfoStrip({
   originIATA,
@@ -543,10 +575,6 @@ function RouteInfoStrip({
   )
 }
 
-// ─────────────────────────────────────────────
-// POPULAR ROUTES GRID
-// ─────────────────────────────────────────────
-
 function PopularRoutesGrid({
   originIATA,
   destinationName,
@@ -570,6 +598,7 @@ function PopularRoutesGrid({
     return seededShuffle(baseRoutes, seed).slice(0, 6)
   }, [sanityCities, originIATA, seed])
 
+  // Now synchronous — open directly, no async needed
   const handleClick = (destIata: string) => {
     const url = buildWhitelabelUrl({
       from: originIATA,
@@ -605,7 +634,6 @@ function PopularRoutesGrid({
           </div>
 
           <button
-            type="button"
             onClick={() => handleClick(route.iata)}
             className="w-full py-2 rounded-xl text-white font-semibold text-sm transition hover:opacity-90"
             style={{ backgroundColor: '#232e4e' }}
@@ -617,10 +645,6 @@ function PopularRoutesGrid({
     </div>
   )
 }
-
-// ─────────────────────────────────────────────
-// TRAVEL TIPS
-// ─────────────────────────────────────────────
 
 function TravelTips() {
   return (
@@ -640,10 +664,6 @@ function TravelTips() {
     </div>
   )
 }
-
-// ─────────────────────────────────────────────
-// SEO TEXT BLOCK
-// ─────────────────────────────────────────────
 
 function SeoTextBlock({
   originName,
@@ -675,7 +695,7 @@ function SeoTextBlock({
       <p>
         Whether you're travelling for a weekend break, a long-haul adventure, or a
         business trip, our search pulls together real-time fares so you can compare
-        and book in minutes. We search all trusted partners to bring you flexible ticket
+        and book in minutes. We partner with Kiwi.com to bring you flexible ticket
         options including one-way, return, and multi-city routes on this popular
         flight corridor.
       </p>
@@ -700,7 +720,7 @@ export default function RoutePageClient({
   origin,
   destination,
   sanityCities,
-  flightInfo,
+  flightInfo={flightInfo}
 }: Props) {
   const originName = resolveCityName(originIATA, origin)
   const destinationName = resolveCityName(destinationIATA, destination)
@@ -740,7 +760,7 @@ export default function RoutePageClient({
         )}
 
         <p className="text-gray-400 mb-10 max-w-xl mx-auto">
-          Compare airlines, dates and prices in seconds. Book with confidence.
+          Compare airlines, dates and prices in seconds. Book securely with Kiwi.com.
         </p>
 
         <SearchBox
@@ -751,71 +771,76 @@ export default function RoutePageClient({
         />
       </section>
 
-      {/* FLIGHT TIMES */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h2
-            className="text-3xl font-bold text-center mb-2"
-            style={{ color: '#232e4e' }}
-          >
-            Flight Time from {originName} to {destinationName}
-          </h2>
+    
+           {/* FLIGHT TIMES */}
+<section className="py-16 px-6 bg-gray-50">
+  <div className="max-w-5xl mx-auto">
+    <h2
+      className="text-3xl font-bold text-center mb-2"
+      style={{ color: '#232e4e' }}
+    >
+      Flight Time from {originName} to {destinationName}
+    </h2>
 
-          <p className="text-center text-gray-500 mb-10 max-w-2xl mx-auto">
-            Here's a quick look at the key details for your journey from {originName} to {destinationName}.
-            These estimates are based on typical commercial jet speeds and great‑circle routing.
-          </p>
+    <p className="text-center text-gray-500 mb-10 max-w-2xl mx-auto">
+      Here’s a quick look at the key details for your journey from {originName} to {destinationName}. 
+      These estimates are based on typical commercial jet speeds and great‑circle routing.
+    </p>
 
-          <div className="bg-white shadow-md rounded-xl p-8 flex flex-col md:flex-row items-center gap-10">
+    {/* VISUAL CARD */}
+    <div className="bg-white shadow-md rounded-xl p-8 flex flex-col md:flex-row items-center gap-10">
+      
+      {/* ICON / VISUAL */}
+      <div className="flex-shrink-0">
+        <div className="w-28 h-28 bg-[#232e4e] rounded-full flex items-center justify-center">
+          <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-14 w-14 text-white"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M2 16l20-5-20-5 5 5-5 5z"
+          />
+        </svg>
 
-            <div className="flex-shrink-0">
-              <div className="w-28 h-28 bg-[#232e4e] rounded-full flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-14 w-14 text-white"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2 16l20-5-20-5 5 5-5 5z"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            <div className="flex-1">
-              <ul className="space-y-4 text-lg text-gray-700">
-                <li>
-                  <strong className="font-semibold text-[#232e4e]">Distance:</strong>{' '}
-                  {Math.round(flightInfo?.distanceKm || 0).toLocaleString()} km
-                </li>
-                <li>
-                  <strong className="font-semibold text-[#232e4e]">Typical Flight Time:</strong>{' '}
-                  {flightInfo?.durationLabel}
-                </li>
-                <li>
-                  <strong className="font-semibold text-[#232e4e]">Route Type:</strong>{' '}
-                  {flightInfo?.distanceKm && flightInfo.distanceKm > 3500
-                    ? 'Long‑haul'
-                    : flightInfo?.distanceKm && flightInfo.distanceKm > 1500
-                    ? 'Medium‑haul'
-                    : 'Short‑haul'}
-                </li>
-              </ul>
-
-              <p className="mt-6 text-gray-600 leading-relaxed">
-                These figures are based on direct, great‑circle routing, the shortest path between two
-                points on the globe. Actual flight times may vary depending on winds, aircraft type, and
-                air‑traffic conditions, but this gives you a reliable benchmark for planning your trip.
-              </p>
-            </div>
-          </div>
         </div>
-      </section>
+      </div>
+
+      {/* TEXTUAL FACTS */}
+      <div className="flex-1">
+        <ul className="space-y-4 text-lg text-gray-700">
+          <li>
+            <strong className="font-semibold text-[#232e4e]">Distance:</strong>{' '}
+            {Math.round(flightInfo?.distanceKm || 0).toLocaleString()} km
+          </li>
+          <li>
+            <strong className="font-semibold text-[#232e4e]">Typical Flight Time:</strong>{' '}
+            {flightInfo?.durationLabel}
+          </li>
+          <li>
+            <strong className="font-semibold text-[#232e4e]">Route Type:</strong>{' '}
+            {flightInfo?.distanceKm && flightInfo.distanceKm > 3500
+              ? 'Long‑haul'
+              : flightInfo?.distanceKm && flightInfo.distanceKm > 1500
+              ? 'Medium‑haul'
+              : 'Short‑haul'}
+          </li>
+        </ul>
+
+        <p className="mt-6 text-gray-600 leading-relaxed">
+          These figures are based on direct, great‑circle routing, the shortest path between two 
+          points on the globe. Actual flight times may vary depending on winds, aircraft type, and 
+          air‑traffic conditions, but this gives you a reliable benchmark for planning your trip.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* SEO CONTENT */}
       <section className="py-16 px-6 bg-white">
@@ -863,7 +888,7 @@ export default function RoutePageClient({
         </div>
       </section>
 
-      {/* ROUTE INFO STRIP */}
+{/* ROUTE INFO STRIP */}
       <section className="py-12 px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8" style={{ color: '#232e4e' }}>
@@ -873,7 +898,7 @@ export default function RoutePageClient({
         </div>
       </section>
 
-      {/* FINAL CTA */}
+       {/* FINAL CTA */}
       <section
         style={{ backgroundColor: '#232e4e' }}
         className="py-16 px-6 text-center text-white"

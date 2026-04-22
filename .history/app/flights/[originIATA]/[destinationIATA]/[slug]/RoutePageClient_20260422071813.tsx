@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useRef, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 
@@ -180,7 +180,7 @@ function seededShuffle<T>(items: T[], seed: string): T[] {
 
 // ─────────────────────────────────────────────
 // WHITELABEL URL BUILDER
-// Format: flights.timmstravel.com/?flightSearch=MEL2205SIN1
+// Format: flights.timmstravel.com/?flightSearch=MEL2205SIN2305100
 // ─────────────────────────────────────────────
 
 const WHITELABEL_BASE = 'https://flights.timmstravel.com'
@@ -242,10 +242,10 @@ const ROUTE_FACTS: {
   label: string
   getValue: (o: string, d: string) => string
 }[] = [
-  { icon: '✈️', label: 'Typical flight time', getValue: () => 'Varies by airline & route' },
-  { icon: '💺', label: 'Cabin classes',        getValue: () => 'Economy · Business · First' },
-  { icon: '🤝', label: 'Booking partner',      getValue: () => 'Compare From All Trusted Partners' },
-  { icon: '🔁', label: 'Trip types',           getValue: () => 'One-way · Return · Multi-city' },
+  { icon: '✈️', label: 'Typical flight time',  getValue: () => 'Varies by airline & route' },
+  { icon: '💺', label: 'Cabin classes',         getValue: () => 'Economy · Business · First' },
+  { icon: '🤝', label: 'Booking partner',       getValue: () => 'Compare From All Trusted Partners' },
+  { icon: '🔁', label: 'Trip types',            getValue: () => 'One-way · Return · Multi-city' },
 ]
 
 const TRAVEL_TIPS = [
@@ -262,7 +262,7 @@ const TRAVEL_TIPS = [
   {
     icon: '🔔',
     title: 'Set a price alert',
-    body: 'Prices fluctuate daily. Search regularly to find when fares drop on this route.',
+    body: 'Prices fluctuate daily. Use Kiwi.com price alerts to get notified when fares drop on this route.',
   },
   {
     icon: '🛂',
@@ -272,7 +272,7 @@ const TRAVEL_TIPS = [
 ]
 
 // ─────────────────────────────────────────────
-// SEARCH BOX
+// SUB-COMPONENTS
 // ─────────────────────────────────────────────
 
 function SearchBox({
@@ -286,211 +286,45 @@ function SearchBox({
   originName: string
   destinationName: string
 }) {
-  const [roundTrip, setRoundTrip] = useState(true)
-  const [depart, setDepart] = useState(daysFromToday(30))
-  const [returnDate, setReturnDate] = useState(daysFromToday(37))
-  const [adults, setAdults] = useState(1)
-  const [children, setChildren] = useState(0)
-  const [infants, setInfants] = useState(0)
-  const [cabin, setCabin] = useState('economy')
-  const [travellerOpen, setTravellerOpen] = useState(false)
-  const travellerRef = useRef<HTMLDivElement>(null)
-
-  const today = new Date().toISOString().split('T')[0]
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (travellerRef.current && !travellerRef.current.contains(e.target as Node)) {
-        setTravellerOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
-
-  const cabinLabels: Record<string, string> = { economy: 'Economy', business: 'Business' }
-  const total = adults + children + infants
-  const travellerSummary = `${total} passenger${total !== 1 ? 's' : ''} · ${cabinLabels[cabin]}`
-
-  const handleSearch = () => {
-    const url = buildWhitelabelUrl({
-      from: originIATA,
-      to: destinationIATA,
-      depart,
-      returnDate: roundTrip ? returnDate : undefined,
-      adults,
-      children,
-      infants,
-      cabin,
-    })
-    window.open(url, '_blank')
-  }
+  // Whitelabel Search
+const handleSearch = () => {
+  const url = buildWhitelabelUrl({
+    from: originIATA,
+    to: destinationIATA,
+    depart: daysFromToday(30),
+    adults: 1,
+    cabin: 'economy',
+  })
+  window.open(url, '_blank')
+}
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-4xl mx-auto">
-
-      {/* Trip type toggle */}
-      <div className="flex gap-2 mb-5">
-        {['Return', 'One way'].map((label) => (
-          <button
-            key={label}
-            type="button"
-            onClick={() => setRoundTrip(label === 'Return')}
-            className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
-              (label === 'Return') === roundTrip
-                ? 'bg-[#232e4e] text-white border-[#232e4e]'
-                : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* Route + dates row */}
-      <div className="flex flex-col sm:flex-row items-stretch gap-3 mb-3">
-
-        {/* FROM */}
-        <div className="flex-1">
+    <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-3xl mx-auto">
+      <div className="flex flex-col sm:flex-row items-center gap-3">
+        <div className="flex-1 w-full">
           <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
             From
           </label>
-          <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-base">
+          <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-lg">
             {originName}
             <span className="ml-2 text-sm font-mono text-gray-400">{originIATA}</span>
           </div>
         </div>
 
-        <div className="text-2xl text-gray-300 self-end pb-3 select-none hidden sm:block">⇄</div>
+        <div className="text-2xl text-gray-400 mt-4 sm:mt-0 select-none">⇄</div>
 
-        {/* TO */}
-        <div className="flex-1">
+        <div className="flex-1 w-full">
           <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
             To
           </label>
-          <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-base">
+          <div className="border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-semibold text-lg">
             {destinationName}
             <span className="ml-2 text-sm font-mono text-gray-400">{destinationIATA}</span>
           </div>
         </div>
 
-        {/* DEPART */}
-        <div className="flex-1">
-          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-            Depart
-          </label>
-          <input
-            type="date"
-            value={depart}
-            min={today}
-            onChange={(e) => setDepart(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-medium focus:outline-none focus:border-gray-400"
-          />
-        </div>
-
-        {/* RETURN */}
-        {roundTrip && (
-          <div className="flex-1">
-            <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-              Return
-            </label>
-            <input
-              type="date"
-              value={returnDate}
-              min={depart || today}
-              onChange={(e) => setReturnDate(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-medium focus:outline-none focus:border-gray-400"
-            />
-          </div>
-        )}
-      </div>
-
-      {/* Passengers + search row */}
-      <div className="flex flex-col sm:flex-row items-stretch gap-3">
-
-        {/* PASSENGERS DROPDOWN */}
-        <div className="relative flex-1" ref={travellerRef}>
-          <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">
-            Passengers
-          </label>
+        <div className="mt-4 sm:mt-6 flex flex-col gap-2 shrink-0">
           <button
-            type="button"
-            onClick={() => setTravellerOpen(!travellerOpen)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-50 text-gray-900 font-medium text-left flex justify-between items-center hover:border-gray-300 transition"
-          >
-            <span>{travellerSummary}</span>
-            <span className="text-gray-400 text-xs">{travellerOpen ? '▲' : '▼'}</span>
-          </button>
-
-          {travellerOpen && (
-            <div className="absolute left-0 top-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl p-5 z-50 w-72">
-
-              {/* Cabin */}
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Cabin</p>
-              <div className="flex gap-2 mb-4">
-                {['economy', 'business'].map((cls) => (
-                  <button
-                    key={cls}
-                    type="button"
-                    onClick={() => setCabin(cls)}
-                    className={`flex-1 py-1.5 rounded-lg text-sm font-semibold border transition ${
-                      cabin === cls
-                        ? 'bg-[#232e4e] text-white border-[#232e4e]'
-                        : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
-                    }`}
-                  >
-                    {cls.charAt(0).toUpperCase() + cls.slice(1)}
-                  </button>
-                ))}
-              </div>
-
-              {/* Passenger counts */}
-              {[
-                { label: 'Adults', sub: '16+', val: adults, set: setAdults, min: 1 },
-                { label: 'Children', sub: '2–15', val: children, set: setChildren, min: 0 },
-                { label: 'Infants', sub: 'Under 2', val: infants, set: setInfants, min: 0 },
-              ].map((p) => (
-                <div key={p.label} className="flex justify-between items-center py-2 border-t border-gray-100">
-                  <div>
-                    <p className="font-semibold text-gray-800 text-sm">{p.label}</p>
-                    <p className="text-xs text-gray-400">{p.sub}</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => p.set(Math.max(p.min, p.val - 1))}
-                      className="w-8 h-8 rounded-full border border-gray-300 text-gray-600 font-bold hover:border-gray-500 transition flex items-center justify-center"
-                    >
-                      −
-                    </button>
-                    <span className="w-4 text-center font-semibold text-gray-800">{p.val}</span>
-                    <button
-                      type="button"
-                      onClick={() => p.set(p.val + 1)}
-                      className="w-8 h-8 rounded-full border border-gray-300 text-gray-600 font-bold hover:border-gray-500 transition flex items-center justify-center"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-              <button
-                type="button"
-                onClick={() => setTravellerOpen(false)}
-                className="w-full mt-4 py-2 rounded-xl text-white font-semibold text-sm"
-                style={{ backgroundColor: '#232e4e' }}
-              >
-                Done
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* SEARCH BUTTON */}
-        <div className="flex flex-col justify-end gap-2 shrink-0">
-          <button
-            type="button"
             onClick={handleSearch}
             className="px-8 py-3 rounded-xl text-white font-bold text-lg transition hover:opacity-90 whitespace-nowrap"
             style={{ backgroundColor: '#03989e' }}
@@ -508,15 +342,11 @@ function SearchBox({
       </div>
 
       <p className="text-center text-xs text-gray-400 mt-4">
-        · Prices updated in real time · No hidden fees · Powered by Timms Travel
+        · Prices updated in real time · No hidden fees
       </p>
     </div>
   )
 }
-
-// ─────────────────────────────────────────────
-// ROUTE INFO STRIP
-// ─────────────────────────────────────────────
 
 function RouteInfoStrip({
   originIATA,
@@ -543,10 +373,6 @@ function RouteInfoStrip({
   )
 }
 
-// ─────────────────────────────────────────────
-// POPULAR ROUTES GRID
-// ─────────────────────────────────────────────
-
 function PopularRoutesGrid({
   originIATA,
   destinationName,
@@ -570,6 +396,7 @@ function PopularRoutesGrid({
     return seededShuffle(baseRoutes, seed).slice(0, 6)
   }, [sanityCities, originIATA, seed])
 
+  // Now synchronous — open directly, no async needed
   const handleClick = (destIata: string) => {
     const url = buildWhitelabelUrl({
       from: originIATA,
@@ -605,7 +432,6 @@ function PopularRoutesGrid({
           </div>
 
           <button
-            type="button"
             onClick={() => handleClick(route.iata)}
             className="w-full py-2 rounded-xl text-white font-semibold text-sm transition hover:opacity-90"
             style={{ backgroundColor: '#232e4e' }}
@@ -617,10 +443,6 @@ function PopularRoutesGrid({
     </div>
   )
 }
-
-// ─────────────────────────────────────────────
-// TRAVEL TIPS
-// ─────────────────────────────────────────────
 
 function TravelTips() {
   return (
@@ -640,10 +462,6 @@ function TravelTips() {
     </div>
   )
 }
-
-// ─────────────────────────────────────────────
-// SEO TEXT BLOCK
-// ─────────────────────────────────────────────
 
 function SeoTextBlock({
   originName,
@@ -675,7 +493,7 @@ function SeoTextBlock({
       <p>
         Whether you're travelling for a weekend break, a long-haul adventure, or a
         business trip, our search pulls together real-time fares so you can compare
-        and book in minutes. We search all trusted partners to bring you flexible ticket
+        and book in minutes. We partner with Kiwi.com to bring you flexible ticket
         options including one-way, return, and multi-city routes on this popular
         flight corridor.
       </p>
@@ -700,7 +518,7 @@ export default function RoutePageClient({
   origin,
   destination,
   sanityCities,
-  flightInfo,
+  flightInfo={flightInfo}
 }: Props) {
   const originName = resolveCityName(originIATA, origin)
   const destinationName = resolveCityName(destinationIATA, destination)
@@ -740,7 +558,7 @@ export default function RoutePageClient({
         )}
 
         <p className="text-gray-400 mb-10 max-w-xl mx-auto">
-          Compare airlines, dates and prices in seconds. Book with confidence.
+          Compare airlines, dates and prices in seconds. Book securely with Kiwi.com.
         </p>
 
         <SearchBox
@@ -751,71 +569,76 @@ export default function RoutePageClient({
         />
       </section>
 
-      {/* FLIGHT TIMES */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <h2
-            className="text-3xl font-bold text-center mb-2"
-            style={{ color: '#232e4e' }}
-          >
-            Flight Time from {originName} to {destinationName}
-          </h2>
+    
+           {/* FLIGHT TIMES */}
+<section className="py-16 px-6 bg-gray-50">
+  <div className="max-w-5xl mx-auto">
+    <h2
+      className="text-3xl font-bold text-center mb-2"
+      style={{ color: '#232e4e' }}
+    >
+      Flight Time from {originName} to {destinationName}
+    </h2>
 
-          <p className="text-center text-gray-500 mb-10 max-w-2xl mx-auto">
-            Here's a quick look at the key details for your journey from {originName} to {destinationName}.
-            These estimates are based on typical commercial jet speeds and great‑circle routing.
-          </p>
+    <p className="text-center text-gray-500 mb-10 max-w-2xl mx-auto">
+      Here’s a quick look at the key details for your journey from {originName} to {destinationName}. 
+      These estimates are based on typical commercial jet speeds and great‑circle routing.
+    </p>
 
-          <div className="bg-white shadow-md rounded-xl p-8 flex flex-col md:flex-row items-center gap-10">
+    {/* VISUAL CARD */}
+    <div className="bg-white shadow-md rounded-xl p-8 flex flex-col md:flex-row items-center gap-10">
+      
+      {/* ICON / VISUAL */}
+      <div className="flex-shrink-0">
+        <div className="w-28 h-28 bg-[#232e4e] rounded-full flex items-center justify-center">
+          <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-14 w-14 text-white"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M2 16l20-5-20-5 5 5-5 5z"
+          />
+        </svg>
 
-            <div className="flex-shrink-0">
-              <div className="w-28 h-28 bg-[#232e4e] rounded-full flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-14 w-14 text-white"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2 16l20-5-20-5 5 5-5 5z"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            <div className="flex-1">
-              <ul className="space-y-4 text-lg text-gray-700">
-                <li>
-                  <strong className="font-semibold text-[#232e4e]">Distance:</strong>{' '}
-                  {Math.round(flightInfo?.distanceKm || 0).toLocaleString()} km
-                </li>
-                <li>
-                  <strong className="font-semibold text-[#232e4e]">Typical Flight Time:</strong>{' '}
-                  {flightInfo?.durationLabel}
-                </li>
-                <li>
-                  <strong className="font-semibold text-[#232e4e]">Route Type:</strong>{' '}
-                  {flightInfo?.distanceKm && flightInfo.distanceKm > 3500
-                    ? 'Long‑haul'
-                    : flightInfo?.distanceKm && flightInfo.distanceKm > 1500
-                    ? 'Medium‑haul'
-                    : 'Short‑haul'}
-                </li>
-              </ul>
-
-              <p className="mt-6 text-gray-600 leading-relaxed">
-                These figures are based on direct, great‑circle routing, the shortest path between two
-                points on the globe. Actual flight times may vary depending on winds, aircraft type, and
-                air‑traffic conditions, but this gives you a reliable benchmark for planning your trip.
-              </p>
-            </div>
-          </div>
         </div>
-      </section>
+      </div>
+
+      {/* TEXTUAL FACTS */}
+      <div className="flex-1">
+        <ul className="space-y-4 text-lg text-gray-700">
+          <li>
+            <strong className="font-semibold text-[#232e4e]">Distance:</strong>{' '}
+            {Math.round(flightInfo?.distanceKm || 0).toLocaleString()} km
+          </li>
+          <li>
+            <strong className="font-semibold text-[#232e4e]">Typical Flight Time:</strong>{' '}
+            {flightInfo?.durationLabel}
+          </li>
+          <li>
+            <strong className="font-semibold text-[#232e4e]">Route Type:</strong>{' '}
+            {flightInfo?.distanceKm && flightInfo.distanceKm > 3500
+              ? 'Long‑haul'
+              : flightInfo?.distanceKm && flightInfo.distanceKm > 1500
+              ? 'Medium‑haul'
+              : 'Short‑haul'}
+          </li>
+        </ul>
+
+        <p className="mt-6 text-gray-600 leading-relaxed">
+          These figures are based on direct, great‑circle routing, the shortest path between two 
+          points on the globe. Actual flight times may vary depending on winds, aircraft type, and 
+          air‑traffic conditions, but this gives you a reliable benchmark for planning your trip.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* SEO CONTENT */}
       <section className="py-16 px-6 bg-white">
@@ -863,7 +686,7 @@ export default function RoutePageClient({
         </div>
       </section>
 
-      {/* ROUTE INFO STRIP */}
+{/* ROUTE INFO STRIP */}
       <section className="py-12 px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-8" style={{ color: '#232e4e' }}>
@@ -873,7 +696,7 @@ export default function RoutePageClient({
         </div>
       </section>
 
-      {/* FINAL CTA */}
+       {/* FINAL CTA */}
       <section
         style={{ backgroundColor: '#232e4e' }}
         className="py-16 px-6 text-center text-white"
