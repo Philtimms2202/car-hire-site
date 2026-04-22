@@ -124,10 +124,14 @@ const buildPassengerCode = () => {
       flightSearch += passengerCode
     }
 
-    const url = `https://flights.timmstravel.com/?flightSearch=${flightSearch}&destination_airports=0&origin_airports=1`
+    const params = new URLSearchParams({
+  flightSearch,
+  destination_airports: '0',
+  origin_airports: '1',
+})
 
-    window.location.href = url
-  }
+window.location.assign(`https://flights.timmstravel.com/?${params.toString()}`)
+}
 
   const handleSwap = () => {
     const temp = from
