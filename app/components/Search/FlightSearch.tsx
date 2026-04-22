@@ -105,7 +105,7 @@ const buildPassengerCode = () => {
   return code
 }
 
-const handleSearch = () => {
+const handleSearch = async () => {
   const fromAirport = selectedFromRef.current
   const toAirport = selectedToRef.current
 
@@ -124,7 +124,17 @@ const handleSearch = () => {
     flightSearch += passengerCode
   }
 
-  window.location.assign(`https://flights.timmstravel.com/?flightSearch=${flightSearch}&shmarker=714930&trs=513651`)
+  try {
+    const res = await fetch(`https://flights.timmstravel.com/main.js?wl_id=16505`)
+    const text = await res.text()
+    const match = text.match(/"trace_id":"([^"]+)"/)
+    const traceId = match ? match[1] : null
+    const marker = traceId ? `714930.${traceId}` : '714930'
+
+    window.location.assign(`https://flights.timmstravel.com/?flightSearch=${flightSearch}&shmarker=${marker}&trs=513651`)
+  } catch {
+    window.location.assign(`https://flights.timmstravel.com/?flightSearch=${flightSearch}&shmarker=714930&trs=513651`)
+  }
 }
 
   const handleSwap = () => {
