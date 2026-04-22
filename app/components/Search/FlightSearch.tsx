@@ -124,15 +124,7 @@ const handleSearch = () => {
     flightSearch += passengerCode
   }
 
-  // Step 1: Open white label homepage in new tab to set TP tracking cookie
-  const homepage = window.open('https://flights.timmstravel.com', '_blank')
-
-  // Step 2: After a short delay, redirect that tab to the search results
-  setTimeout(() => {
-    if (homepage) {
-      homepage.location.href = `https://flights.timmstravel.com/?flightSearch=${flightSearch}`
-    }
-  }, 2000)
+  window.location.assign(`https://flights.timmstravel.com/?flightSearch=${flightSearch}&marker=714930&trs=513651`)
 }
 
   const handleSwap = () => {
