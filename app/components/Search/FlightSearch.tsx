@@ -124,10 +124,10 @@ const handleSearch = () => {
     flightSearch += passengerCode
   }
 
-  // Let Travelpayouts handle ALL tracking internally
-  window.location.assign(
-    `https://flights.timmstravel.com/?flightSearch=${flightSearch}`
-  )
+  // ✅ REQUIRED for custom search → this is what enables tracking
+  const url = `https://flights.timmstravel.com/?flightSearch=${flightSearch}&shmarker=714930&trs=513651`
+
+  window.location.assign(url)
 }
 
   const handleSwap = () => {
