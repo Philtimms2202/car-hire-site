@@ -163,7 +163,7 @@ const cityDirectory = [
   { city:'Bangkok',    continent:'asia',          country:'thailand',       slug:'bangkok'    },
   { city:'Berlin',     continent:'europe',        country:'germany',        slug:'berlin'     },
   { city:'Budapest',   continent:'europe',        country:'hungary',        slug:'budapest'   },
-  { city:'Zanzibar',      continent:'africa',        country:'egypt',          slug:'zanzibar'      },
+  { city:'Zanzibar',      continent:'africa',        country:'tanzania',          slug:'zanzibar'      },
   { city:'Cape Town',  continent:'africa',        country:'south-africa',   slug:'cape-town'  },
   { city:'Edinburgh',  continent:'europe',        country:'united-kingdom', slug:'edinburgh'  },
   { city:'Istanbul',   continent:'europe',        country:'turkey',         slug:'istanbul'   },
