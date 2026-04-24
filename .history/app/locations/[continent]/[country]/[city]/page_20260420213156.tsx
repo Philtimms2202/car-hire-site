@@ -1,6 +1,3 @@
-// app/locations/[continent]/[country]/[city]/page.tsx
-
-import { Suspense } from 'react'
 import Navbar from '../../../../components/Navbar'
 import Footer from '../../../../components/Footer'
 import Script from 'next/script'
@@ -9,10 +6,8 @@ import { PortableText } from '@portabletext/react'
 import FlightSearch from '@/app/components/Search/FlightSearch'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import CityHighlights from '@/app/components/city/CityHighlights'
 
-// Static once AI content is cached in Sanity
-export const revalidate = false
+export const revalidate = 60
 
 // -----------------------------
 // Metadata
@@ -30,7 +25,6 @@ export async function generateMetadata({ params }: any) {
       name,
       heroDescription,
       metaDescription,
-      aiIntro,
       country->{ name }
     }`,
     { continent, country, city }
@@ -41,7 +35,6 @@ export async function generateMetadata({ params }: any) {
   const desc =
     data?.metaDescription ||
     data?.heroDescription ||
-    data?.aiIntro ||
     `Explore ${cityName}, ${countryName} — top attractions, tours, travel tips and things to do.`
 
   return {
@@ -65,7 +58,6 @@ async function getCity(continentSlug: string, countrySlug: string, citySlug: str
         country->slug.current == $countrySlug &&
         country->continent->slug.current == $continentSlug
       ][0]{
-        _id,
         name,
         "slug": slug.current,
         emoji,
@@ -78,11 +70,7 @@ async function getCity(continentSlug: string, countrySlug: string, citySlug: str
           "slug": slug.current,
           emoji,
           continent->{ name, "slug": slug.current, emoji }
-        },
-        aiIntro,
-        aiHighlightsIntro,
-        aiHighlightCards,
-        aiAboutFallback
+        }
       }`,
       { continentSlug, countrySlug, citySlug }
     )
@@ -127,6 +115,7 @@ export default async function CityPage({ params }: any) {
       redirect(`/locations/${correct.continentSlug}/${correct.countrySlug}/${correct.slug}`)
     }
 
+    // Truly not found
     return (
       <main className="min-h-screen bg-white">
         <Navbar />
@@ -151,16 +140,8 @@ export default async function CityPage({ params }: any) {
   const countryName = cityDoc.country?.name
   const continentName = cityDoc.country?.continent?.name
   const emoji = cityDoc.emoji
+  const heroDescription = cityDoc.heroDescription
   const mainContent = cityDoc.mainContent
-
-  const heroDescription =
-    cityDoc.heroDescription ||
-    cityDoc.aiIntro ||
-    `Discover top attractions, tours, and unforgettable experiences in ${cityName}, ${countryName}.`
-
-  const aboutFallback =
-    cityDoc.aiAboutFallback ||
-    `${cityName} is a vibrant destination in ${countryName}, known for its culture, attractions and unique character.`
 
   return (
     <main className="min-h-screen bg-white">
@@ -177,26 +158,31 @@ export default async function CityPage({ params }: any) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'TouristDestination',
+            "@context": "https://schema.org",
+            "@type": "TouristDestination",
             name: cityName,
             description: heroDescription,
             containedInPlace: {
-              '@type': 'Country',
+              "@type": "Country",
               name: countryName,
             },
           }),
         }}
       />
 
-      {/* HERO — renders immediately */}
+      {/* HERO */}
       <section
         style={{ backgroundColor: '#232e4e' }}
         className="text-white py-20 px-6 text-center"
       >
         <div className="text-6xl mb-4">{emoji}</div>
         <h1 className="text-5xl font-bold mb-4">Explore {cityName}</h1>
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto">{heroDescription}</p>
+        <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          {heroDescription ||
+            `Discover top attractions, tours, and unforgettable experiences in ${cityName}, ${countryName}.`}
+        </p>
+
+        {/* REPLACED CITYSEARCHBAR → FLIGHTSEARCH */}
         <div className="mt-10">
           <div className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black">
             <FlightSearch />
@@ -204,19 +190,51 @@ export default async function CityPage({ params }: any) {
         </div>
       </section>
 
-      {/* HIGHLIGHTS — streams in when ready, hidden until then */}
-      <Suspense fallback={null}>
-        <CityHighlights
-          documentId={cityDoc._id}
-          cityName={cityName}
-          countryName={countryName}
-          continentName={continentName || ''}
-          cachedHighlightsIntro={cityDoc.aiHighlightsIntro}
-          cachedHighlightCards={cityDoc.aiHighlightCards}
-        />
-      </Suspense>
+      {/* HIGHLIGHTS */}
+      <section className="py-16 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6" style={{ color: '#232e4e' }}>
+            Highlights of {cityName}
+          </h2>
+          <p className="text-gray-600 mb-8 leading-relaxed">
+            {cityName} is one of the most iconic destinations in {countryName}. Whether you are
+            visiting for culture, food, nightlife or history, the city offers something for every
+            traveller. Here are some of the reasons people love visiting {cityName}.
+          </p>
+          <ul className="grid md:grid-cols-2 gap-6 text-gray-700">
+            <li className="p-4 border rounded-lg shadow-sm">
+              <strong>Top Attractions in {cityName}</strong>
+              <p className="text-sm mt-1 text-gray-500">
+                Explore world-famous landmarks, museums and must-see sights that make {cityName} one
+                of the most visited cities in {countryName}.
+              </p>
+            </li>
+            <li className="p-4 border rounded-lg shadow-sm">
+              <strong>Culture &amp; Local Life</strong>
+              <p className="text-sm mt-1 text-gray-500">
+                Experience the traditions, neighbourhoods and cultural highlights that define{' '}
+                {cityName} — seen through its own unique lens.
+              </p>
+            </li>
+            <li className="p-4 border rounded-lg shadow-sm">
+              <strong>Food &amp; Dining</strong>
+              <p className="text-sm mt-1 text-gray-500">
+                From regional dishes to modern cuisine, {cityName} showcases some of the best
+                flavours {countryName} has to offer.
+              </p>
+            </li>
+            <li className="p-4 border rounded-lg shadow-sm">
+              <strong>Day Trips from {cityName}</strong>
+              <p className="text-sm mt-1 text-gray-500">
+                Discover nearby towns, natural wonders and coastal escapes — all easily accessible
+                from {cityName}.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
 
-      {/* GYG EXPERIENCES WIDGET — renders immediately */}
+      {/* GYG EXPERIENCES WIDGET */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
@@ -234,7 +252,7 @@ export default async function CityPage({ params }: any) {
         </div>
       </section>
 
-      {/* VIEW MORE CTA — renders immediately */}
+      {/* VIEW MORE CTA */}
       <div className="py-10 text-center">
         <Link
           href={`/locations/${continent}/${country}/${city}/things-to-do`}
@@ -244,7 +262,7 @@ export default async function CityPage({ params }: any) {
         </Link>
       </div>
 
-      {/* ABOUT — renders immediately */}
+      {/* ABOUT */}
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-4" style={{ color: '#03989e' }}>
@@ -255,7 +273,11 @@ export default async function CityPage({ params }: any) {
               <PortableText value={mainContent} />
             </div>
           ) : (
-            <p className="text-gray-600 leading-relaxed whitespace-pre-line">{aboutFallback}</p>
+            <p className="text-gray-600 leading-relaxed">
+              {cityName} is a vibrant destination in {countryName}, known for its culture,
+              attractions and unique character. Explore the city's highlights, discover local
+              neighbourhoods and enjoy unforgettable experiences.
+            </p>
           )}
 
           {/* Breadcrumbs */}
@@ -264,25 +286,15 @@ export default async function CityPage({ params }: any) {
               All Continents
             </Link>
             <span className="text-gray-400">→</span>
-            <Link
-              href={`/locations/${continent}`}
-              className="hover:opacity-75 transition capitalize"
-              style={{ color: '#2f797c' }}
-            >
+            <Link href={`/locations/${continent}`} className="hover:opacity-75 transition capitalize" style={{ color: '#2f797c' }}>
               {continentName || continent}
             </Link>
             <span className="text-gray-400">→</span>
-            <Link
-              href={`/locations/${continent}/${country}`}
-              className="hover:opacity-75 transition capitalize"
-              style={{ color: '#2f797c' }}
-            >
+            <Link href={`/locations/${continent}/${country}`} className="hover:opacity-75 transition capitalize" style={{ color: '#2f797c' }}>
               {countryName || country}
             </Link>
             <span className="text-gray-400">→</span>
-            <span style={{ color: '#232e4e' }} className="font-semibold">
-              {cityName}
-            </span>
+            <span style={{ color: '#232e4e' }} className="font-semibold">{cityName}</span>
           </nav>
         </div>
       </section>

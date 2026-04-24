@@ -1,6 +1,5 @@
 // app/locations/[continent]/[country]/[city]/page.tsx
 
-import { Suspense } from 'react'
 import Navbar from '../../../../components/Navbar'
 import Footer from '../../../../components/Footer'
 import Script from 'next/script'
@@ -9,9 +8,10 @@ import { PortableText } from '@portabletext/react'
 import FlightSearch from '@/app/components/Search/FlightSearch'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import CityHighlights from '@/app/components/city/CityHighlights'
+import { generateCityAiContent } from '@/lib/generateCityAiContent'
+import { updateCityAiContent } from '@/lib/updateCityAiContent'
 
-// Static once AI content is cached in Sanity
+// Static once AI content is cached in Sanity — no need to revalidate
 export const revalidate = false
 
 // -----------------------------
@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: any) {
 }
 
 // -----------------------------
-// City Fetch
+// City Fetch — includes all AI fields
 // -----------------------------
 async function getCity(continentSlug: string, countrySlug: string, citySlug: string) {
   try {
@@ -82,7 +82,8 @@ async function getCity(continentSlug: string, countrySlug: string, citySlug: str
         aiIntro,
         aiHighlightsIntro,
         aiHighlightCards,
-        aiAboutFallback
+        aiAboutFallback,
+        aiNeighbourhoods
       }`,
       { continentSlug, countrySlug, citySlug }
     )
@@ -153,14 +154,66 @@ export default async function CityPage({ params }: any) {
   const emoji = cityDoc.emoji
   const mainContent = cityDoc.mainContent
 
+  // -----------------------------
+  // AI Content: check Sanity cache, generate if missing
+  // -----------------------------
+  let aiContent = {
+    aiIntro: cityDoc.aiIntro,
+    aiHighlightsIntro: cityDoc.aiHighlightsIntro,
+    aiHighlightCards: cityDoc.aiHighlightCards,
+    aiAboutFallback: cityDoc.aiAboutFallback,
+    aiNeighbourhoods: cityDoc.aiNeighbourhoods,
+  }
+
+  const needsGeneration = !cityDoc.aiHighlightsIntro || !cityDoc.aiHighlightCards?.length
+
+  if (needsGeneration) {
+    try {
+      console.log(`[AI] Generating content for ${cityName}, ${countryName}...`)
+      const generated = await generateCityAiContent(cityName, countryName, continentName || '')
+      await updateCityAiContent(cityDoc._id, generated)
+      aiContent = generated
+      console.log(`[AI] Content cached in Sanity for ${cityName}`)
+    } catch (err) {
+      console.error(`[AI] Generation failed for ${cityName}:`, err)
+      // Fall through — page renders with static fallbacks below
+    }
+  }
+
+  // Resolved values — AI content with hardcoded fallbacks as last resort
   const heroDescription =
     cityDoc.heroDescription ||
-    cityDoc.aiIntro ||
+    aiContent.aiIntro ||
     `Discover top attractions, tours, and unforgettable experiences in ${cityName}, ${countryName}.`
 
+  const highlightsIntro =
+    aiContent.aiHighlightsIntro ||
+    `${cityName} is one of the most iconic destinations in ${countryName}. Whether you are visiting for culture, food, nightlife or history, the city offers something for every traveller.`
+
+  const highlightCards = aiContent.aiHighlightCards?.length
+    ? aiContent.aiHighlightCards
+    : [
+        {
+          title: `Top Attractions in ${cityName}`,
+          description: `Explore world-famous landmarks, museums and must-see sights that make ${cityName} one of the most visited cities in ${countryName}.`,
+        },
+        {
+          title: 'Culture & Local Life',
+          description: `Experience the traditions, neighbourhoods and cultural highlights that define ${cityName} — seen through its own unique lens.`,
+        },
+        {
+          title: 'Food & Dining',
+          description: `From regional dishes to modern cuisine, ${cityName} showcases some of the best flavours ${countryName} has to offer.`,
+        },
+        {
+          title: `Day Trips from ${cityName}`,
+          description: `Discover nearby towns, natural wonders and coastal escapes — all easily accessible from ${cityName}.`,
+        },
+      ]
+
   const aboutFallback =
-    cityDoc.aiAboutFallback ||
-    `${cityName} is a vibrant destination in ${countryName}, known for its culture, attractions and unique character.`
+    aiContent.aiAboutFallback ||
+    `${cityName} is a vibrant destination in ${countryName}, known for its culture, attractions and unique character. Explore the city's highlights, discover local neighbourhoods and enjoy unforgettable experiences.`
 
   return (
     <main className="min-h-screen bg-white">
@@ -177,19 +230,19 @@ export default async function CityPage({ params }: any) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'TouristDestination',
+            "@context": "https://schema.org",
+            "@type": "TouristDestination",
             name: cityName,
             description: heroDescription,
             containedInPlace: {
-              '@type': 'Country',
+              "@type": "Country",
               name: countryName,
             },
           }),
         }}
       />
 
-      {/* HERO — renders immediately */}
+      {/* HERO */}
       <section
         style={{ backgroundColor: '#232e4e' }}
         className="text-white py-20 px-6 text-center"
@@ -204,19 +257,48 @@ export default async function CityPage({ params }: any) {
         </div>
       </section>
 
-      {/* HIGHLIGHTS — streams in when ready, hidden until then */}
-      <Suspense fallback={null}>
-        <CityHighlights
-          documentId={cityDoc._id}
-          cityName={cityName}
-          countryName={countryName}
-          continentName={continentName || ''}
-          cachedHighlightsIntro={cityDoc.aiHighlightsIntro}
-          cachedHighlightCards={cityDoc.aiHighlightCards}
-        />
-      </Suspense>
+      {/* HIGHLIGHTS */}
+      <section className="py-16 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold mb-6" style={{ color: '#232e4e' }}>
+            Highlights of {cityName}
+          </h2>
+          <p className="text-gray-600 mb-8 leading-relaxed">{highlightsIntro}</p>
+          <ul className="grid md:grid-cols-2 gap-6 text-gray-700">
+            {highlightCards.map((card: { title: string; description: string }, i: number) => (
+              <li key={i} className="p-4 border rounded-lg shadow-sm">
+                <strong>{card.title}</strong>
+                <p className="text-sm mt-1 text-gray-500">{card.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-      {/* GYG EXPERIENCES WIDGET — renders immediately */}
+      {/* NEIGHBOURHOODS — only shown if AI generated them */}
+      {aiContent.aiNeighbourhoods?.length > 0 && (
+        <section className="py-16 px-6 bg-gray-50">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl font-bold mb-6" style={{ color: '#232e4e' }}>
+              Neighbourhoods in {cityName}
+            </h2>
+            <ul className="grid md:grid-cols-3 gap-6">
+              {aiContent.aiNeighbourhoods.map(
+                (n: { name: string; description: string }, i: number) => (
+                  <li key={i} className="p-4 border rounded-lg shadow-sm bg-white">
+                    <strong className="text-base" style={{ color: '#232e4e' }}>
+                      {n.name}
+                    </strong>
+                    <p className="text-sm mt-1 text-gray-500">{n.description}</p>
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      {/* GYG EXPERIENCES WIDGET */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
@@ -234,7 +316,7 @@ export default async function CityPage({ params }: any) {
         </div>
       </section>
 
-      {/* VIEW MORE CTA — renders immediately */}
+      {/* VIEW MORE CTA */}
       <div className="py-10 text-center">
         <Link
           href={`/locations/${continent}/${country}/${city}/things-to-do`}
@@ -244,7 +326,7 @@ export default async function CityPage({ params }: any) {
         </Link>
       </div>
 
-      {/* ABOUT — renders immediately */}
+      {/* ABOUT */}
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-4" style={{ color: '#03989e' }}>
