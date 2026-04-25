@@ -43,7 +43,7 @@ export default async function Blog() {
       >
         <h1 className="text-5xl font-bold mb-4">Blog</h1>
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          Tips, guides and the latest news from the world of travel, everything you need to
+          Tips, guides and the latest news from the world of travel — everything you need to
           make the most of your next adventure.
         </p>
       </section>

@@ -22,7 +22,7 @@ export default function About() {
   const stats = [
     { value: '100+', label: 'Countries Covered' },
     { value: '1,000+', label: 'Cities & Destinations' },
-    { value: '0', label: 'Hidden Fees, Ever' },
+    { value: '0', label: 'Hidden Fees — Ever' },
     { value: '24hrs', label: 'Support Response Time' },
   ]
 
@@ -43,7 +43,7 @@ export default function About() {
       emoji: '🌍',
       title: 'Wherever You are Headed',
       description:
-        'From a weekend city break to a month-long road trip, we have got you covered in over 100 countries worldwide. City, coast or countryside, we have got it.',
+        'From a weekend city break to a month-long road trip, we have got you covered in over 100 countries worldwide. City, coast or countryside — we have got it.',
     },
     {
       emoji: '⚡',
@@ -55,7 +55,7 @@ export default function About() {
       emoji: '💰',
       title: 'No Added Fees',
       description:
-        'We do not charge any fees for using our service. Everything we provide is completely free of charge to you, we earn a small commission from our partners instead.',
+        'We don't charge any fees for using our service. Everything we provide is completely free of charge to you — we earn a small commission from our partners instead.',
     },
     {
       emoji: '⭐',
@@ -76,19 +76,19 @@ export default function About() {
       step: '02',
       title: 'Compare Your Options',
       description:
-        'We bring together flights, hotels, car hire and experiences from our trusted partners, all in one place. No switching between tabs, no hidden surprises.',
+        'We bring together flights, hotels, car hire and experiences from our trusted partners — all in one place. No switching between tabs, no hidden surprises.',
     },
     {
       step: '03',
       title: 'Book With Confidence',
       description:
-        'When you are ready, you will be securely redirected to our partners site to complete your booking. All payments are handled by them using secure, encrypted systems.',
+        'When you are ready, you'll be securely redirected to our partner's site to complete your booking. All payments are handled by them using secure, encrypted systems.',
     },
     {
       step: '04',
       title: 'Enjoy Your Trip',
       description:
-        'Pack your bags. Everything is taken care of. If you ever need help finding information about your booking, we are just an email away.',
+        'Pack your bags. Everything's taken care of. If you ever need help finding information about your booking, we're just an email away.',
     },
   ]
 
@@ -103,7 +103,7 @@ export default function About() {
           <h1 className="text-5xl font-bold mb-6">About Timms Travel</h1>
           <p className="text-xl text-gray-300 leading-relaxed">
             We're on a mission to make global travel simple, transparent and affordable for everyone.
-            No hidden fees, no inflated prices, just honest travel comparison done right.
+            No hidden fees, no inflated prices — just honest travel comparison done right.
           </p>
         </div>
       </section>
@@ -130,18 +130,18 @@ export default function About() {
           </h2>
           <div className="space-y-5 text-gray-600 leading-relaxed text-lg">
             <p>
-              Timms Travel was built out of a simple frustration, planning a trip shouldn't require
+              Timms Travel was built out of a simple frustration — planning a trip shouldn't require
               ten different browser tabs, confusing price comparisons, and the nagging feeling you've
               missed a better deal somewhere. We set out to fix that.
             </p>
             <p>
               We bring together flights, hotels, car hire, airport transfers and experiences from a
-              curated network of trusted suppliers, all in one place. Our job is to do the legwork
+              curated network of trusted suppliers — all in one place. Our job is to do the legwork
               so you can focus on the exciting part: actually going somewhere.
             </p>
             <p>
               We're completely free to use. We earn a small commission from our partners when you
-              make a booking, which is how we keep the lights on, but it never costs you a penny
+              make a booking, which is how we keep the lights on — but it never costs you a penny
               more. The price you see is the price you pay.
             </p>
             <p>
@@ -193,7 +193,7 @@ export default function About() {
             Why Choose Timms Travel?
           </h2>
           <p className="text-center text-gray-500 mb-14">
-            We're not just another travel site, here's what makes us different.
+            We're not just another travel site — here's what makes us different.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {values.map((v, i) => (
@@ -253,7 +253,7 @@ export default function About() {
           <h2 className="text-3xl font-bold mb-4">Ready to Start Exploring?</h2>
           <p className="text-gray-300 mb-8 text-lg leading-relaxed">
             Search thousands of destinations, compare deals from trusted partners, and book your
-            next adventure, completely free.
+            next adventure — completely free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
