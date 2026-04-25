@@ -32,9 +32,6 @@ export async function generateMetadata({ params }: any) {
   return {
     title: `Timms Travel | ${continentName}`,
     description: desc,
-    alternates: {
-      canonical: `https://timmstravel.com/locations/${continent}`,
-    },
   }
 }
 

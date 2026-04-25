@@ -204,9 +204,6 @@ export async function generateMetadata({ params }: { params: Promise<RouteParams
   return buildMetadata({
     title,
     description,
-    alternates: {
-      canonical,
-    },
     openGraph: {
       url: canonical,
       title,

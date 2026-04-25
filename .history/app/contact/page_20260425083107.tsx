@@ -11,9 +11,6 @@ export const metadata = {
     template: "Timms Travel |",
   },
   description: "Get in touch with the Timms Travel team. We're here to help with any questions about travel, bookings or anything else.",
-  alternates: {
-    canonical: "https://timmstravel.com/contact",
-  },
   icons: {
     icon: "/favicon.ico",
   },

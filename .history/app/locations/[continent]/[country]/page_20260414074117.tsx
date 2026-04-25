@@ -55,7 +55,7 @@ async function getCities(continentSlug: string, countrySlug: string) {
 // -----------------------------
 export async function generateMetadata({ params }: any) {
   const resolved = await params
-  const { continent, country } = resolved
+  const { country } = resolved
 
   const countryData = await getCountryData(country)
   const countryName = countryData?.name || country
@@ -63,9 +63,6 @@ export async function generateMetadata({ params }: any) {
   return {
     title: `Timms Travel | ${countryName}`,
     description: `Discover the best experiences, attractions, and adventures across ${countryName}.`,
-    alternates: {
-      canonical: `https://timmstravel.com/locations/${continent}/${country}`,
-    },
   }
 }
 

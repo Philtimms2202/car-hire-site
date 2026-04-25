@@ -28,7 +28,7 @@ type CityData = {
 }
 
 // ---------------------------------------------
-// SANITY FETCH (read-only)
+// SANITY FETCH (read‑only)
 // ---------------------------------------------
 async function getCityFromSanity(citySlug: string): Promise<CityData | null> {
   try {
@@ -37,13 +37,7 @@ async function getCityFromSanity(citySlug: string): Promise<CityData | null> {
         _id,
         name,
         slug,
-        country->{
-          name,
-          slug,
-          continent->{
-            slug
-          }
-        },
+        country->{name, slug, continent->{slug}},
         emoji,
         heroDescription,
         aiIntro,
@@ -67,7 +61,7 @@ async function getCityFromSanity(citySlug: string): Promise<CityData | null> {
       continentSlug: city.country?.continent?.slug,
     }
   } catch (err) {
-    console.error('SANITY FETCH ERROR:', err)
+    console.error("SANITY FETCH ERROR:", err)
     return null
   }
 }
@@ -78,11 +72,11 @@ async function getCityFromSanity(citySlug: string): Promise<CityData | null> {
 function getCityFromAirports(citySlug: string): CityData | null {
   const name = citySlug
     .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
 
   const match = (airports as AirportRecord[]).find(
-    (a) => a.city?.toLowerCase() === name.toLowerCase()
+    a => a.city?.toLowerCase() === name.toLowerCase()
   )
 
   if (!match) return null
@@ -95,16 +89,6 @@ function getCityFromAirports(citySlug: string): CityData | null {
 }
 
 // ---------------------------------------------
-// RESOLVER (single source of truth)
-// ---------------------------------------------
-async function resolveCity(citySlug: string): Promise<CityData | null> {
-  const sanityCity = await getCityFromSanity(citySlug)
-  if (sanityCity) return sanityCity
-
-  return getCityFromAirports(citySlug)
-}
-
-// ---------------------------------------------
 // METADATA
 // ---------------------------------------------
 export async function generateMetadata({
@@ -113,34 +97,22 @@ export async function generateMetadata({
   params: Promise<{ city: string }>
 }): Promise<Metadata> {
   const { city } = await params
-  const cityData = await resolveCity(city)
+  const sanityCity = await getCityFromSanity(city)
+  const cityData = sanityCity || getCityFromAirports(city)
 
-  // Fallback metadata (important for invalid routes)
-  if (!cityData) {
-    return {
-      title: 'Hotels | Timms Travel',
-      alternates: {
-        canonical: 'https://timmstravel.com/hotels',
-      },
-    }
-  }
-
-  const url = `https://timmstravel.com/hotels/${city}`
+  if (!cityData) return { title: 'Hotels | Timms Travel' }
 
   return {
     title: `Where to Stay in ${cityData.name} | Timms Travel`,
     description: `Discover the best areas and hotels in ${cityData.name}, ${cityData.country}.`,
-    openGraph: {
-      url,
-    },
     alternates: {
-      canonical: url,
+      canonical: `https://timmstravel.com/hotels/${city}`,
     },
   }
 }
 
 // ---------------------------------------------
-// PAGE (ISR-safe)
+// PAGE (read‑only, ISR‑safe)
 // ---------------------------------------------
 export default async function HotelCityPage({
   params,
@@ -148,11 +120,11 @@ export default async function HotelCityPage({
   params: Promise<{ city: string }>
 }) {
   const { city } = await params
-  const cityData = await resolveCity(city)
 
-  if (!cityData) {
-    redirect('/hotels')
-  }
+  const sanityCity = await getCityFromSanity(city)
+  const cityData = sanityCity || getCityFromAirports(city)
+
+  if (!cityData) redirect('/hotels')
 
   return (
     <HotelCityClient
