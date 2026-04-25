@@ -12,6 +12,8 @@ import { redirect } from 'next/navigation'
 import CityHighlights from '@/app/components/city/CityHighlights'
 
 
+export const revalidate = 0
+
 // Static once AI content is cached in Sanity
 export const revalidate = false
 
