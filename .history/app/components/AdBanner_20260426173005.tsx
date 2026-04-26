@@ -38,11 +38,11 @@ export default function AdBanner() {
 
         {/* AdSense unit - leaderboard / banner format */}
         <ins
-  className="adsbygoogle"
-  style={{ display: 'inline-block', width: '728px', height: '90px' }}
-  data-ad-client="ca-pub-6886846670145470"
-  data-ad-slot="1506572254"
-/>
+          className="adsbygoogle"
+          style={{ display: 'inline-block', width: '728px', height: '90px' }}
+          data-ad-client="ca-pub-6886846670145470"
+          data-ad-slot="YOUR_AD_SLOT_ID"
+        />
       </div>
     </div>
   )
