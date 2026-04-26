@@ -33,6 +33,7 @@ type Destination = {
   country: string
 }
 
+
 type HaulDestination = {
   city: string
   country: string
@@ -41,7 +42,6 @@ type HaulDestination = {
   priceFrom: string
   emoji: string
   slug: string
-  href: string
 }
 
 type PopularRoute = {
@@ -191,7 +191,7 @@ const seasonalBlocks = [
         city: 'Antalya',
         iata: 'AYT',
         slug: 'antalya',
-        continent: 'europe',
+        continent: 'europe', // or 'asia' depending how you structure Turkey
         country: 'turkey',
         temp: '30–36°C',
         rain: 'Very Low',
@@ -274,30 +274,30 @@ const seasonalBlocks = [
 ]
 
 const shortHaul: HaulDestination[] = [
-  { city: 'Amsterdam', country: 'Netherlands', iata: 'AMS', flightTime: '~1h 45m', priceFrom: 'From £39', emoji: '🌷', slug: 'amsterdam', href: '/locations/europe/netherlands/amsterdam' },
-  { city: 'Paris',     country: 'France',      iata: 'CDG', flightTime: '~1h 45m', priceFrom: 'From £45', emoji: '🗼', slug: 'paris',     href: '/locations/europe/france/paris'           },
-  { city: 'Dublin',    country: 'Ireland',     iata: 'DUB', flightTime: '~1h 20m', priceFrom: 'From £29', emoji: '🍀', slug: 'dublin',    href: '/locations/europe/ireland/dublin'         },
-  { city: 'Barcelona', country: 'Spain',       iata: 'BCN', flightTime: '~2h 15m', priceFrom: 'From £49', emoji: '⛪', slug: 'barcelona', href: '/locations/europe/spain/barcelona'        },
-  { city: 'Lisbon',    country: 'Portugal',    iata: 'LIS', flightTime: '~2h 30m', priceFrom: 'From £55', emoji: '🌊', slug: 'lisbon',    href: '/locations/europe/portugal/lisbon'        },
-  { city: 'Rome',      country: 'Italy',       iata: 'FCO', flightTime: '~2h 45m', priceFrom: 'From £59', emoji: '🏛️', slug: 'rome',     href: '/locations/europe/italy/rome'             },
+  { city: 'Amsterdam', country: 'Netherlands', iata: 'AMS', flightTime: '~1h 45m', priceFrom: 'From £39', emoji: '🌷', slug: 'amsterdam' },
+  { city: 'Paris',     country: 'France',      iata: 'CDG', flightTime: '~1h 45m', priceFrom: 'From £45', emoji: '🗼', slug: 'paris'     },
+  { city: 'Dublin',    country: 'Ireland',     iata: 'DUB', flightTime: '~1h 20m', priceFrom: 'From £29', emoji: '🍀', slug: 'dublin'    },
+  { city: 'Barcelona', country: 'Spain',       iata: 'BCN', flightTime: '~2h 15m', priceFrom: 'From £49', emoji: '⛪', slug: 'barcelona' },
+  { city: 'Lisbon',    country: 'Portugal',    iata: 'LIS', flightTime: '~2h 30m', priceFrom: 'From £55', emoji: '🌊', slug: 'lisbon'    },
+  { city: 'Rome',      country: 'Italy',       iata: 'FCO', flightTime: '~2h 45m', priceFrom: 'From £59', emoji: '🏛️', slug: 'rome'     },
 ]
 
 const midHaul: HaulDestination[] = [
-  { city: 'Dubai',     country: 'UAE',     iata: 'DXB', flightTime: '~7h',     priceFrom: 'From £299', emoji: '🌆', slug: 'dubai',     href: '/locations/middle-east/uae/dubai'       },
-  { city: 'New York',  country: 'USA',     iata: 'JFK', flightTime: '~8h',     priceFrom: 'From £349', emoji: '🗽', slug: 'new-york',  href: '/locations/north-america/usa/new-york'  },
-  { city: 'Marrakech', country: 'Morocco', iata: 'RAK', flightTime: '~3h 30m', priceFrom: 'From £89',  emoji: '🕌', slug: 'marrakech', href: '/locations/africa/morocco/marrakech'    },
-  { city: 'Cairo',     country: 'Egypt',   iata: 'CAI', flightTime: '~5h',     priceFrom: 'From £199', emoji: '🐫', slug: 'cairo',     href: '/locations/africa/egypt/cairo'          },
-  { city: 'Istanbul',  country: 'Turkey',  iata: 'IST', flightTime: '~4h',     priceFrom: 'From £129', emoji: '🕍', slug: 'istanbul',  href: '/locations/europe/turkey/istanbul'      },
-  { city: 'Tenerife',  country: 'Spain',   iata: 'TFS', flightTime: '~4h 30m', priceFrom: 'From £149', emoji: '🌋', slug: 'tenerife',  href: '/locations/europe/spain/tenerife'       },
+  { city: 'Dubai',     country: 'UAE',     iata: 'DXB', flightTime: '~7h',     priceFrom: 'From £299', emoji: '🌆', slug: 'dubai'     },
+  { city: 'New York',  country: 'USA',     iata: 'JFK', flightTime: '~8h',     priceFrom: 'From £349', emoji: '🗽', slug: 'new-york'  },
+  { city: 'Marrakech', country: 'Morocco', iata: 'RAK', flightTime: '~3h 30m', priceFrom: 'From £89',  emoji: '🕌', slug: 'marrakech' },
+  { city: 'Cairo',     country: 'Egypt',   iata: 'CAI', flightTime: '~5h',     priceFrom: 'From £199', emoji: '🐫', slug: 'cairo'     },
+  { city: 'Istanbul',  country: 'Turkey',  iata: 'IST', flightTime: '~4h',     priceFrom: 'From £129', emoji: '🕍', slug: 'istanbul'  },
+  { city: 'Tenerife',  country: 'Spain',   iata: 'TFS', flightTime: '~4h 30m', priceFrom: 'From £149', emoji: '🌋', slug: 'tenerife'  },
 ]
 
 const longHaul: HaulDestination[] = [
-  { city: 'Bangkok',     country: 'Thailand',     iata: 'BKK', flightTime: '~11h', priceFrom: 'From £499', emoji: '🛕', slug: 'bangkok',     href: '/locations/asia/thailand/bangkok'          },
-  { city: 'Singapore',   country: 'Singapore',    iata: 'SIN', flightTime: '~13h', priceFrom: 'From £549', emoji: '🦁', slug: 'singapore',   href: '/locations/asia/singapore/singapore'       },
-  { city: 'Los Angeles', country: 'USA',          iata: 'LAX', flightTime: '~11h', priceFrom: 'From £499', emoji: '🎬', slug: 'los-angeles', href: '/locations/north-america/usa/los-angeles'  },
-  { city: 'Tokyo',       country: 'Japan',        iata: 'NRT', flightTime: '~12h', priceFrom: 'From £599', emoji: '🗾', slug: 'tokyo',       href: '/locations/asia/japan/tokyo'               },
-  { city: 'Sydney',      country: 'Australia',    iata: 'SYD', flightTime: '~22h', priceFrom: 'From £799', emoji: '🦘', slug: 'sydney',      href: '/locations/oceania/australia/sydney'       },
-  { city: 'Cape Town',   country: 'South Africa', iata: 'CPT', flightTime: '~11h', priceFrom: 'From £549', emoji: '🌍', slug: 'cape-town',   href: '/locations/africa/south-africa/cape-town'  },
+  { city: 'Bangkok',     country: 'Thailand',      iata: 'BKK', flightTime: '~11h', priceFrom: 'From £499', emoji: '🛕', slug: 'bangkok'     },
+  { city: 'Singapore',   country: 'Singapore',     iata: 'SIN', flightTime: '~13h', priceFrom: 'From £549', emoji: '🦁', slug: 'singapore'   },
+  { city: 'Los Angeles', country: 'USA',           iata: 'LAX', flightTime: '~11h', priceFrom: 'From £499', emoji: '🎬', slug: 'los-angeles' },
+  { city: 'Tokyo',       country: 'Japan',         iata: 'NRT', flightTime: '~12h', priceFrom: 'From £599', emoji: '🗾', slug: 'tokyo'       },
+  { city: 'Sydney',      country: 'Australia',     iata: 'SYD', flightTime: '~22h', priceFrom: 'From £799', emoji: '🦘', slug: 'sydney'      },
+  { city: 'Cape Town',   country: 'South Africa',  iata: 'CPT', flightTime: '~11h', priceFrom: 'From £549', emoji: '🌍', slug: 'cape-town'   },
 ]
 
 const popularRoutes: PopularRoute[] = [
@@ -398,33 +398,35 @@ const allRoutesIndex = [
   { label: 'Dublin to Manchester',     href: '/flights/dub/man/dublin-to-manchester'     },
 ]
 
-// Quick-link destination index - crawlable links to /locations/[continent]/[country]/[city]
+// Quick-link destination index - crawlable links to /destinations/[slug]
 const allDestinationsIndex = [
-  { label: 'Flights to Amsterdam',   href: '/locations/europe/netherlands/amsterdam'      },
-  { label: 'Flights to Antalya',     href: '/locations/europe/turkey/antalya'             },
-  { label: 'Flights to Bangkok',     href: '/locations/asia/thailand/bangkok'             },
-  { label: 'Flights to Barcelona',   href: '/locations/europe/spain/barcelona'            },
-  { label: 'Flights to Budapest',    href: '/locations/europe/hungary/budapest'           },
-  { label: 'Flights to Cairo',       href: '/locations/africa/egypt/cairo'                },
-  { label: 'Flights to Cape Town',   href: '/locations/africa/south-africa/cape-town'    },
-  { label: 'Flights to Dubai',       href: '/locations/middle-east/uae/dubai'            },
-  { label: 'Flights to Dublin',      href: '/locations/europe/ireland/dublin'             },
-  { label: 'Flights to Malaga',      href: '/locations/europe/spain/malaga'              },
-  { label: 'Flights to Istanbul',    href: '/locations/europe/turkey/istanbul'            },
-  { label: 'Flights to Lisbon',      href: '/locations/europe/portugal/lisbon'            },
-  { label: 'Flights to London',      href: '/locations/europe/united-kingdom/london'      },
-  { label: 'Flights to Los Angeles', href: '/locations/north-america/usa/los-angeles'    },
-  { label: 'Flights to Marrakech',   href: '/locations/africa/morocco/marrakech'          },
-  { label: 'Flights to New York',    href: '/locations/north-america/usa/new-york'        },
-  { label: 'Flights to Orlando',     href: '/locations/north-america/usa/orlando'         },
-  { label: 'Flights to Paris',       href: '/locations/europe/france/paris'               },
-  { label: 'Flights to Prague',      href: '/locations/europe/czech-republic/prague'      },
-  { label: 'Flights to Rome',        href: '/locations/europe/italy/rome'                 },
-  { label: 'Flights to Singapore',   href: '/locations/asia/singapore/singapore'          },
-  { label: 'Flights to Sydney',      href: '/locations/oceania/australia/sydney'          },
-  { label: 'Flights to Tenerife',    href: '/locations/europe/spain/tenerife'             },
-  { label: 'Flights to Tokyo',       href: '/locations/asia/japan/tokyo'                  },
+  { label: 'Flights to Amsterdam',   href: '/locations/europe/netherlands/amsterdam' },
+  { label: 'Flights to Antalya',     href: '/locations/europe/turkey/antalya' },
+  { label: 'Flights to Bangkok',     href: '/locations/asia/thailand/bangkok' },
+  { label: 'Flights to Barcelona',   href: '/locations/europe/spain/barcelona' },
+  { label: 'Flights to Budapest',    href: '/locations/europe/hungary/budapest' },
+  { label: 'Flights to Cairo',       href: '/locations/africa/egypt/cairo' },
+  { label: 'Flights to Cape Town',   href: '/locations/africa/south-africa/cape-town' },
+  { label: 'Flights to Cape Town',  href: '/locations/africa/south-africa/cape-town' },
+  { label: 'Flights to Dubai',       href: '/locations/middle-east/uae/abu-dhabi' },
+  { label: 'Flights to Dublin',      href: '/locations/europe/united-kingdom/dublin' },
+  { label: 'Flights to Malaga',       href: '/locations/europe/spain/malaga' },
+  { label: 'Flights to Istanbul',    href: '/locations/europe/turkey/istanbul' },
+  { label: 'Flights to Lisbon',      href: '/locations/europe/portugal/lisbon' },
+  { label: 'Flights to London',      href: '/locations/europe/united-kingdom/london' },
+  { label: 'Flights to Los Angeles', href: '/locations/north-america/usa/los-angeles' },
+  { label: 'Flights to Marrakech',   href: '/locations/africa/morocco/marrakech' },
+  { label: 'Flights to New York',    href: '/locations/north-america/usa/new-york' },
+  { label: 'Flights to Orlando',     href: '/locations/north-america/usa/orlando' },
+  { label: 'Flights to Paris',       href: '/locations/europe/france/paris' },
+  { label: 'Flights to Prague',      href: '/locations/europe/czech-republic/prague' },
+  { label: 'Flights to Rome',        href: '/locations/europe/italy/rome' },
+  { label: 'Flights to Singapore',   href: '/locations/asia/singapore/singapore' },
+  { label: 'Flights to Sydney',      href: '/locations/oceania/australia/sydney' },
+  { label: 'Flights to Tenerife',    href: '/locations/europe/spain/tenerife' },
+  { label: 'Flights to Tokyo',       href: '/locations/asia/japan/tokyo' },
 ]
+
 
 // -----------------------------
 // JSON-LD SCHEMAS
@@ -700,6 +702,7 @@ export default function FlightsPageClient() {
     )
   }
 
+  // Opens Kiwi for haul / featured / seasonal cards
   const openRoute = (destIata: string) => {
     if (!originAirport) { alert('Choose a departure airport first.'); return }
     const url = buildTrackedKiwiUrl({
@@ -767,87 +770,98 @@ export default function FlightsPageClient() {
           </ol>
         </nav>
 
-        {/* ── HERO ───────────────────────────────────────────────────────────── */}
-        <section
-          className="relative overflow-hidden text-white py-24 px-6 text-center"
-          aria-labelledby="hero-heading"
+ {/* ── HERO ───────────────────────────────────────────────────────────── */}
+<section
+  className="relative overflow-hidden text-white py-24 px-6 text-center"
+  aria-labelledby="hero-heading"
+>
+  <NextImage
+    src="https://images.unsplash.com/photo-1532364158125-02d75a0f7fb9?q=80&w=1548"
+    alt="View from an airplane window above the clouds on a clear day"
+    fill
+    className="object-cover object-[center_30%]"
+    priority
+  />
+
+  {/* Dark overlay */}
+  <div className="absolute inset-0 bg-[#232e4e]/75 z-0" aria-hidden="true" />
+
+  {/* Content container */}
+  <div className="relative z-10 max-w-4xl mx-auto">
+    {/* Label */}
+    <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
+      Timms Travel
+    </p>
+
+    {/* Heading */}
+    <h1
+      id="hero-heading"
+      className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight"
+    >
+      Compare Flights Worldwide
+    </h1>
+
+    {/* Subheading */}
+    <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
+      Search hundreds of airlines and find cheap flights to over 700 destinations from UK airports – with no hidden fees.
+    </p>
+
+    {/* ── SEARCH TABS ── */}
+    <nav
+      aria-label="Search type"
+      className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto"
+    >
+      {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+        <button
+          key={tab}
+          onClick={() => setActiveTab(tab)}
+          aria-pressed={activeTab === tab}
+          aria-label={`Search ${tab}`}
+          className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+            activeTab === tab
+              ? 'bg-white text-[#232e4e] shadow-sm'
+              : 'text-gray-300 hover:text-white'
+          }`}
         >
-          <NextImage
-            src="https://images.unsplash.com/photo-1532364158125-02d75a0f7fb9?q=80&w=1548"
-            alt="View from an airplane window above the clouds on a clear day"
-            fill
-            className="object-cover object-[center_30%]"
-            priority
-          />
-          <div className="absolute inset-0 bg-[#232e4e]/75 z-0" aria-hidden="true" />
-          <div className="relative z-10 max-w-4xl mx-auto">
-            <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-              Timms Travel
-            </p>
-            <h1
-              id="hero-heading"
-              className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight"
-            >
-              Compare Flights Worldwide
-            </h1>
-            <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
-              Search hundreds of airlines and find cheap flights to over 700 destinations from UK airports – with no hidden fees.
-            </p>
+          {tab}
+        </button>
+      ))}
+    </nav>
 
-            {/* ── SEARCH TABS ── */}
-            <nav
-              aria-label="Search type"
-              className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto"
-            >
-              {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  aria-pressed={activeTab === tab}
-                  aria-label={`Search ${tab}`}
-                  className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
-                    activeTab === tab
-                      ? 'bg-white text-[#232e4e] shadow-sm'
-                      : 'text-gray-300 hover:text-white'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </nav>
+    {/* ── SEARCH WIDGET (IDENTICAL TO HOMEPAGE) ── */}
+    <div
+      className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black"
+      role="search"
+      aria-label="Travel search"
+    >
+      {activeTab === 'flights'     && <FlightSearch />}
+      {activeTab === 'hotels'      && <HotelSearch />}
+      {activeTab === 'experiences' && <ExperienceSearch />}
+      {activeTab === 'cars'        && (
+        <CarSearch
+          pickupLocation={pickupLocation}
+          pickupDate={pickupDate}
+          dropoffDate={dropoffDate}
+          setPickupLocation={setPickupLocation}
+          setPickupDate={setPickupDate}
+          setDropoffDate={setDropoffDate}
+          loading={loading}
+          onSearch={handleCarSearch}
+        />
+      )}
+    </div>
 
-            <div
-              className="bg-white rounded-2xl p-6 max-w-4xl mx-auto shadow-xl text-black"
-              role="search"
-              aria-label="Travel search"
-            >
-              {activeTab === 'flights'     && <FlightSearch />}
-              {activeTab === 'hotels'      && <HotelSearch />}
-              {activeTab === 'experiences' && <ExperienceSearch />}
-              {activeTab === 'cars'        && (
-                <CarSearch
-                  pickupLocation={pickupLocation}
-                  pickupDate={pickupDate}
-                  dropoffDate={dropoffDate}
-                  setPickupLocation={setPickupLocation}
-                  setPickupDate={setPickupDate}
-                  setDropoffDate={setDropoffDate}
-                  loading={loading}
-                  onSearch={handleCarSearch}
-                />
-              )}
-            </div>
-
-            <p
-              className="flex justify-center gap-8 mt-8 text-sm text-gray-300"
-              aria-label="Trust signals"
-            >
-              <span>Fully Bespoke Offers</span>
-              <span>No hidden fees</span>
-              <span>Competitive price guarantee</span>
-            </p>
-          </div>
-        </section>
+    {/* Trust signals */}
+    <p
+      className="flex justify-center gap-8 mt-8 text-sm text-gray-300"
+      aria-label="Trust signals"
+    >
+      <span>Fully Bespoke Offers</span>
+      <span>No hidden fees</span>
+      <span>Competitive price guarantee</span>
+    </p>
+  </div>
+</section>
 
         {/* ── STATS STRIP ────────────────────────────────────────────────────── */}
         <section style={{ backgroundColor: '#1a2540' }} className="py-6 px-6" aria-label="Timms Travel at a glance">
@@ -876,6 +890,7 @@ export default function FlightsPageClient() {
               Browse by flight duration - from quick European hops to epic long-haul adventures.
             </p>
 
+            {/* Haul toggle */}
             <nav aria-label="Flight duration category" className="flex flex-wrap justify-center gap-2 mb-8">
               {(['short', 'mid', 'long'] as const).map(h => (
                 <button
@@ -912,8 +927,9 @@ export default function FlightsPageClient() {
                     <div className="flex items-center gap-3">
                       <span className="text-3xl" aria-hidden="true">{dest.emoji}</span>
                       <div>
+                        {/* Internal destination link */}
                         <Link
-                          href={dest.href}
+                          href={`/locations/${dest.continent}/${dest.country_slug}/${dest.slug}`}
                           className="font-bold text-lg leading-tight hover:underline"
                           style={{ color: '#232e4e' }}
                           title={`Explore ${dest.city} - flights, hotels & travel guide`}
@@ -977,6 +993,7 @@ export default function FlightsPageClient() {
                     </span>
                   </div>
 
+                  {/* Crawlable <Link> - primary internal link for this route */}
                   <Link
                     href={route.internalSlug}
                     className="block font-bold text-lg mb-1 hover:underline"
@@ -1003,7 +1020,7 @@ export default function FlightsPageClient() {
               ))}
             </ul>
 
-            {/* ── ALL ROUTES INDEX ── */}
+            {/* ── ALL ROUTES INDEX (crawlable anchor grid) ── */}
             <div className="mt-14 border-t border-gray-100 pt-10">
               <h3 className="text-xl font-bold mb-5 text-center" style={{ color: '#232e4e' }}>
                 Browse All Flight Routes from the UK
@@ -1027,150 +1044,156 @@ export default function FlightsPageClient() {
           </div>
         </section>
 
-        {/* ── FEATURED DESTINATIONS ──────────────────────────────────────────── */}
-        <section className="py-16 px-6 bg-gray-50" aria-labelledby="featured-heading" id="featured-destinations">
-          <div className="max-w-6xl mx-auto">
-            <h2 id="featured-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
-              Featured Destinations
-            </h2>
-            <p className="text-center text-gray-500 mb-10">
-              Hand-picked favourites - explore destination guides or search live flights instantly.
-            </p>
+{/* ── FEATURED DESTINATIONS ──────────────────────────────────────────── */}
+<section className="py-16 px-6 bg-gray-50" aria-labelledby="featured-heading" id="featured-destinations">
+  <div className="max-w-6xl mx-auto">
+    <h2 id="featured-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+      Featured Destinations
+    </h2>
+    <p className="text-center text-gray-500 mb-10">
+      Hand-picked favourites - explore destination guides or search live flights instantly.
+    </p>
 
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-label="Featured travel destinations">
-              {featuredDestinations.map(dest => {
-                const url = `/locations/${dest.continent}/${dest.country}/${dest.slug}`
-                return (
-                  <li key={dest.iata} className="bg-white rounded-2xl shadow-md p-5 hover:shadow-xl transition">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-3xl" aria-hidden="true">{dest.emoji}</span>
-                      <div>
-                        <Link
-                          href={url}
-                          className="font-bold text-lg block hover:underline"
-                          style={{ color: '#232e4e' }}
-                          title={dest.description}
-                        >
-                          {dest.city}
-                        </Link>
-                        <p className="text-xs text-gray-400">
-                          <Link
-                            href={url}
-                            className="hover:underline text-teal-600 font-medium"
-                            title={`${dest.city} travel guide - things to do, hotels & flights`}
-                          >
-                            Destination guide →
-                          </Link>
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => openRoute(dest.iata)}
-                      aria-label={`Search live flights to ${dest.city}`}
-                      className="text-blue-600 font-semibold hover:underline disabled:opacity-60 text-sm"
-                      disabled={!originAirport}
-                    >
-                      {originAirport
-                        ? `View flights from ${originAirport.iata_code} →`
-                        : 'Choose a departure airport above'}
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
+    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-label="Featured travel destinations">
+      {featuredDestinations.map(dest => {
+        const url = `/locations/${dest.continent}/${dest.country}/${dest.slug}`
 
-            {/* ── ALL DESTINATIONS INDEX ── */}
-            <div className="mt-14 border-t border-gray-100 pt-10">
-              <h3 className="text-xl font-bold mb-5 text-center" style={{ color: '#232e4e' }}>
-                Browse All Destinations
-              </h3>
-              <nav aria-label="All flight destinations directory">
-                <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                  {allDestinationsIndex.map(dest => (
-                    <li key={dest.href}>
-                      <Link
-                        href={dest.href}
-                        className="block text-sm text-blue-700 hover:text-blue-900 hover:underline py-1 px-2 rounded transition-colors"
-                        title={`${dest.label} - travel guide, hotels & best prices`}
-                      >
-                        {dest.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+        return (
+          <li key={dest.iata} className="bg-white rounded-2xl shadow-md p-5 hover:shadow-xl transition">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-3xl" aria-hidden="true">{dest.emoji}</span>
+              <div>
+                <Link
+                  href={url}
+                  className="font-bold text-lg block hover:underline"
+                  style={{ color: '#232e4e' }}
+                  title={dest.description}
+                >
+                  {dest.city}
+                </Link>
+
+                <p className="text-xs text-gray-400">
+                  <Link
+                    href={url}
+                    className="hover:underline text-teal-600 font-medium"
+                    title={`${dest.city} travel guide - things to do, hotels & flights`}
+                  >
+                    Destination guide →
+                  </Link>
+                </p>
+              </div>
             </div>
-          </div>
-        </section>
 
-        {/* ── DESTINATIONS BY SEASON ─────────────────────────────────────────── */}
-        <section className="py-16 px-6 bg-white" aria-labelledby="seasonal-heading" id="destinations-by-season">
-          <div className="max-w-6xl mx-auto">
-            <h2 id="seasonal-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
-              Destinations by Season
-            </h2>
-            <p className="text-center text-gray-500 mb-10">
-              Find the perfect place to fly depending on the time of year.
-            </p>
+            <button
+              type="button"
+              onClick={() => openRoute(dest.iata)}
+              aria-label={`Search live flights to ${dest.city}`}
+              className="text-blue-600 font-semibold hover:underline disabled:opacity-60 text-sm"
+              disabled={!originAirport}
+            >
+              {originAirport
+                ? `View flights from ${originAirport.iata_code} →`
+                : 'Choose a departure airport above'}
+            </button>
+          </li>
+        )
+      })}
+    </ul>
 
-            {seasonalBlocks.map(({ season, emoji, items }) => (
-              <article key={season} className="mb-14" aria-label={`${season} destinations`}>
-                <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2" style={{ color: '#232e4e' }}>
-                  <span aria-hidden="true">{emoji}</span> Best Destinations in {season}
-                </h3>
+    {/* ── ALL DESTINATIONS INDEX ── */}
+    <div className="mt-14 border-t border-gray-100 pt-10">
+      <h3 className="text-xl font-bold mb-5 text-center" style={{ color: '#232e4e' }}>
+        Browse All Destinations
+      </h3>
+      <nav aria-label="All flight destinations directory">
+        <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {allDestinationsIndex.map(dest => (
+            <li key={dest.href}>
+              <Link
+                href={dest.href}
+                className="block text-sm text-blue-700 hover:text-blue-900 hover:underline py-1 px-2 rounded transition-colors"
+                title={`${dest.label} - travel guide, hotels & best prices`}
+              >
+                {dest.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</section>
 
-                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {items.map(dest => {
-                    const url = `/locations/${dest.continent}/${dest.country}/${dest.slug}`
-                    return (
-                      <li
-                        key={dest.iata}
-                        className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition"
-                      >
-                        <Link
-                          href={url}
-                          className="font-bold text-xl mb-2 block hover:underline"
-                          style={{ color: '#232e4e' }}
-                          title={`${dest.city} in ${season} - travel guide & cheap flights`}
-                        >
-                          {dest.city}
-                        </Link>
+{/* ── DESTINATIONS BY SEASON ─────────────────────────────────────────── */}
+<section className="py-16 px-6 bg-white" aria-labelledby="seasonal-heading" id="destinations-by-season">
+  <div className="max-w-6xl mx-auto">
+    <h2 id="seasonal-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+      Destinations by Season
+    </h2>
+    <p className="text-center text-gray-500 mb-10">
+      Find the perfect place to fly depending on the time of year.
+    </p>
 
-                        <div className="text-sm text-gray-600 space-y-1 mb-4">
-                          <p><strong>Avg Temp:</strong> {dest.temp}</p>
-                          <p><strong>Rainfall:</strong> {dest.rain}</p>
-                          <p><strong>Sunshine:</strong> {dest.sun}</p>
-                        </div>
+    {seasonalBlocks.map(({ season, emoji, items }) => (
+      <article key={season} className="mb-14" aria-label={`${season} destinations`}>
+        <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2" style={{ color: '#232e4e' }}>
+          <span aria-hidden="true">{emoji}</span> Best Destinations in {season}
+        </h3>
 
-                        <div className="flex flex-col gap-2">
-                          <button
-                            type="button"
-                            onClick={() => openRoute(dest.iata)}
-                            aria-label={`Search flights to ${dest.city} in ${season}`}
-                            className="text-blue-600 font-semibold hover:underline disabled:opacity-60 text-sm"
-                            disabled={!originAirport}
-                          >
-                            {originAirport
-                              ? `View flights from ${originAirport.iata_code} →`
-                              : 'Choose a departure airport above'}
-                          </button>
-                          <Link
-                            href={url}
-                            className="text-teal-600 text-sm font-medium hover:underline"
-                            title={`${dest.city} ${season} travel guide`}
-                          >
-                            Read destination guide →
-                          </Link>
-                        </div>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </section>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.map(dest => {
+            const url = `/locations/${dest.continent}/${dest.country}/${dest.slug}`
+
+            return (
+              <li
+                key={dest.iata}
+                className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition"
+              >
+                <Link
+                  href={url}
+                  className="font-bold text-xl mb-2 block hover:underline"
+                  style={{ color: '#232e4e' }}
+                  title={`${dest.city} in ${season} - travel guide & cheap flights`}
+                >
+                  {dest.city}
+                </Link>
+
+                <div className="text-sm text-gray-600 space-y-1 mb-4">
+                  <p><strong>Avg Temp:</strong> {dest.temp}</p>
+                  <p><strong>Rainfall:</strong> {dest.rain}</p>
+                  <p><strong>Sunshine:</strong> {dest.sun}</p>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <button
+                    type="button"
+                    onClick={() => openRoute(dest.iata)}
+                    aria-label={`Search flights to ${dest.city} in ${season}`}
+                    className="text-blue-600 font-semibold hover:underline disabled:opacity-60 text-sm"
+                    disabled={!originAirport}
+                  >
+                    {originAirport
+                      ? `View flights from ${originAirport.iata_code} →`
+                      : 'Choose a departure airport above'}
+                  </button>
+
+                  <Link
+                    href={url}
+                    className="text-teal-600 text-sm font-medium hover:underline"
+                    title={`${dest.city} ${season} travel guide`}
+                  >
+                    Read destination guide →
+                  </Link>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      </article>
+    ))}
+  </div>
+</section>
+
 
         {/* ── FLIGHT TIPS / FAQ ──────────────────────────────────────────────── */}
         <section className="py-16 px-6" style={{ backgroundColor: '#f0f4ff' }} aria-labelledby="tips-heading" id="flight-tips">
@@ -1182,6 +1205,7 @@ export default function FlightsPageClient() {
               Everything you need to know before you fly - from booking to boarding.
             </p>
 
+            {/* Rendered as a list so each tip is semantically distinct - matches FAQPage schema */}
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-label="Flight tips and frequently asked questions">
               {flightTips.map(tip => (
                 <li
@@ -1201,7 +1225,7 @@ export default function FlightsPageClient() {
           </div>
         </section>
 
-        {/* ── RELATED PAGES ──────────────────────────────────────────────────── */}
+        {/* ── RELATED PAGES / INTERNAL LINKS HUB ────────────────────────────── */}
         <section className="py-12 px-6 bg-white border-t border-gray-100" aria-labelledby="explore-heading">
           <div className="max-w-6xl mx-auto">
             <h2 id="explore-heading" className="text-2xl font-bold text-center mb-8" style={{ color: '#232e4e' }}>
@@ -1231,7 +1255,7 @@ export default function FlightsPageClient() {
                   {
                     title: 'Travel Guides',
                     description: 'In-depth destination guides to help you plan every part of your trip.',
-                    href: '/locations',
+                    href: '/destinations',
                     icon: '🗺️',
                   },
                 ].map(item => (
@@ -1255,101 +1279,103 @@ export default function FlightsPageClient() {
         </section>
 
         {/* ── FAQ: WHY BOOK WITH TIMMS TRAVEL ───────────────────────────────── */}
-        <section className="py-16 px-6 bg-gray-50 border-t border-gray-100" aria-labelledby="faq-heading" id="why-book">
-          <div className="max-w-4xl mx-auto">
-            <h2 id="faq-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
-              Why book flights with Timms Travel?
-            </h2>
-            <p className="text-center text-gray-500 mb-10">
-              A few common questions about how we help you find the best flights.
-            </p>
+<section className="py-16 px-6 bg-gray-50 border-t border-gray-100" aria-labelledby="faq-heading" id="why-book">
+  <div className="max-w-4xl mx-auto">
+    <h2 id="faq-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+      Why book flights with Timms Travel?
+    </h2>
+    <p className="text-center text-gray-500 mb-10">
+      A few common questions about how we help you find the best flights.
+    </p>
 
-            <div className="space-y-4">
-              <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
-                  How does Timms Travel find cheap flights?
-                  <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                  We compare hundreds of airlines and travel providers in seconds, bringing together prices from budget carriers and full-service airlines in one place. That means you can quickly see the best options without having to check multiple websites yourself.
-                </p>
-              </details>
+    <div className="space-y-4">
 
-              <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
-                  Are there any hidden fees?
-                  <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                  No - what you see is what you pay. We aim to show the full price upfront, including taxes and charges, so there are no surprises when you go to book.
-                </p>
-              </details>
+      <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+        <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
+          How does Timms Travel find cheap flights?
+          <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
+        </summary>
+        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+          We compare hundreds of airlines and travel providers in seconds, bringing together prices from budget carriers and full-service airlines in one place. That means you can quickly see the best options without having to check multiple websites yourself.
+        </p>
+      </details>
 
-              <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
-                  Do I book directly with Timms Travel?
-                  <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                  Timms Travel helps you find the best deal, then sends you to a trusted airline or travel provider to complete your booking securely. This way, you benefit from competitive pricing and book directly with the company operating your trip.
-                </p>
-              </details>
+      <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+        <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
+          Are there any hidden fees?
+          <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
+        </summary>
+        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+          No - what you see is what you pay. We aim to show the full price upfront, including taxes and charges, so there are no surprises when you go to book.
+        </p>
+      </details>
 
-              <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
-                  Can I search flights from my nearest airport?
-                  <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                  Yes - you can either type your departure airport or use your current location to find the closest one. We support hundreds of UK and international airports, making it easy to start your journey wherever you are.
-                </p>
-              </details>
+      <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+        <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
+          Do I book directly with Timms Travel?
+          <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
+        </summary>
+        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+          Timms Travel helps you find the best deal, then sends you to a trusted airline or travel provider to complete your booking securely. This way, you benefit from competitive pricing and book directly with the company operating your trip.
+        </p>
+      </details>
 
-              <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
-                  Why use Timms Travel instead of going direct?
-                  <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                  Going direct means checking one airline at a time. We bring everything together - routes, prices, and options - so you can compare quickly and make a confident choice without missing a better deal elsewhere.
-                </p>
-              </details>
+      <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+        <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
+          Can I search flights from my nearest airport?
+          <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
+        </summary>
+        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+          Yes - you can either type your departure airport or use your current location to find the closest one. We support hundreds of UK and international airports, making it easy to start your journey wherever you are.
+        </p>
+      </details>
 
-              <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
-                  Is Timms Travel free to use?
-                  <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">
-                  Yes, our flight search is completely free. We earn a small commission from partners when you book, which helps us keep the service running without charging you anything extra.
-                </p>
-              </details>
-            </div>
-          </div>
-        </section>
+      <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+        <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
+          Why use Timms Travel instead of going direct?
+          <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
+        </summary>
+        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+          Going direct means checking one airline at a time. We bring everything together - routes, prices, and options - so you can compare quickly and make a confident choice without missing a better deal elsewhere.
+        </p>
+      </details>
 
-        {/* ── CTA BANNER ─────────────────────────────────────────────────────── */}
-        <section
-          className="py-16 px-6 text-center text-white"
-          style={{ backgroundColor: '#232e4e' }}
-          aria-labelledby="cta-heading"
-        >
-          <div className="max-w-2xl mx-auto">
-            <h2 id="cta-heading" className="text-3xl font-bold mb-4">Ready to take off?</h2>
-            <p className="text-gray-300 mb-8">
-              Use our search above to compare hundreds of airlines and find the best price for your next adventure.
-              No hidden fees. No surprises.
-            </p>
-            <Link
-              href="/flights/search"
-              aria-label="Search flights with Timms Travel"
-              className="inline-block px-8 py-3 rounded-full font-semibold text-sm transition-all hover:opacity-90"
-              style={{ backgroundColor: '#2dd4bf', color: '#232e4e' }}
-            >
-              Search Flights Now →
-            </Link>
-          </div>
-        </section>
+      <details className="group bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+        <summary className="cursor-pointer font-semibold text-lg flex justify-between items-center" style={{ color: '#232e4e' }}>
+          Is Timms Travel free to use?
+          <span className="ml-2 text-gray-400 group-open:rotate-180 transition">⌄</span>
+        </summary>
+        <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+          Yes, our flight search is completely free. We earn a small commission from partners when you book, which helps us keep the service running without charging you anything extra.
+        </p>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+{/* ── CTA BANNER ─────────────────────────────────────────────────────── */}
+<section
+  className="py-16 px-6 text-center text-white"
+  style={{ backgroundColor: '#232e4e' }}
+  aria-labelledby="cta-heading"
+>
+  <div className="max-w-2xl mx-auto">
+    <h2 id="cta-heading" className="text-3xl font-bold mb-4">Ready to take off?</h2>
+    <p className="text-gray-300 mb-8">
+      Use our search above to compare hundreds of airlines and find the best price for your next adventure.
+      No hidden fees. No surprises.
+    </p>
+    <Link
+      href="/flights/search"
+      aria-label="Search flights with Timms Travel"
+      className="inline-block px-8 py-3 rounded-full font-semibold text-sm transition-all hover:opacity-90"
+      style={{ backgroundColor: '#2dd4bf', color: '#232e4e' }}
+    >
+      Search Flights Now →
+    </Link>
+  </div>
+</section>
 
         <Footer />
       </main>

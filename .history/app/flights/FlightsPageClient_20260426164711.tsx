@@ -1231,7 +1231,7 @@ export default function FlightsPageClient() {
                   {
                     title: 'Travel Guides',
                     description: 'In-depth destination guides to help you plan every part of your trip.',
-                    href: '/locations',
+                    href: '/destinations',
                     icon: '🗺️',
                   },
                 ].map(item => (
