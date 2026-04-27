@@ -14,7 +14,6 @@ const AD_EXCLUDED_PATHS = [
 ]
 
 export default function AdBanner() {
-  return null // ← add this line to disable ads
   const [dismissed, setDismissed] = useState(false)
   const pathname = usePathname()
 
