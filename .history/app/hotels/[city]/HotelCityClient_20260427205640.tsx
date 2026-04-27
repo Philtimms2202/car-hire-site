@@ -486,71 +486,37 @@ export default function HotelCityClient(props: Props) {
         </section>
       )}
 
-{/* ── WHEN TO VISIT ─────────────────────────────────────────────── */}
-{aiWhenToVisit && (
-  <section
-    id="when"
-    className="py-14 px-6 bg-gray-50 border-t border-gray-100"
-  >
-    <div className="max-w-5xl mx-auto grid md:grid-cols-[3fr,2fr] gap-10 items-start">
-
-      {/* LEFT COLUMN — TEXT */}
-      <div>
-        <SectionLabel>Timing your trip</SectionLabel>
-        <H2>When to visit {cityName}</H2>
-
-        <div className="mt-4">
-          <ParagraphBlock text={aiWhenToVisit} />
-        </div>
-
-        <Link
-          href="/flights"
-          className="inline-flex items-center gap-1.5 mt-5 text-sm font-semibold hover:opacity-75 transition"
-          style={{ color: '#03989e' }}
-        >
-          Search flights →
-        </Link>
-      </div>
-
-      {/* RIGHT COLUMN — SEASON CARDS */}
-      <div className="grid grid-cols-2 gap-3 text-xs">
-        {[
-          {
-            season: 'Spring',
-            note:
-              "Generally milder weather with manageable crowds and prices that haven't peaked yet.",
-          },
-          {
-            season: 'Summer',
-            note:
-              'The busiest and most expensive period, but with the longest days and most going on.',
-          },
-          {
-            season: 'Autumn',
-            note:
-              'Often a sweet spot — cooler temperatures, softer light, and quieter streets.',
-          },
-          {
-            season: 'Winter',
-            note:
-              'The quietest and cheapest time; some sights may run shorter hours.',
-          },
-        ].map(({ season, note }) => (
-          <div
-            key={season}
-            className="rounded-2xl border border-gray-200 bg-white p-3 space-y-1"
-          >
-            <p className="font-semibold" style={{ color: '#022135' }}>
-              {season}
-            </p>
-            <p className="text-gray-500">{note}</p>
+      {/* ── WHEN TO VISIT ─────────────────────────────────────────────── */}
+      {aiWhenToVisit && (
+        <section id="when" className="py-14 px-6 bg-gray-50 border-t border-gray-100">
+          <div className="max-w-5xl mx-auto grid md:grid-cols-[3fr,2fr] gap-10 items-start">
+            <div>
+              <SectionLabel>Timing your trip</SectionLabel>
+              <H2>When to visit {cityName}</H2>
+              <div className="mt-4"><ParagraphBlock text={aiWhenToVisit} /></div>
+              <Link href="/flights"
+                    className="inline-flex items-center gap-1.5 mt-5 text-sm font-semibold hover:opacity-75 transition"
+                    style={{ color: '#03989e' }}>
+                Search flights →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              {[
+                { season: 'Spring', note: 'Generally milder weather with manageable crowds and prices that haven't peaked yet.' },
+                { season: 'Summer', note: 'The busiest and most expensive period, but with the longest days and most going on.' },
+                { season: 'Autumn', note: 'Often a sweet spot — cooler temperatures, softer light, and quieter streets.' },
+                { season: 'Winter', note: 'The quietest and cheapest time; some sights may run shorter hours.' },
+              ].map(({ season, note }) => (
+                <div key={season}
+                     className="rounded-2xl border border-gray-200 bg-white p-3 space-y-1">
+                  <p className="font-semibold" style={{ color: '#022135' }}>{season}</p>
+                  <p className="text-gray-500">{note}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
-  </section>
-)}
-
+        </section>
+      )}
 
       {/* ── NIGHTLIFE + FOOD ──────────────────────────────────────────── */}
       {(aiNightlife || aiFood) && (

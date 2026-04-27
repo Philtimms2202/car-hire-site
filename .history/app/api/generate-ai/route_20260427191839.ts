@@ -14,6 +14,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing city slug" }, { status: 400 });
     }
 
+    // 1) Fetch city document
     const city = await readClient.fetch(
       `*[_type == "city" && slug.current == $slug][0]{
         _id,
@@ -34,9 +35,7 @@ export async function POST(req: Request) {
         aiLocalTips,
         aiHowManyDays,
         aiDigitalNomads,
-        aiAreasToAvoid,
-        aiHighlightsIntro,
-        aiHighlightCards
+        aiAreasToAvoid
       }`,
       { slug: citySlug }
     );
@@ -61,9 +60,7 @@ export async function POST(req: Request) {
       city.aiLocalTips &&
       city.aiHowManyDays &&
       city.aiDigitalNomads &&
-      city.aiAreasToAvoid &&
-      city.aiHighlightsIntro &&
-      city.aiHighlightCards?.length;
+      city.aiAreasToAvoid;
 
     if (allFieldsExist && !force) {
       return NextResponse.json({ status: "exists" });
@@ -78,6 +75,7 @@ export async function POST(req: Request) {
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+    // 2) Build prompt
     const systemPrompt = `
 You are a British travel writer specialising in hotel and neighbourhood advice.
 Tone: warm, practical, specific, confident. Avoid clichés and AI-sounding phrases.
@@ -95,15 +93,6 @@ Return ONLY this JSON structure:
 
 {
   "intro": "150–200 words about staying in ${city.name}. Mention layout, hotel scene, price expectations, and what visitors should know before booking.",
-
-  "highlightsIntro": "2–3 sentences summarising what makes ${city.name} a good base. Used as a subtitle under the highlights section.",
-
-  "highlightCards": [
-    { "title": "Short punchy label", "description": "2 sentences on this aspect of staying in ${city.name}. Be specific." },
-    { "title": "Short punchy label", "description": "2 sentences." },
-    { "title": "Short punchy label", "description": "2 sentences." },
-    { "title": "Short punchy label", "description": "2 sentences." }
-  ],
 
   "neighbourhoods": [
     { "name": "Real neighbourhood", "description": "80–120 words about who it suits, what it's near, and why stay here." },
@@ -143,6 +132,7 @@ Rules:
 - No extra keys.
 `;
 
+    // 3) Call OpenAI
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       temperature: 0.7,
@@ -164,37 +154,41 @@ Rules:
     let parsed;
     try {
       parsed = JSON.parse(raw);
-    } catch {
+    } catch (err) {
       return NextResponse.json(
         { error: "Invalid JSON returned by OpenAI" },
         { status: 500 }
       );
     }
 
+    // 4) Add _key to arrays
     const withKeys = (arr: any[]) =>
       arr.map((item) => ({ _key: crypto.randomUUID(), ...item }));
 
+    const neighbourhoods = withKeys(parsed.neighbourhoods || []);
+    const faqs = withKeys(parsed.faqs || []);
+
+    // 5) Write to Sanity
     await writeClient
       .patch(city._id)
       .set({
-        aiIntro:           parsed.intro,
-        aiHighlightsIntro: parsed.highlightsIntro,
-        aiHighlightCards:  withKeys(parsed.highlightCards || []),
-        aiNeighbourhoods:  withKeys(parsed.neighbourhoods || []),
-        aiFirstTimers:     parsed.firstTimers,
-        aiBudget:          parsed.budget,
-        aiCouples:         parsed.couples,
-        aiFamilies:        parsed.families,
-        aiWhenToVisit:     parsed.whenToVisit,
-        aiFaqs:            withKeys(parsed.faqs || []),
-        aiNightlife:       parsed.nightlife,
-        aiFood:            parsed.food,
-        aiSafety:          parsed.safety,
-        aiTransport:       parsed.transport,
-        aiLocalTips:       parsed.localTips,
-        aiHowManyDays:     parsed.howManyDays,
-        aiDigitalNomads:   parsed.digitalNomads,
-        aiAreasToAvoid:    parsed.areasToAvoid,
+        aiIntro: parsed.intro,
+        aiNeighbourhoods: neighbourhoods,
+        aiFirstTimers: parsed.firstTimers,
+        aiBudget: parsed.budget,
+        aiCouples: parsed.couples,
+        aiFamilies: parsed.families,
+        aiWhenToVisit: parsed.whenToVisit,
+        aiFaqs: faqs,
+
+        aiNightlife: parsed.nightlife,
+        aiFood: parsed.food,
+        aiSafety: parsed.safety,
+        aiTransport: parsed.transport,
+        aiLocalTips: parsed.localTips,
+        aiHowManyDays: parsed.howManyDays,
+        aiDigitalNomads: parsed.digitalNomads,
+        aiAreasToAvoid: parsed.areasToAvoid,
       })
       .commit();
 

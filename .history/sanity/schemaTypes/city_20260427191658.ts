@@ -1,4 +1,4 @@
-// sanity/schemaTypes/city.ts
+// sanity/schemas/city.ts
 export default {
   name: "city",
   title: "City",
@@ -6,15 +6,15 @@ export default {
 
   groups: [
     { name: "core",      title: "Core Details", default: true },
-    { name: "editorial", title: "Editorial"                   },
-    { name: "ai",        title: "AI-Generated"                },
+    { name: "editorial", title: "Editorial" },
+    { name: "ai",        title: "AI-Generated" },
   ],
 
   fields: [
 
-    // ─────────────────────────────────────────────
+    // ───────────────────────────────────────────────
     // CORE DETAILS
-    // ─────────────────────────────────────────────
+    // ───────────────────────────────────────────────
     {
       name: "name",
       title: "City Name",
@@ -78,9 +78,9 @@ export default {
       description: "Full name of the primary airport (e.g. Heathrow Airport)",
     },
 
-    // ─────────────────────────────────────────────
-    // EDITORIAL
-    // ─────────────────────────────────────────────
+    // ───────────────────────────────────────────────
+    // EDITORIAL (manual overrides)
+    // ───────────────────────────────────────────────
     {
       name: "emoji",
       title: "Emoji",
@@ -113,10 +113,11 @@ export default {
       description: "SEO meta description. AI intro used if empty.",
     },
 
-    // ─────────────────────────────────────────────
-    // AI — HOTELS
-    // Auto-populated on first visit to /hotels/[city]
-    // ─────────────────────────────────────────────
+    // ───────────────────────────────────────────────
+    // AI-GENERATED HOTEL CONTENT
+    // Auto-populated on first visit
+    // ───────────────────────────────────────────────
+
     {
       name: "aiIntro",
       title: "Intro",
@@ -125,33 +126,7 @@ export default {
       rows: 5,
       description: "4–5 sentence intro to staying in this city.",
     },
-    {
-      name: "aiHighlightsIntro",
-      title: "Highlights Intro",
-      type: "text",
-      group: "ai",
-      rows: 3,
-      description: "2–3 sentence subtitle for the Highlights section.",
-    },
-    {
-      name: "aiHighlightCards",
-      title: "Highlight Cards",
-      type: "array",
-      group: "ai",
-      description: "4 highlight cards for the hotels page grid.",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "title",       title: "Title",       type: "string" },
-            { name: "description", title: "Description", type: "text"   },
-          ],
-          preview: {
-            select: { title: "title", subtitle: "description" },
-          },
-        },
-      ],
-    },
+
     {
       name: "aiNeighbourhoods",
       title: "Neighbourhoods",
@@ -171,6 +146,7 @@ export default {
         },
       ],
     },
+
     {
       name: "aiFirstTimers",
       title: "First-Time Visitors",
@@ -211,6 +187,31 @@ export default {
       rows: 5,
       description: "Best and worst times to visit.",
     },
+
+    {
+      name: "aiFaqs",
+      title: "FAQs",
+      type: "array",
+      group: "ai",
+      description: "Frequently asked questions.",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { name: "question", title: "Question", type: "string" },
+            { name: "answer",   title: "Answer",   type: "text"   },
+          ],
+          preview: {
+            select: { title: "question", subtitle: "answer" },
+          },
+        },
+      ],
+    },
+
+    // ───────────────────────────────────────────────
+    // AI HOTEL PAGE — NEW EXTENDED SECTIONS
+    // ───────────────────────────────────────────────
+
     {
       name: "aiNightlife",
       title: "Nightlife & Going Out",
@@ -229,19 +230,11 @@ export default {
     },
     {
       name: "aiSafety",
-      title: "Safety",
+      title: "Safety & Areas to Avoid",
       type: "text",
       group: "ai",
       rows: 5,
-      description: "Safety notes for visitors.",
-    },
-    {
-      name: "aiAreasToAvoid",
-      title: "Areas to Avoid",
-      type: "text",
-      group: "ai",
-      rows: 5,
-      description: "Neighbourhoods that may not suit visitors.",
+      description: "Safety notes and areas to avoid.",
     },
     {
       name: "aiTransport",
@@ -276,51 +269,32 @@ export default {
       description: "Best areas for remote workers.",
     },
     {
-      name: "aiFaqs",
-      title: "FAQs",
-      type: "array",
-      group: "ai",
-      description: "Frequently asked questions for the hotels page.",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "question", title: "Question", type: "string" },
-            { name: "answer",   title: "Answer",   type: "text"   },
-          ],
-          preview: {
-            select: { title: "question", subtitle: "answer" },
-          },
-        },
-      ],
-    },
-    {
-      name: "aiAboutFallback",
-      title: "About Fallback",
-      type: "text",
-      group: "ai",
-      rows: 4,
-      description: "Fallback About text used when mainContent is empty.",
-    },
-
-    // ─────────────────────────────────────────────
-    // AI — THINGS TO DO
-    // Auto-populated on first visit to /things-to-do
-    // ─────────────────────────────────────────────
-    {
-      name: "ttdIntro",
-      title: "TTD: Intro",
+      name: "aiAreasToAvoid",
+      title: "Areas to Avoid",
       type: "text",
       group: "ai",
       rows: 5,
-      description: "4–5 sentence intro to activities and experiences in this city.",
+      description: "Neighbourhoods that may not suit visitors.",
+    },
+
+    // ───────────────────────────────────────────────
+    // EXISTING HIGHLIGHTS + ABOUT FALLBACK
+    // ───────────────────────────────────────────────
+
+    {
+      name: "aiHighlightsIntro",
+      title: "Highlights Intro",
+      type: "text",
+      group: "ai",
+      rows: 3,
+      description: "Intro paragraph for the Highlights section.",
     },
     {
-      name: "ttdHighlights",
-      title: "TTD: Highlight Cards",
+      name: "aiHighlightCards",
+      title: "Highlight Cards",
       type: "array",
       group: "ai",
-      description: "4 cards summarising why this city is worth visiting for experiences.",
+      description: "4 highlight cards for the grid.",
       of: [
         {
           type: "object",
@@ -335,90 +309,12 @@ export default {
       ],
     },
     {
-      name: "ttdNeighbourhoods",
-      title: "TTD: Areas by Activity Type",
-      type: "array",
-      group: "ai",
-      description: "Which areas are best for which kind of activity.",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "name",        title: "Area Name",   type: "string" },
-            { name: "description", title: "Description", type: "text"   },
-          ],
-          preview: {
-            select: { title: "name", subtitle: "description" },
-          },
-        },
-      ],
-    },
-    {
-      name: "ttdWithKids",
-      title: "TTD: With Kids",
+      name: "aiAboutFallback",
+      title: "About Fallback",
       type: "text",
       group: "ai",
-      rows: 5,
-      description: "Best activities and areas for families with children.",
-    },
-    {
-      name: "ttdOnABudget",
-      title: "TTD: On a Budget",
-      type: "text",
-      group: "ai",
-      rows: 5,
-      description: "Free and cheap things to do.",
-    },
-    {
-      name: "ttdForCouples",
-      title: "TTD: For Couples",
-      type: "text",
-      group: "ai",
-      rows: 5,
-      description: "Romantic and atmospheric experiences for couples.",
-    },
-    {
-      name: "ttdDayTrips",
-      title: "TTD: Day Trips",
-      type: "text",
-      group: "ai",
-      rows: 5,
-      description: "Best day trips and excursions from the city.",
-    },
-    {
-      name: "ttdWhenToGo",
-      title: "TTD: When to Go",
-      type: "text",
-      group: "ai",
-      rows: 5,
-      description: "Best time of year for activities — festivals, weather, events.",
-    },
-    {
-      name: "ttdLocalTips",
-      title: "TTD: Local Tips",
-      type: "text",
-      group: "ai",
-      rows: 5,
-      description: "Things most tourists miss, booking advice, local etiquette.",
-    },
-    {
-      name: "ttdFaqs",
-      title: "TTD: FAQs",
-      type: "array",
-      group: "ai",
-      description: "4 Q&As targeting People Also Ask queries about visiting this city.",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "question", title: "Question", type: "string" },
-            { name: "answer",   title: "Answer",   type: "text"   },
-          ],
-          preview: {
-            select: { title: "question", subtitle: "answer" },
-          },
-        },
-      ],
+      rows: 4,
+      description: "Fallback About text used when mainContent is empty.",
     },
   ],
 }
