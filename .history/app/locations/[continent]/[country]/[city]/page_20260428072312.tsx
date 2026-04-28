@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: any) {
     data?.metaDescription ||
     data?.heroDescription  ||
     data?.aiIntro          ||
-    `Looking to visit ${cityName}, ${countryName}? View the top attractions, tours, travel tips and local experiences.`
+    `Should You Visit ${cityName}, ${countryName} - top attractions, tours, travel tips and local experiences.`
 
   return {
     title: `Should You Visit ${cityName}? | Timms Travel`,
