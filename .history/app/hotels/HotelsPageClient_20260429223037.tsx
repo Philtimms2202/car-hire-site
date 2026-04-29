@@ -1218,22 +1218,19 @@ export default function HotelsPageClient() {
 function PopularDestinationsGrid() {
   const [cities, setCities] = useState<SanityCity[]>([])
   const [visibleCount, setVisibleCount] = useState(12)
-  const [initialCount, setInitialCount] = useState(12)
 
+  // Set initial count based on screen size after mount
   useEffect(() => {
-    const count = window.innerWidth < 640 ? 6 : 12
-    setVisibleCount(count)
-    setInitialCount(count)
+    if (window.innerWidth < 640) setVisibleCount(6)
   }, [])
 
   useEffect(() => {
     client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
   }, [])
 
-  const increment = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
   const visible = cities.slice(0, visibleCount)
   const hasMore = visibleCount < cities.length
-  const isExpanded = visibleCount > initialCount
+  const increment = window.innerWidth < 640 ? 6 : 12
 
   if (cities.length === 0) {
     return (
@@ -1276,26 +1273,15 @@ function PopularDestinationsGrid() {
         ))}
       </div>
 
-      {(hasMore || isExpanded) && (
-        <div className="mt-6 flex justify-center gap-3">
-          {hasMore && (
-            <button
-              onClick={() => setVisibleCount(c => c + increment)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
-            >
-              Show more destinations ↓
-            </button>
-          )}
-          {isExpanded && (
-            <button
-              onClick={() => setVisibleCount(initialCount)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#e5e7eb', color: '#9ca3af', backgroundColor: 'white' }}
-            >
-              Collapse ↑
-            </button>
-          )}
+      {hasMore && (
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => setVisibleCount(c => c + increment)}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
+            style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
+          >
+            Show more destinations ↓
+          </button>
         </div>
       )}
     </div>

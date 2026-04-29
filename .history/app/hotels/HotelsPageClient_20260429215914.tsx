@@ -11,7 +11,6 @@ import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import { client } from '@/sanity/lib/client'
 import NextImage from 'next/image'
-
 // ---------------------------------------------
 // TYPES
 // ---------------------------------------------
@@ -39,14 +38,6 @@ type SanityCity = {
   slug: string
 }
 
-type DestinationCard = {
-  city: string
-  country: string
-  affiliateCity: string
-  image: string
-  tagline: string
-}
-
 // ---------------------------------------------
 // AFFILIATE HELPERS
 // ---------------------------------------------
@@ -55,6 +46,7 @@ const EXPEDIA_CAMREF = '1110lCmpb'
 const EXPEDIA_CREATIVEREF = '1011l87747'
 const EXPEDIA_ADREF = 'PZZ928vica'
 
+// Region IDs for known cities (extend as needed)
 const REGION_IDS: Record<string, string> = {
   London: '2114',
   Manchester: '2430',
@@ -71,14 +63,13 @@ const REGION_IDS: Record<string, string> = {
   Prague: '179976',
   Vienna: '179922',
   Berlin: '179886',
-  Bath: '553248',
-  Liverpool: '553274',
-  Bristol: '553248',
 }
 
 function buildExpediaDeepLink(city: string, country: string): string {
   const regionId = REGION_IDS[city]
-  const destination = country ? `${city}, ${country}` : city
+  const destination = country
+    ? `${city}, ${country}`
+    : city
 
   const landingPageParams = new URLSearchParams({
     destination,
@@ -254,99 +245,6 @@ const typeBadge: Record<string, string> = {
 }
 
 // ---------------------------------------------
-// DESTINATION CARD DATA
-// ---------------------------------------------
-const UK_DESTINATIONS: DestinationCard[] = [
-  {
-    city: 'London',
-    country: 'United Kingdom',
-    affiliateCity: 'London',
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=700&q=80',
-    tagline: 'The capital that never sleeps',
-  },
-  {
-    city: 'Edinburgh',
-    country: 'United Kingdom',
-    affiliateCity: 'Edinburgh',
-    image: 'https://images.unsplash.com/photo-1506377585622-bedcbb027afc?w=700&q=80',
-    tagline: 'Drama, whisky and medieval streets',
-  },
-  {
-    city: 'Manchester',
-    country: 'United Kingdom',
-    affiliateCity: 'Manchester',
-    image: 'https://images.unsplash.com/photo-1529655683826-aba9b3e77383?w=700&q=80',
-    tagline: 'Music, culture and Northern grit',
-  },
-  {
-    city: 'Bath',
-    country: 'United Kingdom',
-    affiliateCity: 'Bath',
-    image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=700&q=80',
-    tagline: 'Roman elegance, Georgian grandeur',
-  },
-  {
-    city: 'Liverpool',
-    country: 'United Kingdom',
-    affiliateCity: 'Liverpool',
-    image: 'https://images.unsplash.com/photo-1726410238762-2388af04eadb?q=80',
-    tagline: 'Waterfront heritage and creative soul',
-  },
-  {
-    city: 'Bristol',
-    country: 'United Kingdom',
-    affiliateCity: 'Bristol',
-    image: 'https://images.unsplash.com/photo-1598192763874-e8058b1ce546?q=80',
-    tagline: 'Independent spirit and Banksy walls',
-  },
-]
-
-const WORLDWIDE_DESTINATIONS: DestinationCard[] = [
-  {
-    city: 'Paris',
-    country: 'France',
-    affiliateCity: 'Paris',
-    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=700&q=80',
-    tagline: 'Romance, art and perfect pastry',
-  },
-  {
-    city: 'New York',
-    country: 'United States',
-    affiliateCity: 'New York',
-    image: 'https://images.unsplash.com/photo-1490644658840-3f2e3f8c5625?w=700&q=80',
-    tagline: 'The city that defines ambition',
-  },
-  {
-    city: 'Dubai',
-    country: 'United Arab Emirates',
-    affiliateCity: 'Dubai',
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=80',
-    tagline: 'Luxury, desert and endless sky',
-  },
-  {
-    city: 'Tokyo',
-    country: 'Japan',
-    affiliateCity: 'Tokyo',
-    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=700&q=80',
-    tagline: 'Ancient temples, neon and ramen',
-  },
-  {
-    city: 'Barcelona',
-    country: 'Spain',
-    affiliateCity: 'Barcelona',
-    image: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=700&q=80',
-    tagline: 'Gaudí, beaches and late-night tapas',
-  },
-  {
-    city: 'Amsterdam',
-    country: 'Netherlands',
-    affiliateCity: 'Amsterdam',
-    image: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=700&q=80',
-    tagline: 'Canals, culture and golden light',
-  },
-]
-
-// ---------------------------------------------
 // HOTEL PILL
 // ---------------------------------------------
 function HotelPill({ hotel }: { hotel: Hotel }) {
@@ -508,43 +406,16 @@ function PopularDestinationsDropdown() {
 }
 
 // ---------------------------------------------
-// DESTINATION CARD TILE (image-based)
+// TOP DESTINATIONS
 // ---------------------------------------------
-function DestinationCardTile({ dest }: { dest: DestinationCard }) {
-  const href = buildExpediaDeepLink(dest.affiliateCity, dest.country)
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group relative overflow-hidden rounded-2xl block"
-      style={{ aspectRatio: '4/3' }}
-    >
-      <NextImage
-        src={dest.image}
-        alt={`Hotels in ${dest.city}`}
-        fill
-        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-        sizes="(max-width: 768px) 50vw, 33vw"
-      />
-      {/* gradient overlay */}
-      <div
-        className="absolute inset-0 transition-opacity duration-300"
-        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 55%, transparent 100%)' }}
-      />
-      <div className="absolute bottom-0 left-0 right-0 p-4">
-        <p className="font-bold text-white text-base leading-tight">{dest.city}</p>
-        <p className="text-gray-300 text-xs mt-0.5 leading-snug">{dest.tagline}</p>
-        <span
-          className="mt-2.5 inline-block text-xs font-bold px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0"
-          style={{ backgroundColor: '#03989e', color: '#fff' }}
-        >
-          Search hotels →
-        </span>
-      </div>
-    </a>
-  )
-}
+const TOP_DESTINATIONS: CityOption[] = [
+  { city: 'London 🏙️', country: 'United Kingdom' },
+  { city: 'Paris 🗼', country: 'France' },
+  { city: 'New York 🗽', country: 'United States' },
+  { city: 'Dubai ⭐', country: 'United Arab Emirates' },
+  { city: 'Tokyo ✈️', country: 'Japan' },
+  { city: 'Barcelona ⛪', country: 'Spain' },
+]
 
 // ---------------------------------------------
 // FEATURED DESTINATION SPOTLIGHT
@@ -557,7 +428,7 @@ type SpotlightDest = {
   bestFor: string
   tip: string
   emoji: string
-  affiliateCity: string
+  affiliateCity: string // clean city name for deep link
 }
 
 const SPOTLIGHT_DESTINATIONS: SpotlightDest[] = [
@@ -618,7 +489,7 @@ function FeaturedSpotlight() {
               Where to go next
             </h2>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-2">
             {SPOTLIGHT_DESTINATIONS.map((d, i) => (
               <button
                 key={d.city}
@@ -740,6 +611,7 @@ function HotelTypesSection() {
           </p>
         </div>
 
+        {/* Tab row */}
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {HOTEL_TYPES.map((h, i) => (
             <button
@@ -757,6 +629,7 @@ function HotelTypesSection() {
           ))}
         </div>
 
+        {/* Content panel */}
         <div className="rounded-3xl border border-gray-100 bg-white p-8 md:p-10 shadow-sm">
           <div className="flex items-center gap-3 mb-3">
             <span className="text-3xl">{t.emoji}</span>
@@ -919,6 +792,7 @@ function BestTimeSection() {
           </p>
         </div>
 
+        {/* City selector */}
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {SEASON_DATA.map(d => (
             <button
@@ -939,6 +813,7 @@ function BestTimeSection() {
         <div className="rounded-3xl border border-gray-100 bg-gray-50 p-8 md:p-10">
           <p className="text-gray-600 leading-relaxed text-sm md:text-base mb-6">{dest.summary}</p>
 
+          {/* Month grid */}
           <div className="grid grid-cols-6 md:grid-cols-12 gap-2 mb-8">
             {dest.months.map(m => {
               const r = ratingColors[m.rating]
@@ -950,6 +825,7 @@ function BestTimeSection() {
                   >
                     <span className="text-xs font-bold" style={{ color: r.text }}>{m.month}</span>
                   </div>
+                  {/* Tooltip */}
                   <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-32 bg-slate-800 text-white text-xs rounded-xl px-2 py-1.5 text-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                     <strong>{r.label}</strong>
                     <br />{m.note}
@@ -959,6 +835,7 @@ function BestTimeSection() {
             })}
           </div>
 
+          {/* Legend */}
           <div className="flex flex-wrap gap-3 mb-6">
             {(Object.entries(ratingColors) as [MonthRating, typeof ratingColors[MonthRating]][]).map(([key, val]) => (
               <div key={key} className="flex items-center gap-1.5">
@@ -1068,7 +945,10 @@ function PackingSection() {
   const [checked, setChecked] = useState<Record<string, boolean>>({})
 
   const cat = PACKING_CATEGORIES[activeCategory]
-  const toggle = (key: string) => setChecked(prev => ({ ...prev, [key]: !prev[key] }))
+
+  const toggle = (key: string) =>
+    setChecked(prev => ({ ...prev, [key]: !prev[key] }))
+
   const doneCount = cat.items.filter((_, i) => checked[`${activeCategory}-${i}`]).length
 
   return (
@@ -1215,153 +1095,69 @@ export default function HotelsPageClient() {
 
   const cityDeepLink = buildExpediaDeepLink(selectedCity.city, selectedCity.country)
 
-function PopularDestinationsGrid() {
-  const [cities, setCities] = useState<SanityCity[]>([])
-  const [visibleCount, setVisibleCount] = useState(12)
-  const [initialCount, setInitialCount] = useState(12)
-
-  useEffect(() => {
-    const count = window.innerWidth < 640 ? 6 : 12
-    setVisibleCount(count)
-    setInitialCount(count)
-  }, [])
-
-  useEffect(() => {
-    client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
-  }, [])
-
-  const increment = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
-  const visible = cities.slice(0, visibleCount)
-  const hasMore = visibleCount < cities.length
-  const isExpanded = visibleCount > initialCount
-
-  if (cities.length === 0) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="h-16 rounded-2xl bg-gray-100 animate-pulse" />
-        ))}
-      </div>
-    )
-  }
-
-  return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {visible.map((city, i) => (
-          <Link
-            key={city.slug}
-            href={`/hotels/${city.slug}`}
-            className="group flex items-center gap-4 px-5 py-4 rounded-2xl border border-gray-100 bg-white hover:border-teal-200 hover:shadow-sm transition-all duration-200"
-          >
-            <span
-              className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold"
-              style={{ backgroundColor: '#232e4e10', color: '#232e4e' }}
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm truncate" style={{ color: '#232e4e' }}>
-                Hotels in {city.name}
-              </h3>
-              <p className="text-xs text-gray-400 mt-0.5">View hotel guide</p>
-            </div>
-            <span
-              className="shrink-0 text-sm opacity-0 group-hover:opacity-100 transition-all duration-200"
-              style={{ color: '#03989e' }}
-            >
-              →
-            </span>
-          </Link>
-        ))}
-      </div>
-
-      {(hasMore || isExpanded) && (
-        <div className="mt-6 flex justify-center gap-3">
-          {hasMore && (
-            <button
-              onClick={() => setVisibleCount(c => c + increment)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
-            >
-              Show more destinations ↓
-            </button>
-          )}
-          {isExpanded && (
-            <button
-              onClick={() => setVisibleCount(initialCount)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#e5e7eb', color: '#9ca3af', backgroundColor: 'white' }}
-            >
-              Collapse ↑
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
 
-      {/* ── BREADCRUMB ── */}
-      <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-100 px-6 py-2">
-        <ol className="max-w-6xl mx-auto flex items-center gap-2 text-sm text-gray-500" itemScope itemType="https://schema.org/BreadcrumbList">
-          <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <Link href="/" className="hover:text-blue-600 transition-colors" itemProp="item">
-              <span itemProp="name">Home</span>
-            </Link>
-            <meta itemProp="position" content="1" />
-          </li>
-          <li aria-hidden="true" className="text-gray-300">/</li>
-          <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <span className="text-gray-800 font-medium" itemProp="name">Hotels</span>
-            <meta itemProp="position" content="2" />
-            <link itemProp="item" href="https://timmstravel.com/hotels" />
-          </li>
-        </ol>
-      </nav>
+        {/* ── BREADCRUMB ─────────────────────────────────────────────────────── */}
+        <nav aria-label="Breadcrumb" className="bg-white border-b border-gray-100 px-6 py-2">
+          <ol className="max-w-6xl mx-auto flex items-center gap-2 text-sm text-gray-500" itemScope itemType="https://schema.org/BreadcrumbList">
+            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <Link href="/" className="hover:text-blue-600 transition-colors" itemProp="item">
+                <span itemProp="name">Home</span>
+              </Link>
+              <meta itemProp="position" content="1" />
+            </li>
+            <li aria-hidden="true" className="text-gray-300">/</li>
+            <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+              <span className="text-gray-800 font-medium" itemProp="name">Hotels</span>
+              <meta itemProp="position" content="2" />
+              <link itemProp="item" href="https://timmstravel.com/hotels" />
+            </li>
+          </ol>
+        </nav>
 
-      {/* ── HERO ── */}
-      <section className="relative overflow-hidden text-white py-24 px-6 text-center">
-        <NextImage
-          src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?q=80&w=1740"
-          alt="Luxury hotel lobby"
-          fill
-          className="object-cover object-center"
-          priority
-        />
-        <div className="absolute inset-0 bg-[#232e4e]/75 z-0" />
+{/* ── HERO ── */}
+<section className="relative overflow-hidden text-white py-24 px-6 text-center">
+  {/* Unsplash background image */}
+  <NextImage
+    src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?q=80&w=1740"
+    alt="Luxury hotel lobby"
+    fill
+    className="object-cover object-center"
+    priority
+  />
 
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
-            Timms Travel · Hotels
-          </p>
-          <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
-            Compare Hotels Worldwide!
-          </h1>
-          <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
-            Search hotels in any city worldwide. Curated picks, live prices and no booking fees.
-          </p>
+  {/* Dark overlay */}
+  <div className="absolute inset-0 bg-[#232e4e]/75 z-0" />
 
-          {/* SEARCH TABS */}
-          <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
-            {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
-                  activeTab === tab
-                    ? 'bg-white text-[#232e4e] shadow-sm'
-                    : 'text-gray-300 hover:text-white'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+  <div className="relative z-10 max-w-5xl mx-auto">
+    <p className="text-xs font-bold tracking-[0.25em] uppercase text-teal-400 mb-4">
+      Timms Travel · Hotels
+    </p>
+    <h1 className="text-4xl md:text-6xl font-bold mb-5 leading-tight tracking-tight">
+      Compare Hotels Worldwide!
+    </h1>
+    <p className="text-base md:text-lg text-gray-300 max-w-xl mx-auto mb-10">
+      Search hotels in any city worldwide. Curated picks, live prices and no booking fees.
+    </p>
+
+    {/* SEARCH TABS */}
+    <div className="flex justify-center gap-1 mb-6 bg-white/10 rounded-2xl p-1 max-w-sm mx-auto">
+      {(['flights', 'hotels', 'experiences', 'cars'] as const).map(tab => (
+        <button
+          key={tab}
+          onClick={() => setActiveTab(tab)}
+          className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all capitalize ${
+            activeTab === tab
+              ? 'bg-white text-[#232e4e] shadow-sm'
+              : 'text-gray-300 hover:text-white'
+          }`}
+        >
+          {tab}
+        </button>
+      ))}
+    </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-2xl text-black text-left">
             {activeTab === 'flights'     && <FlightSearch />}
@@ -1372,52 +1168,85 @@ function PopularDestinationsGrid() {
         </div>
       </section>
 
-      {/* ── POPULAR UK CITIES ── */}
-      <section className="py-16 px-6 bg-white border-t border-gray-100">
+
+
+      {/* ── SEARCH + RESULTS ── */}
+      <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-8">
-            <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Closer to home</p>
-            <div className="flex items-end justify-between flex-wrap gap-4">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
-                  Popular UK cities
-                </h2>
-                <p className="text-gray-400 text-sm mt-1">
-                  From London to Edinburgh - the best of Britain, one stay at a time.
-                </p>
-              </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-3 mb-10">
+            <div className="flex-1 w-full">
+              <CitySearch onSelect={setSelectedCity} />
+            </div>
+            <PopularDestinationsDropdown />
+          </div>
+
+          <div className="flex items-baseline justify-between mb-6">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
+                Hotels in {selectedCity.city}
+                {selectedCity.country ? `, ${selectedCity.country}` : ''}
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">
+                Curated where available - click any hotel to search on Expedia.
+              </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {UK_DESTINATIONS.map(dest => (
-              <DestinationCardTile key={dest.city} dest={dest} />
+          <div className="space-y-3">
+            {hotels.map(hotel => (
+              <HotelPill key={hotel.name} hotel={hotel} />
             ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <a
+              href={cityDeepLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 hover:scale-[1.02] shadow-md"
+              style={{ backgroundColor: '#03989e' }}
+            >
+              View All Hotels in {selectedCity.city} on Expedia →
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ── WORLDWIDE DESTINATIONS ── */}
-      <section className="py-16 px-6 bg-gray-50 border-t border-gray-100">
+      {/* ── TOP DESTINATIONS ── */}
+      <section className="py-16 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-8">
-            <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Go further</p>
-            <div className="flex items-end justify-between flex-wrap gap-4">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
-                  Worldwide destinations
-                </h2>
-                <p className="text-gray-400 text-sm mt-1">
-                  Iconic cities across the globe - ready when you are.
-                </p>
-              </div>
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Explore</p>
+              <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
+                Top destinations this month
+              </h2>
             </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {WORLDWIDE_DESTINATIONS.map(dest => (
-              <DestinationCardTile key={dest.city} dest={dest} />
-            ))}
+            {TOP_DESTINATIONS.map(dest => {
+              const cleanCity = dest.city.replace(/\s[\p{Emoji}]+/gu, '').trim()
+              const href = buildExpediaDeepLink(cleanCity, dest.country)
+              return (
+                <a
+                  key={`${dest.city}-${dest.country}`}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group rounded-2xl border border-gray-100 bg-gray-50 p-6 hover:border-teal-200 hover:bg-teal-50/30 transition-all"
+                >
+                  <h3 className="font-bold text-lg mb-0.5 group-hover:text-[#03989e] transition-colors" style={{ color: '#232e4e' }}>
+                    {dest.city}
+                  </h3>
+                  <p className="text-gray-400 text-sm">{dest.country}</p>
+                  <span className="mt-3 inline-block text-xs font-semibold text-[#03989e] opacity-0 group-hover:opacity-100 transition-opacity">
+                    Search hotels →
+                  </span>
+                </a>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -1498,22 +1327,6 @@ function PopularDestinationsGrid() {
           </div>
         </div>
       </section>
-
-      {/* ── POPULAR DESTINATIONS ── */}
-<section className="py-16 px-6 bg-white border-t border-gray-100">
-  <div className="max-w-5xl mx-auto">
-    <div className="mb-8">
-      <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Hotel guides</p>
-      <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
-        Popular destinations
-      </h2>
-      <p className="text-gray-400 text-sm mt-1">
-        In-depth hotel guides for the world's most searched cities.
-      </p>
-    </div>
-    <PopularDestinationsGrid />
-  </div>
-</section>
 
       <Footer />
     </main>

@@ -1217,87 +1217,45 @@ export default function HotelsPageClient() {
 
 function PopularDestinationsGrid() {
   const [cities, setCities] = useState<SanityCity[]>([])
-  const [visibleCount, setVisibleCount] = useState(12)
-  const [initialCount, setInitialCount] = useState(12)
-
-  useEffect(() => {
-    const count = window.innerWidth < 640 ? 6 : 12
-    setVisibleCount(count)
-    setInitialCount(count)
-  }, [])
 
   useEffect(() => {
     client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
   }, [])
 
-  const increment = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
-  const visible = cities.slice(0, visibleCount)
-  const hasMore = visibleCount < cities.length
-  const isExpanded = visibleCount > initialCount
-
   if (cities.length === 0) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="h-16 rounded-2xl bg-gray-100 animate-pulse" />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="h-20 rounded-2xl bg-gray-200 animate-pulse" />
         ))}
       </div>
     )
   }
 
   return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {visible.map((city, i) => (
-          <Link
-            key={city.slug}
-            href={`/hotels/${city.slug}`}
-            className="group flex items-center gap-4 px-5 py-4 rounded-2xl border border-gray-100 bg-white hover:border-teal-200 hover:shadow-sm transition-all duration-200"
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {cities.map(city => (
+        <Link
+          key={city.slug}
+          href={`/hotels/${city.slug}`}
+          className="group relative flex flex-col justify-between px-5 py-5 rounded-2xl border border-gray-100 bg-white hover:border-teal-300 hover:shadow-md transition-all duration-200 overflow-hidden"
+        >
+          {/* Subtle teal accent bar on hover */}
+          <div
+            className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            style={{ backgroundColor: '#03989e' }}
+          />
+          <h3 className="font-bold text-sm leading-snug" style={{ color: '#232e4e' }}>
+            Hotels in {city.name}
+          </h3>
+          <span
+            className="mt-2 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-0 group-hover:translate-x-0.5"
+            style={{ color: '#03989e' }}
           >
-            <span
-              className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold"
-              style={{ backgroundColor: '#232e4e10', color: '#232e4e' }}
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm truncate" style={{ color: '#232e4e' }}>
-                Hotels in {city.name}
-              </h3>
-              <p className="text-xs text-gray-400 mt-0.5">View hotel guide</p>
-            </div>
-            <span
-              className="shrink-0 text-sm opacity-0 group-hover:opacity-100 transition-all duration-200"
-              style={{ color: '#03989e' }}
-            >
-              →
-            </span>
-          </Link>
-        ))}
-      </div>
-
-      {(hasMore || isExpanded) && (
-        <div className="mt-6 flex justify-center gap-3">
-          {hasMore && (
-            <button
-              onClick={() => setVisibleCount(c => c + increment)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
-            >
-              Show more destinations ↓
-            </button>
-          )}
-          {isExpanded && (
-            <button
-              onClick={() => setVisibleCount(initialCount)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#e5e7eb', color: '#9ca3af', backgroundColor: 'white' }}
-            >
-              Collapse ↑
-            </button>
-          )}
-        </div>
-      )}
+            View guide →
+          </span>
+        </Link>
+      ))}
     </div>
   )
 }
@@ -1383,7 +1341,7 @@ function PopularDestinationsGrid() {
                   Popular UK cities
                 </h2>
                 <p className="text-gray-400 text-sm mt-1">
-                  From London to Edinburgh - the best of Britain, one stay at a time.
+                  From London to Edinburgh — the best of Britain, one stay at a time.
                 </p>
               </div>
             </div>
@@ -1408,7 +1366,7 @@ function PopularDestinationsGrid() {
                   Worldwide destinations
                 </h2>
                 <p className="text-gray-400 text-sm mt-1">
-                  Iconic cities across the globe - ready when you are.
+                  Iconic cities across the globe — ready when you are.
                 </p>
               </div>
             </div>
@@ -1460,7 +1418,7 @@ function PopularDestinationsGrid() {
 
           <div className="space-y-4 text-slate-700 leading-relaxed text-sm">
             <p>
-              Finding the right hotel should feel simple. Timms Travel is designed to help you cut through the noise and discover places to stay that genuinely suit your trip - whether you are planning a weekend break, a family holiday or a long haul adventure.
+              Finding the right hotel should feel simple. Timms Travel is designed to help you cut through the noise and discover places to stay that genuinely suit your trip — whether you are planning a weekend break, a family holiday or a long haul adventure.
             </p>
             <p>
               For major destinations, we highlight a selection of hotels that travellers consistently love. These curated suggestions save you time and give you a head start when choosing where to stay. If you are heading somewhere less familiar, you can still search globally and find hotels in thousands of locations.

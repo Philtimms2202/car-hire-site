@@ -289,7 +289,7 @@ const UK_DESTINATIONS: DestinationCard[] = [
     city: 'Liverpool',
     country: 'United Kingdom',
     affiliateCity: 'Liverpool',
-    image: 'https://images.unsplash.com/photo-1726410238762-2388af04eadb?q=80',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80',
     tagline: 'Waterfront heritage and creative soul',
   },
   {
@@ -1215,93 +1215,6 @@ export default function HotelsPageClient() {
 
   const cityDeepLink = buildExpediaDeepLink(selectedCity.city, selectedCity.country)
 
-function PopularDestinationsGrid() {
-  const [cities, setCities] = useState<SanityCity[]>([])
-  const [visibleCount, setVisibleCount] = useState(12)
-  const [initialCount, setInitialCount] = useState(12)
-
-  useEffect(() => {
-    const count = window.innerWidth < 640 ? 6 : 12
-    setVisibleCount(count)
-    setInitialCount(count)
-  }, [])
-
-  useEffect(() => {
-    client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
-  }, [])
-
-  const increment = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
-  const visible = cities.slice(0, visibleCount)
-  const hasMore = visibleCount < cities.length
-  const isExpanded = visibleCount > initialCount
-
-  if (cities.length === 0) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="h-16 rounded-2xl bg-gray-100 animate-pulse" />
-        ))}
-      </div>
-    )
-  }
-
-  return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {visible.map((city, i) => (
-          <Link
-            key={city.slug}
-            href={`/hotels/${city.slug}`}
-            className="group flex items-center gap-4 px-5 py-4 rounded-2xl border border-gray-100 bg-white hover:border-teal-200 hover:shadow-sm transition-all duration-200"
-          >
-            <span
-              className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold"
-              style={{ backgroundColor: '#232e4e10', color: '#232e4e' }}
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm truncate" style={{ color: '#232e4e' }}>
-                Hotels in {city.name}
-              </h3>
-              <p className="text-xs text-gray-400 mt-0.5">View hotel guide</p>
-            </div>
-            <span
-              className="shrink-0 text-sm opacity-0 group-hover:opacity-100 transition-all duration-200"
-              style={{ color: '#03989e' }}
-            >
-              →
-            </span>
-          </Link>
-        ))}
-      </div>
-
-      {(hasMore || isExpanded) && (
-        <div className="mt-6 flex justify-center gap-3">
-          {hasMore && (
-            <button
-              onClick={() => setVisibleCount(c => c + increment)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
-            >
-              Show more destinations ↓
-            </button>
-          )}
-          {isExpanded && (
-            <button
-              onClick={() => setVisibleCount(initialCount)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#e5e7eb', color: '#9ca3af', backgroundColor: 'white' }}
-            >
-              Collapse ↑
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
@@ -1372,6 +1285,52 @@ function PopularDestinationsGrid() {
         </div>
       </section>
 
+      {/* ── HOTEL SEARCH BY CITY ── */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+
+          {/* Search bar + dropdown */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 mb-10">
+            <div className="flex-1 w-full">
+              <CitySearch onSelect={setSelectedCity} />
+            </div>
+            <PopularDestinationsDropdown />
+          </div>
+
+          {/* Heading */}
+          <div className="flex items-baseline justify-between mb-6">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
+                Hand-picked hotels in {selectedCity.city}
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">
+                Curated where available — click any hotel to check live availability on Expedia.
+              </p>
+            </div>
+          </div>
+
+          {/* Hotel pills */}
+          <div className="space-y-3">
+            {hotels.map(hotel => (
+              <HotelPill key={hotel.name} hotel={hotel} />
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="mt-10 text-center">
+            <a
+              href={cityDeepLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 hover:scale-[1.02] shadow-md"
+              style={{ backgroundColor: '#03989e' }}
+            >
+              View all hotels in {selectedCity.city} on Expedia →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ── POPULAR UK CITIES ── */}
       <section className="py-16 px-6 bg-white border-t border-gray-100">
         <div className="max-w-5xl mx-auto">
@@ -1383,7 +1342,7 @@ function PopularDestinationsGrid() {
                   Popular UK cities
                 </h2>
                 <p className="text-gray-400 text-sm mt-1">
-                  From London to Edinburgh - the best of Britain, one stay at a time.
+                  From London to Edinburgh — the best of Britain, one stay at a time.
                 </p>
               </div>
             </div>
@@ -1408,7 +1367,7 @@ function PopularDestinationsGrid() {
                   Worldwide destinations
                 </h2>
                 <p className="text-gray-400 text-sm mt-1">
-                  Iconic cities across the globe - ready when you are.
+                  Iconic cities across the globe — ready when you are.
                 </p>
               </div>
             </div>
@@ -1460,7 +1419,7 @@ function PopularDestinationsGrid() {
 
           <div className="space-y-4 text-slate-700 leading-relaxed text-sm">
             <p>
-              Finding the right hotel should feel simple. Timms Travel is designed to help you cut through the noise and discover places to stay that genuinely suit your trip - whether you are planning a weekend break, a family holiday or a long haul adventure.
+              Finding the right hotel should feel simple. Timms Travel is designed to help you cut through the noise and discover places to stay that genuinely suit your trip — whether you are planning a weekend break, a family holiday or a long haul adventure.
             </p>
             <p>
               For major destinations, we highlight a selection of hotels that travellers consistently love. These curated suggestions save you time and give you a head start when choosing where to stay. If you are heading somewhere less familiar, you can still search globally and find hotels in thousands of locations.
@@ -1498,22 +1457,6 @@ function PopularDestinationsGrid() {
           </div>
         </div>
       </section>
-
-      {/* ── POPULAR DESTINATIONS ── */}
-<section className="py-16 px-6 bg-white border-t border-gray-100">
-  <div className="max-w-5xl mx-auto">
-    <div className="mb-8">
-      <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Hotel guides</p>
-      <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
-        Popular destinations
-      </h2>
-      <p className="text-gray-400 text-sm mt-1">
-        In-depth hotel guides for the world's most searched cities.
-      </p>
-    </div>
-    <PopularDestinationsGrid />
-  </div>
-</section>
 
       <Footer />
     </main>

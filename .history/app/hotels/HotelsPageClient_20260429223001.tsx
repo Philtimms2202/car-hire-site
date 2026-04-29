@@ -1218,19 +1218,52 @@ export default function HotelsPageClient() {
 function PopularDestinationsGrid() {
   const [cities, setCities] = useState<SanityCity[]>([])
   const [visibleCount, setVisibleCount] = useState(12)
-  const [initialCount, setInitialCount] = useState(12)
 
   useEffect(() => {
-    const count = window.innerWidth < 640 ? 6 : 12
-    setVisibleCount(count)
-    setInitialCount(count)
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      setVisibleCount(6)
+    }
   }, [])
 
   useEffect(() => {
     client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
   }, [])
 
-  const increment = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640
+  const initialCount = isMobile ? 6 : 12
+  const increment = isMobile ? 6 : 12
+  const visible = cities.slice(0, visibleCount)
+  const hasMore = visibleCount < cities.length
+  const isExpanded = visibleCount > initialCount
+
+  if (cities.length === 0) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div key={i} className="h-16 rounded-2xl bg-gray-100 animate-pulse" />
+        ))}
+      </div>
+    )
+  }
+
+
+  function PopularDestinationsGrid() {
+  const [cities, setCities] = useState<SanityCity[]>([])
+  const [visibleCount, setVisibleCount] = useState(12)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      setVisibleCount(6)
+    }
+  }, [])
+
+  useEffect(() => {
+    client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
+  }, [])
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640
+  const initialCount = isMobile ? 6 : 12
+  const increment = isMobile ? 6 : 12
   const visible = cities.slice(0, visibleCount)
   const hasMore = visibleCount < cities.length
   const isExpanded = visibleCount > initialCount
@@ -1277,7 +1310,7 @@ function PopularDestinationsGrid() {
       </div>
 
       {(hasMore || isExpanded) && (
-        <div className="mt-6 flex justify-center gap-3">
+        <div className="mt-6 text-center flex justify-center gap-3">
           {hasMore && (
             <button
               onClick={() => setVisibleCount(c => c + increment)}
@@ -1499,7 +1532,7 @@ function PopularDestinationsGrid() {
         </div>
       </section>
 
-      {/* ── POPULAR DESTINATIONS ── */}
+{/* ── POPULAR DESTINATIONS ── */}
 <section className="py-16 px-6 bg-white border-t border-gray-100">
   <div className="max-w-5xl mx-auto">
     <div className="mb-8">

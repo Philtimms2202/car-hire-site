@@ -1217,23 +1217,13 @@ export default function HotelsPageClient() {
 
 function PopularDestinationsGrid() {
   const [cities, setCities] = useState<SanityCity[]>([])
-  const [visibleCount, setVisibleCount] = useState(12)
-  const [initialCount, setInitialCount] = useState(12)
-
-  useEffect(() => {
-    const count = window.innerWidth < 640 ? 6 : 12
-    setVisibleCount(count)
-    setInitialCount(count)
-  }, [])
+  const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
     client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
   }, [])
 
-  const increment = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
-  const visible = cities.slice(0, visibleCount)
-  const hasMore = visibleCount < cities.length
-  const isExpanded = visibleCount > initialCount
+  const visible = expanded ? cities : cities.slice(0, 12)
 
   if (cities.length === 0) {
     return (
@@ -1254,20 +1244,23 @@ function PopularDestinationsGrid() {
             href={`/hotels/${city.slug}`}
             className="group flex items-center gap-4 px-5 py-4 rounded-2xl border border-gray-100 bg-white hover:border-teal-200 hover:shadow-sm transition-all duration-200"
           >
+            {/* Number badge */}
             <span
-              className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold"
+              className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold transition-colors duration-200"
               style={{ backgroundColor: '#232e4e10', color: '#232e4e' }}
             >
               {String(i + 1).padStart(2, '0')}
             </span>
+
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-sm truncate" style={{ color: '#232e4e' }}>
                 Hotels in {city.name}
               </h3>
               <p className="text-xs text-gray-400 mt-0.5">View hotel guide</p>
             </div>
+
             <span
-              className="shrink-0 text-sm opacity-0 group-hover:opacity-100 transition-all duration-200"
+              className="shrink-0 text-sm opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-0.5"
               style={{ color: '#03989e' }}
             >
               →
@@ -1276,26 +1269,20 @@ function PopularDestinationsGrid() {
         ))}
       </div>
 
-      {(hasMore || isExpanded) && (
-        <div className="mt-6 flex justify-center gap-3">
-          {hasMore && (
-            <button
-              onClick={() => setVisibleCount(c => c + increment)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
-            >
-              Show more destinations ↓
-            </button>
-          )}
-          {isExpanded && (
-            <button
-              onClick={() => setVisibleCount(initialCount)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-              style={{ borderColor: '#e5e7eb', color: '#9ca3af', backgroundColor: 'white' }}
-            >
-              Collapse ↑
-            </button>
-          )}
+      {/* Show more / less */}
+      {cities.length > 12 && (
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => setExpanded(e => !e)}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
+            style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
+          >
+            {expanded ? (
+              <>Show less ↑</>
+            ) : (
+              <>View all {cities.length} destinations ↓</>
+            )}
+          </button>
         </div>
       )}
     </div>
