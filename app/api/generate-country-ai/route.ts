@@ -12,7 +12,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing country param' }, { status: 400 })
     }
 
-    // Fetch the country document
     const country = await readClient.fetch(
       `*[_type == "country" && slug.current == $countrySlug][0]{
         _id,
@@ -44,7 +43,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Country not found' }, { status: 404 })
     }
 
-    // If already generated, skip
     const alreadyDone =
       country.bestTimeToVisit &&
       country.safetyOverview &&
@@ -67,13 +65,19 @@ export async function POST(req: Request) {
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-    // British natural-language prompt
     const prompt = `
-You are writing practical, friendly travel information for the country: ${country.name}.
-Write in natural British English. Keep the tone warm, clear and human — like a UK travel writer.
-Avoid clichés, avoid flowery language, avoid sounding like AI.
+You are a knowledgeable UK travel writer creating a structured, SEO-optimised travel guide for ${country.name}.
 
-Return ONLY valid JSON with the following fields:
+Write in warm, clear, natural British English. Be specific and factual — a traveller should finish reading and feel genuinely informed, not like they've read a brochure. Avoid clichés, AI-sounding phrasing, and generic filler.
+
+Return ONLY valid JSON. No commentary, no markdown code fences, no preamble.
+
+Each text field should use the following structure:
+- A short opening sentence that directly answers the question.
+- 2–4 bullet points (formatted as "• Point here.") covering the most useful specifics.
+- A closing sentence with practical advice or a genuine insight.
+
+Array fields (mainAirports, neighbouringCountries) should be plain string arrays.
 
 {
   "bestTimeToVisit": "",
@@ -88,19 +92,34 @@ Return ONLY valid JSON with the following fields:
   "neighbouringCountries": []
 }
 
-Guidelines:
-- Keep each field to 2–4 sentences.
-- Be factual, steady and helpful.
-- No prices or specific costs.
-- No markdown.
-- No commentary outside the JSON.
-- Use British spelling.
-- Keep it evergreen and globally accurate.
+Field-specific guidance:
+
+bestTimeToVisit — Cover peak season, shoulder season, and any weather patterns to avoid. Mention specific months.
+
+safetyOverview — Cover overall safety level, common risks (petty theft, scams, natural hazards), and any areas or situations to be cautious about. Be honest but balanced.
+
+localLaws — Cover dress codes, alcohol rules, photography restrictions, and any laws that commonly catch tourists off guard. Be specific.
+
+costOfTravel — Cover budget, mid-range and comfortable daily spend ranges in GBP. Mention what drives costs up or down (cities vs rural, season, etc). Be realistic.
+
+transportBasics — Cover how to get between cities, local city transport options, taxi/ride-share availability, and any tips for getting around efficiently.
+
+vaccinations — Cover recommended vaccinations, any required ones (e.g. yellow fever certificates), and any health advisories relevant to travellers from the UK.
+
+internetConnectivity — Cover mobile network quality, whether eSIMs work well, local SIM availability, and typical speeds or coverage gaps to be aware of.
+
+timeZone — State the primary time zone(s) clearly. Mention if the country spans multiple zones or observes daylight saving.
+
+mainAirports — List 3–6 key international or major regional airports by full name and IATA code, e.g. "London Heathrow (LHR)".
+
+neighbouringCountries — List all bordering countries by their common English name.
+
+British spelling throughout. Keep it evergreen. Do not include specific prices for individual items.
 `
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
-      temperature: 0.7,
+      temperature: 0.6,
       response_format: { type: 'json_object' },
       messages: [{ role: 'user', content: prompt }]
     })
@@ -136,7 +155,6 @@ Guidelines:
       }
     }
 
-    // Write to Sanity
     await writeClient
       .patch(country._id)
       .set({

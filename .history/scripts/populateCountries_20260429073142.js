@@ -1,10 +1,8 @@
 // scripts/populateCountries.js
-import dotenv from "dotenv"
-dotenv.config({ path: ".env.local" })
-
+import "dotenv/config"
 import { createClient } from "@sanity/client"
 
-const sanityClient = createClient({
+const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
   apiVersion: "2024-01-01",
@@ -14,9 +12,8 @@ const sanityClient = createClient({
 
 async function run() {
   console.log("Fetching countries from Sanity…")
-  console.log("Project ID:", process.env.NEXT_PUBLIC_SANITY_PROJECT_ID)
 
-  const countries = await sanityClient.fetch(`
+  const countries = await client.fetch(`
     *[_type == "country"]{
       _id,
       name,

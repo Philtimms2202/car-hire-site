@@ -21,17 +21,7 @@ async function getCountryData(countrySlug: string) {
       drivingSide,
       emergencyNumber,
       tippingCulture,
-      visaInfo,
-      bestTimeToVisit,
-      safetyOverview,
-      localLaws,
-      costOfTravel,
-      transportBasics,
-      vaccinations,
-      internetConnectivity,
-      timeZone,
-      mainAirports,
-      neighbouringCountries
+      visaInfo
     }`,
     { slug: countrySlug }
   )
@@ -71,7 +61,7 @@ export async function generateMetadata({ params }: any) {
   const countryName = countryData?.name || country
 
   return {
-    title: `${countryName} Travel Guide | Cities, Tips & Essential Info`,
+    title: `${countryName} Travel Guide | Cities, Tips & Essential Info `,
     description: `Discover the best experiences, attractions, and adventures across ${countryName}.`,
     alternates: {
       canonical: `https://timmstravel.com/locations/${continent}/${country}`,
@@ -138,65 +128,6 @@ function FaqItem({ question, answer }: { question: string; answer: React.ReactNo
 }
 
 // -----------------------------
-// Structured Text Component
-// Parses bullet-point format from AI: opening line, • bullets, closing line
-// -----------------------------
-function StructuredText({ text }: { text: string }) {
-  if (!text) return null
-
-  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean)
-
-  return (
-    <div className="space-y-2 text-sm text-gray-600 leading-relaxed">
-      {lines.map((line, i) => {
-        if (line.startsWith('•')) {
-          return (
-            <div key={i} className="flex gap-2">
-              <span style={{ color: '#2f797c' }} className="mt-0.5 flex-shrink-0">
-                •
-              </span>
-              <span>{line.replace(/^•\s*/, '')}</span>
-            </div>
-          )
-        }
-        return <p key={i}>{line}</p>
-      })}
-    </div>
-  )
-}
-
-// -----------------------------
-// Content Card Component
-// Used for extended AI-generated sections
-// -----------------------------
-function ContentCard({
-  icon,
-  title,
-  children,
-}: {
-  icon: string
-  title: string
-  children: React.ReactNode
-}) {
-  return (
-    <div className="p-6 rounded-xl border border-gray-100 bg-white hover:shadow-md transition">
-      <div className="flex items-center gap-3 mb-4">
-        <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0"
-          style={{ backgroundColor: '#eef6f6', color: '#2f797c' }}
-        >
-          {icon}
-        </div>
-        <h3 className="font-bold text-base" style={{ color: '#232e4e' }}>
-          {title}
-        </h3>
-      </div>
-      {children}
-    </div>
-  )
-}
-
-// -----------------------------
 // PAGE
 // -----------------------------
 export default async function CountryPage({ params }: { params: Promise<{ continent: string; country: string }> }) {
@@ -224,28 +155,16 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
   const countryName = countryData?.name || cities[0]?.country || country
   const countryEmoji = countryData?.flag || cities[0]?.countryEmoji || '🌍'
 
-  // Core fields
   const capital = countryData?.capital || 'Unknown'
   const population = countryData?.population ? Intl.NumberFormat().format(countryData.population) : 'Unknown'
   const languages = countryData?.languages?.join(', ') || 'Unknown'
   const currency = countryData?.currency || 'Unknown'
+
   const plugType = countryData?.plugType || 'Unknown'
   const drivingSide = countryData?.drivingSide || 'Unknown'
   const emergencyNumber = countryData?.emergencyNumber || 'Unknown'
   const tippingCulture = countryData?.tippingCulture || 'Information not available.'
   const visaInfo = countryData?.visaInfo || 'Visa requirements vary by nationality.'
-
-  // Extended AI fields
-  const bestTimeToVisit = countryData?.bestTimeToVisit || null
-  const safetyOverview = countryData?.safetyOverview || null
-  const localLaws = countryData?.localLaws || null
-  const costOfTravel = countryData?.costOfTravel || null
-  const transportBasics = countryData?.transportBasics || null
-  const vaccinations = countryData?.vaccinations || null
-  const internetConnectivity = countryData?.internetConnectivity || null
-  const timeZone = countryData?.timeZone || null
-  const mainAirports: string[] = countryData?.mainAirports || []
-  const neighbouringCountries: string[] = countryData?.neighbouringCountries || []
 
   const basePath = `/locations/${continent}/${country}`
 
@@ -279,23 +198,11 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         <div className="text-4xl mb-3">{city.emoji}</div>
         <p className="font-semibold text-sm" style={{ color: '#232e4e' }}>{city.city}</p>
         <p className="text-xs mt-1 group-hover:opacity-80 transition" style={{ color: '#2f797c' }}>
-          Get ready to explore →
+          Explore experiences →
         </p>
       </a>
     )
   })
-
-  const hasExtendedContent =
-    bestTimeToVisit ||
-    safetyOverview ||
-    localLaws ||
-    costOfTravel ||
-    transportBasics ||
-    vaccinations ||
-    internetConnectivity ||
-    timeZone
-
-  const hasLocationContent = mainAirports.length > 0 || neighbouringCountries.length > 0
 
   return (
     <main className="min-h-screen bg-white">
@@ -376,149 +283,6 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
           </div>
         </div>
       </section>
-
-      {/* EXTENDED GUIDE SECTION */}
-      {hasExtendedContent && (
-        <section className="py-16 sm:py-20 px-6 bg-white">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-10">
-              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#2f797c' }}>
-                Your complete guide
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: '#232e4e' }}>
-                Everything you need to know about {countryName}
-              </h2>
-              <p className="text-gray-500 mt-2 text-sm sm:text-base">
-                Practical information to help you plan, prepare, and travel with confidence.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              {bestTimeToVisit && (
-                <ContentCard icon="🌤️" title="Best time to visit">
-                  <StructuredText text={bestTimeToVisit} />
-                </ContentCard>
-              )}
-              {safetyOverview && (
-                <ContentCard icon="🛡️" title="Safety overview">
-                  <StructuredText text={safetyOverview} />
-                </ContentCard>
-              )}
-              {costOfTravel && (
-                <ContentCard icon="💷" title="Cost of travel">
-                  <StructuredText text={costOfTravel} />
-                </ContentCard>
-              )}
-              {transportBasics && (
-                <ContentCard icon="🚌" title="Getting around">
-                  <StructuredText text={transportBasics} />
-                </ContentCard>
-              )}
-              {localLaws && (
-                <ContentCard icon="⚖️" title="Local laws & customs">
-                  <StructuredText text={localLaws} />
-                </ContentCard>
-              )}
-              {vaccinations && (
-                <ContentCard icon="💉" title="Health & vaccinations">
-                  <StructuredText text={vaccinations} />
-                </ContentCard>
-              )}
-              {internetConnectivity && (
-                <ContentCard icon="📶" title="Internet & connectivity">
-                  <StructuredText text={internetConnectivity} />
-                </ContentCard>
-              )}
-              {timeZone && (
-                <ContentCard icon="🕐" title="Time zone">
-                  <StructuredText text={timeZone} />
-                </ContentCard>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* AIRPORTS & NEIGHBOURS SECTION */}
-      {hasLocationContent && (
-        <section className="py-16 sm:py-20 px-6" style={{ backgroundColor: '#f8fafa' }}>
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-10">
-              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#2f797c' }}>
-                Getting there & beyond
-              </p>
-              <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: '#232e4e' }}>
-                Airports & nearby countries
-              </h2>
-              <p className="text-gray-500 mt-2 text-sm sm:text-base">
-                Key entry points and suggested onward destinations from {countryName}.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-6">
-              {mainAirports.length > 0 && (
-                <div className="p-6 rounded-xl border border-gray-100 bg-white">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0"
-                      style={{ backgroundColor: '#eef6f6' }}
-                    >
-                      ✈️
-                    </div>
-                    <h3 className="font-bold text-base" style={{ color: '#232e4e' }}>
-                      Main airports
-                    </h3>
-                  </div>
-                  <ul className="space-y-2">
-                    {mainAirports.map((airport, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center gap-3 text-sm text-gray-700 py-2 border-b border-gray-50 last:border-0"
-                      >
-                        <span
-                          className="w-2 h-2 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: '#2f797c' }}
-                        />
-                        {airport}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {neighbouringCountries.length > 0 && (
-                <div className="p-6 rounded-xl border border-gray-100 bg-white">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0"
-                      style={{ backgroundColor: '#eef6f6' }}
-                    >
-                      🗺️
-                    </div>
-                    <h3 className="font-bold text-base" style={{ color: '#232e4e' }}>
-                      Neighbouring countries
-                    </h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {neighbouringCountries.map((c, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1.5 rounded-full text-sm font-medium"
-                        style={{ backgroundColor: '#eef6f6', color: '#2f797c' }}
-                      >
-                        {c}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-xs text-gray-400 mt-4">
-                    Consider extending your trip with a visit to a neighbouring country.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* FAQ SECTION */}
       <section className="py-16 sm:py-20 px-6 bg-white">
