@@ -6,11 +6,10 @@ import { postType } from './postType'
 import { authorType } from './authorType'
 import { locationType } from './locationType'
 
+// ⭐ Correct imports — all in the same folder
 import continent from './continent'
 import country from './country'
 import city from './city'
-import guideCategory from './guideCategory'
-import guide from './guide'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -19,10 +18,10 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     postType,
     authorType,
     locationType,
+
+    // ⭐ These must NOT be undefined
     continent,
     country,
-    city,
-    guideCategory,  // ← must come before guide
-    guide,
+    city
   ],
 }

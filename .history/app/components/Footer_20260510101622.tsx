@@ -40,7 +40,6 @@ export default function Footer() {
 
               <a href="/blog" className="hover:text-dark transition">Blog</a>
               <a href="/about" className="hover:text-dark transition">About Us</a>
-              <a href="/guides" className="hover:text-dark transition">Free Travel Guides</a>
 
               <a href="/contact" className="hover:text-dark transition">Contact Us</a>
             </div>

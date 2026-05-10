@@ -2,13 +2,12 @@
   "name": "car-hire-site",
   "version": "0.1.0",
   "private": true,
-"scripts": {
+  "scripts": {
   "dev": "next dev",
   "build": "next build",
   "start": "next start",
   "lint": "eslint",
-  "generate:guides": "npx tsx --env-file=.env.local scripts/generate-guides.ts",
-  "update:guides": "npx tsx --env-file=.env.local scripts/update-guides.ts"
+  "generate:guides": "npx tsx --env-file=.env.local scripts/generate-guides.ts"
 },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.89.0",

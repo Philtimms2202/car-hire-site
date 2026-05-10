@@ -40,7 +40,6 @@ export default function Footer() {
 
               <a href="/blog" className="hover:text-dark transition">Blog</a>
               <a href="/about" className="hover:text-dark transition">About Us</a>
-              <a href="/guides" className="hover:text-dark transition">Free Travel Guides</a>
 
               <a href="/contact" className="hover:text-dark transition">Contact Us</a>
             </div>
@@ -77,7 +76,37 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          
+                    {/* Travel Tools (NEW COLUMN) */}
+          <div>
+            <h3 className="text-dark font-semibold mb-4">Travel Tools</h3>
+            <ul className="flex flex-col gap-2 text-sm">
+              <li>
+                <a href="/tools" className="hover:text-dark transition">
+                  All Tools
+                </a>
+              </li>
+              <li>
+                <a href="/tools/flight-time-calculator" className="hover:text-dark transition">
+                  Flight Time Calculator
+                </a>
+              </li>
+              <li>
+                <a href="/tools/packing-checklist" className="hover:text-dark transition">
+                  Packing Checklist
+                </a>
+              </li>
+              <li>
+                <a href="/tools/budget-planner" className="hover:text-dark transition">
+                  Budget Planner
+                </a>
+              </li>
+              <li>
+                <a href="/tools/time-zone-converter" className="hover:text-dark transition">
+                  Time Zone Converter
+                </a>
+              </li>
+            </ul>
+          </div>
 
           {/* Other Services */}
           <div>

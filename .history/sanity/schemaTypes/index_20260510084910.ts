@@ -22,7 +22,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     continent,
     country,
     city,
-    guideCategory,  // ← must come before guide
+    guideCategory,
     guide,
   ],
 }
