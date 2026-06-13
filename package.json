@@ -2,14 +2,14 @@
   "name": "car-hire-site",
   "version": "0.1.0",
   "private": true,
-"scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "eslint",
-  "generate:guides": "npx tsx --env-file=.env.local scripts/generate-guides.ts",
-  "update:guides": "npx tsx --env-file=.env.local scripts/update-guides.ts"
-},
+  "scripts": {
+    "dev": "cross-env NEXT_WEBPACK=true next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "generate:guides": "npx tsx --env-file=.env.local scripts/generate-guides.ts",
+    "update:guides": "npx tsx --env-file=.env.local scripts/update-guides.ts"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.89.0",
     "@portabletext/react": "^6.0.3",
@@ -38,6 +38,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/tailwindcss": "^3.0.11",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4.2.2",
