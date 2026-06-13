@@ -36,7 +36,7 @@
     ".next/types/**/*.ts",
     "**/*.mts",
     ".next/dev/types/**/*.ts"
-, "scripts/populateCountries.js"  ],
+, "scripts/populateCountries.js", "app/sitemap-flights-regional/sitemap-flights-regional.xml"  ],
   "exclude": [
     "node_modules"
   ]
