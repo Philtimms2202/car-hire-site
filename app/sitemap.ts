@@ -25,5 +25,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${base}/sitemap-guides.xml`,
       lastModified: now,
     },
+    {
+      url: `${base}/sitemap-flights-regional.xml`,
+      lastModified: now,
+    }
   ]
 }
