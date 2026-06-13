@@ -45,8 +45,7 @@ export default function HotelSearch() {
           Hotels in {cityName || "Your Destination"}
         </h3>
         <p className="text-sm text-gray-500 max-w-xs text-center">
-          Powered by Booking.com via Travelpayouts
-        </p>
+Compare Hotels Worldwide        </p>
       </div>
 
       {/* Widget container */}

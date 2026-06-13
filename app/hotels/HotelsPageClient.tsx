@@ -48,56 +48,64 @@ type DestinationCard = {
 }
 
 // ---------------------------------------------
-// AFFILIATE HELPERS
+// DYNAMIC ROUTING HELPERS
 // ---------------------------------------------
-const BOOKING_AID = '818288'
-const BOOKING_LABEL = 'affnetcj-11916287_pub-5108952_site-101749590'
-const BOOKING_AFFILIATE_FALLBACK = `https://www.booking.com/index.html?aid=${BOOKING_AID}&label=${BOOKING_LABEL}`
-
-const BOOKING_DEST_IDS: Record<string, { dest_id: string; dest_type: string }> = {
-  London:      { dest_id: '-2601889', dest_type: 'city' },
-  Edinburgh:   { dest_id: '-2595386', dest_type: 'city' },
-  Manchester:  { dest_id: '-2602512', dest_type: 'city' },
-  Bath:        { dest_id: '-2580561', dest_type: 'city' },
-  Liverpool:   { dest_id: '-2601924', dest_type: 'city' },
-  Bristol:     { dest_id: '-2580528', dest_type: 'city' },
-  Paris:       { dest_id: '-1456928', dest_type: 'city' },
-  'New York':  { dest_id: '20088325', dest_type: 'city' },
-  Dubai:       { dest_id: '-782831',  dest_type: 'city' },
-  Tokyo:       { dest_id: '-246227',  dest_type: 'city' },
-  Barcelona:   { dest_id: '-372490',  dest_type: 'city' },
-  Amsterdam:   { dest_id: '-2140479', dest_type: 'city' },
-  Lisbon:      { dest_id: '-2167973', dest_type: 'city' },
-  Rome:        { dest_id: '-126693',  dest_type: 'city' },
-  Vienna:      { dest_id: '-1995499', dest_type: 'city' },
-  Berlin:      { dest_id: '-1746443', dest_type: 'city' },
-  Prague:      { dest_id: '-553173',  dest_type: 'city' },
-  Dublin:      { dest_id: '-1507266', dest_type: 'city' },
+function getCitySlug(cityName: string): string {
+  return cityName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-function buildBookingDeepLink(city: string, country: string): string {
-  const dest = BOOKING_DEST_IDS[city]
+// ---------------------------------------------
+// AFFILIATE HELPERS
+// ---------------------------------------------
+const EXPEDIA_AFFILIATE_FALLBACK = 'https://expedia.com/affiliate/KohMBZ5'
+const EXPEDIA_CAMREF = '1110lCmpb'
+const EXPEDIA_CREATIVEREF = '1011l87747'
+const EXPEDIA_ADREF = 'PZZ928vica'
 
-  if (dest) {
-    const params = new URLSearchParams({
-      ss: city,
-      dest_id: dest.dest_id,
-      dest_type: dest.dest_type,
-      lang: 'en-gb',
-      aid: BOOKING_AID,
-      label: BOOKING_LABEL,
-    })
-    return `https://www.booking.com/searchresults.html?${params.toString()}`
-  }
+const REGION_IDS: Record<string, string> = {
+  London: '2114',
+  Manchester: '2430',
+  Paris: '179088',
+  'New York': '178293',
+  Dubai: '602958',
+  Tokyo: '179900',
+  Barcelona: '181703',
+  Amsterdam: '178285',
+  Rome: '179917',
+  Lisbon: '179141',
+  Edinburgh: '55568',
+  Dublin: '180495',
+  Prague: '179976',
+  Vienna: '179922',
+  Berlin: '179886',
+  Bath: '553248',
+  Liverpool: '553274',
+  Bristol: '553248',
+}
 
-  // Fallback for cities not in the map — sends to Booking.com search
-  const params = new URLSearchParams({
-    ss: city,
-    lang: 'en-gb',
-    aid: BOOKING_AID,
-    label: BOOKING_LABEL,
+function buildExpediaDeepLink(city: string, country: string): string {
+  const regionId = REGION_IDS[city]
+  const destination = country ? `${city}, ${country}` : city
+
+  const landingPageParams = new URLSearchParams({
+    destination,
+    ...(regionId ? { regionId } : {}),
+    sort: 'RECOMMENDED',
+    categorySearch: 'any_option',
+    useRewards: 'false',
   })
-  return `https://www.booking.com/searchresults.html?${params.toString()}`
+
+  const landingPage = `https://www.expedia.co.uk/Hotel-Search?${landingPageParams.toString()}`
+
+  const affiliateParams = new URLSearchParams({
+    siteid: '1',
+    landingPage,
+    camref: EXPEDIA_CAMREF,
+    creativeref: EXPEDIA_CREATIVEREF,
+    adref: EXPEDIA_ADREF,
+  })
+
+  return `https://expedia.com/affiliate?${affiliateParams.toString()}`
 }
 
 // ---------------------------------------------
@@ -281,7 +289,7 @@ const UK_DESTINATIONS: DestinationCard[] = [
     city: 'Bath',
     country: 'United Kingdom',
     affiliateCity: 'Bath',
-    image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?w=700&q=80',
+    image: 'https://images.unsplash.com/photo-1548765597-6a906d9686b9?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     tagline: 'Roman elegance, Georgian grandeur',
   },
   {
@@ -351,8 +359,8 @@ const WORLDWIDE_DESTINATIONS: DestinationCard[] = [
 function HotelPill({ hotel }: { hotel: Hotel }) {
   const badgeColor = typeBadge[hotel.type] ?? '#03989e'
   const href = hotel.country
-    ? buildBookingDeepLink(hotel.city, hotel.country)
-    : BOOKING_AFFILIATE_FALLBACK
+    ? buildExpediaDeepLink(hotel.city, hotel.country)
+    : EXPEDIA_AFFILIATE_FALLBACK
 
   return (
     <div className="group w-full rounded-2xl border border-gray-100 bg-white px-6 py-5 flex flex-col md:flex-row md:items-center gap-4 shadow-sm hover:shadow-lg transition-all duration-200">
@@ -380,7 +388,7 @@ function HotelPill({ hotel }: { hotel: Hotel }) {
         className="shrink-0 inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-xs font-bold text-white transition-all hover:opacity-90 hover:scale-[1.02]"
         style={{ backgroundColor: '#03989e' }}
       >
-        View on Booking.com →
+        View hotel →
       </a>
     </div>
   )
@@ -510,12 +518,10 @@ function PopularDestinationsDropdown() {
 // DESTINATION CARD TILE (image-based)
 // ---------------------------------------------
 function DestinationCardTile({ dest }: { dest: DestinationCard }) {
-  const href = buildBookingDeepLink(dest.affiliateCity, dest.country)
+  const citySlug = getCitySlug(dest.city)
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={`/hotels/${citySlug}`}
       className="group relative overflow-hidden rounded-2xl block"
       style={{ aspectRatio: '4/3' }}
     >
@@ -537,10 +543,10 @@ function DestinationCardTile({ dest }: { dest: DestinationCard }) {
           className="mt-2.5 inline-block text-xs font-bold px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0"
           style={{ backgroundColor: '#03989e', color: '#fff' }}
         >
-          Search on Booking.com →
+          Search hotels →
         </span>
       </div>
-    </a>
+    </Link>
   )
 }
 
@@ -563,7 +569,7 @@ const SPOTLIGHT_DESTINATIONS: SpotlightDest[] = [
     city: 'Lisbon',
     country: 'Portugal',
     tagline: 'Golden light, tiled streets and Atlantic soul.',
-    why: 'Lisbon has become one of Europe\'s most beloved city break destinations - and for good reason. The Portuguese capital mixes centuries of Moorish and maritime history with a buzzing contemporary food scene, rooftop bars and a nightlife culture that genuinely comes alive after midnight. Wandering the steep cobbled lanes of Alfama at sunset, with fado drifting from an open doorway, is one of travel\'s genuinely unforgettable moments.',
+    why: "Lisbon has become one of Europe's most beloved city break destinations - and for good reason. The Portuguese capital mixes centuries of Moorish and maritime history with a buzzing contemporary food scene, rooftop bars and a nightlife culture that genuinely comes alive after midnight. Wandering the steep cobbled lanes of Alfama at sunset, with fado drifting from an open doorway, is one of travel's genuinely unforgettable moments.",
     bestFor: 'Culture lovers, foodies, city breakers',
     tip: 'Stay in Chiado or Príncipe Real for walkable access to the best restaurants and viewpoints.',
     emoji: '🇵🇹',
@@ -573,7 +579,7 @@ const SPOTLIGHT_DESTINATIONS: SpotlightDest[] = [
     city: 'Tokyo',
     country: 'Japan',
     tagline: 'Neon, silence, ramen and ancient ritual - all at once.',
-    why: 'Tokyo is a city of infinite layers. From the serene cedar groves of Meiji Shrine to the sensory overload of Shinjuku at midnight, nowhere on earth offers contrasts quite like it. The food alone - whether you\'re eating yakitori under the train tracks in Yurakucho or a twelve-course kaiseki in a hushed Ginza restaurant - justifies the flight. Every neighbourhood feels like a different city entirely.',
+    why: "Tokyo is a city of infinite layers. From the serene cedar groves of Meiji Shrine to the sensory overload of Shinjuku at midnight, nowhere on earth offers contrasts quite like it. The food alone - whether you're eating yakitori under the train tracks in Yurakucho or a twelve-course kaiseki in a hushed Ginza restaurant - justifies the flight. Every neighbourhood feels like a different city entirely.",
     bestFor: 'First timers, food lovers, culture seekers',
     tip: 'Shinjuku and Shibuya are great bases for transport links; Yanaka offers a slower, more traditional Tokyo.',
     emoji: '🇯🇵',
@@ -583,7 +589,7 @@ const SPOTLIGHT_DESTINATIONS: SpotlightDest[] = [
     city: 'Amsterdam',
     country: 'Netherlands',
     tagline: 'Canals, culture and the world\'s best cycling city.',
-    why: 'Amsterdam punches far above its size. The canal ring - a UNESCO World Heritage Site - is genuinely beautiful at any time of year, and the density of world-class museums (Rijksmuseum, Van Gogh, Anne Frank House) within walking distance of each other is almost unfair. The city rewards slow travel: rent a bike, pick a neighbourhood, find a brown café and settle in.',
+    why: "Amsterdam punches far above its size. The canal ring - a UNESCO World Heritage Site - is genuinely beautiful at any time of year, and the density of world-class museums (Rijksmuseum, Van Gogh, Anne Frank House) within walking distance of each other is almost unfair. The city rewards slow travel: rent a bike, pick a neighbourhood, find a brown café and settle in.",
     bestFor: 'Art lovers, couples, weekend breakers',
     tip: 'Stay in the Jordaan or De Pijp for the most characterful base - avoid tourist-heavy areas around Centraal Station.',
     emoji: '🇳🇱',
@@ -593,7 +599,7 @@ const SPOTLIGHT_DESTINATIONS: SpotlightDest[] = [
     city: 'Edinburgh',
     country: 'United Kingdom',
     tagline: 'Dramatic skylines, whisky and wild festival energy.',
-    why: 'Edinburgh is one of Britain\'s most dramatic cities - the volcanic Castle Rock, the medieval Royal Mile and the Georgian New Town form a backdrop unlike anywhere else in the UK. August transforms it into the world\'s largest arts festival, but the city is equally rewarding in winter, when the Christmas markets glow beneath the castle and the pubs are warm and full of conversation.',
+    why: "Edinburgh is one of Britain's most dramatic cities - the volcanic Castle Rock, the medieval Royal Mile and the Georgian New Town form a backdrop unlike anywhere else in the UK. August transforms it into the world's largest arts festival, but the city is equally rewarding in winter, when the Christmas markets glow beneath the castle and the pubs are warm and full of conversation.",
     bestFor: 'History buffs, whisky enthusiasts, festival-goers',
     tip: 'The Old Town puts you inside history; the New Town is quieter and easier for walking to restaurants.',
     emoji: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
@@ -604,7 +610,7 @@ const SPOTLIGHT_DESTINATIONS: SpotlightDest[] = [
 function FeaturedSpotlight() {
   const [index, setIndex] = useState(0)
   const dest = SPOTLIGHT_DESTINATIONS[index]
-  const href = buildBookingDeepLink(dest.affiliateCity, dest.country)
+  const citySlug = getCitySlug(dest.city)
 
   return (
     <section className="py-16 px-6 bg-white border-t border-gray-100">
@@ -659,15 +665,13 @@ function FeaturedSpotlight() {
               </div>
             </div>
 
-            <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={`/hotels/${citySlug}`}
               className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 hover:scale-[1.02] shadow-md"
               style={{ backgroundColor: '#03989e' }}
             >
-              Find hotels in {dest.city} on Booking.com →
-            </a>
+              Find hotels in {dest.city} →
+            </Link>
           </div>
         </div>
       </div>
@@ -715,7 +719,7 @@ const HOTEL_TYPES = [
     color: '#5a7a52',
     bg: '#5a7a5215',
     headline: 'Smart spending without compromising on comfort.',
-    body: 'Budget hotels have changed dramatically. The best options today - particularly from Premier Inn, ibis Styles, Travelodge and Motel One - offer genuinely comfortable beds, clean rooms and great locations for a fraction of the cost of their luxury neighbours. The money you save goes back into your trip: better restaurants, more experiences, longer stays. Budget doesn\'t mean basic - it means prioritising.',
+    body: "Budget hotels have changed dramatically. The best options today - particularly from Premier Inn, ibis Styles, Travelodge and Motel One - offer genuinely comfortable beds, clean rooms and great locations for a fraction of the cost of their luxury neighbours. The money you save goes back into your trip: better restaurants, more experiences, longer stays. Budget doesn't mean basic - it means prioritising.",
     examples: 'Premier Inn, ibis Styles, Motel One, Travelodge',
     idealFor: 'Solo trips, longer stays, families stretching a holiday budget',
   },
@@ -902,7 +906,7 @@ const ratingColors: Record<MonthRating, { bg: string; text: string; label: strin
 function BestTimeSection() {
   const [activeCity, setActiveCity] = useState('London')
   const dest = SEASON_DATA.find(d => d.city === activeCity) ?? SEASON_DATA[0]
-  const href = buildBookingDeepLink(dest.city, dest.country)
+  const href = buildExpediaDeepLink(dest.city, dest.country)
 
   return (
     <section className="py-16 px-6 bg-white border-t border-gray-100">
@@ -984,7 +988,7 @@ function BestTimeSection() {
             className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 hover:scale-[1.02] shadow-md"
             style={{ backgroundColor: '#03989e' }}
           >
-            Search hotels in {dest.city} on Booking.com →
+            Search hotels in {dest.city} →
           </a>
         </div>
       </div>
@@ -1169,15 +1173,15 @@ const FAQS = [
   },
   {
     q: 'Can I book hotels directly on Timms Travel?',
-    a: 'Timms Travel helps you discover and compare hotels. When you are ready to book, you will be taken to a secure booking page on Booking.com.',
+    a: 'Timms Travel helps you discover and compare hotels. When you are ready to book, you will be taken to a secure booking page provided by one of our trusted travel partners.',
   },
   {
     q: 'Does Timms Travel charge any fees?',
-    a: 'No. You will never pay extra to use Timms Travel. The price you see when you click through to book is the price provided by Booking.com.',
+    a: 'No. You will never pay extra to use Timms Travel. The price you see when you click through to book is the price provided by the travel partner.',
   },
   {
     q: 'Can I search for hotels in smaller or less common destinations?',
-    a: 'Yes. Timms Travel supports hotel searches in thousands of destinations worldwide via Booking.com. Even small towns and remote locations are included.',
+    a: 'Yes. Timms Travel supports hotel searches in thousands of destinations around the world. Even small towns and remote locations are included.',
   },
   {
     q: 'Why do some cities have curated hotel lists?',
@@ -1189,7 +1193,7 @@ const FAQS = [
   },
   {
     q: 'Is Timms Travel suitable for last minute bookings?',
-    a: 'Yes. You can search for hotels at any time and click through to Booking.com to see live availability. It is ideal for both planned trips and spontaneous getaways.',
+    a: 'Yes. You can search for hotels at any time and click through to see live availability. It is ideal for both planned trips and spontaneous getaways.',
   },
   {
     q: 'Is Timms Travel a UK based platform?',
@@ -1211,94 +1215,94 @@ export default function HotelsPageClient() {
     curatedHotels[selectedCity.city] ??
     generateHotels(selectedCity.city, selectedCity.country)
 
-  const cityDeepLink = buildBookingDeepLink(selectedCity.city, selectedCity.country)
+  const cityDeepLink = buildExpediaDeepLink(selectedCity.city, selectedCity.country)
 
-  function PopularDestinationsGrid() {
-    const [cities, setCities] = useState<SanityCity[]>([])
-    const [visibleCount, setVisibleCount] = useState(12)
-    const [initialCount, setInitialCount] = useState(12)
+function PopularDestinationsGrid() {
+  const [cities, setCities] = useState<SanityCity[]>([])
+  const [visibleCount, setVisibleCount] = useState(12)
+  const [initialCount, setInitialCount] = useState(12)
 
-    useEffect(() => {
-      const count = window.innerWidth < 640 ? 6 : 12
-      setVisibleCount(count)
-      setInitialCount(count)
-    }, [])
+  useEffect(() => {
+    const count = window.innerWidth < 640 ? 6 : 12
+    setVisibleCount(count)
+    setInitialCount(count)
+  }, [])
 
-    useEffect(() => {
-      client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
-    }, [])
+  useEffect(() => {
+    client.fetch<SanityCity[]>(CITIES_QUERY).then(setCities)
+  }, [])
 
-    const increment = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
-    const visible = cities.slice(0, visibleCount)
-    const hasMore = visibleCount < cities.length
-    const isExpanded = visibleCount > initialCount
+  const increment = typeof window !== 'undefined' && window.innerWidth < 640 ? 6 : 12
+  const visible = cities.slice(0, visibleCount)
+  const hasMore = visibleCount < cities.length
+  const isExpanded = visibleCount > initialCount
 
-    if (cities.length === 0) {
-      return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="h-16 rounded-2xl bg-gray-100 animate-pulse" />
-          ))}
-        </div>
-      )
-    }
-
+  if (cities.length === 0) {
     return (
-      <div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {visible.map((city, i) => (
-            <Link
-              key={city.slug}
-              href={`/hotels/${city.slug}`}
-              className="group flex items-center gap-4 px-5 py-4 rounded-2xl border border-gray-100 bg-white hover:border-teal-200 hover:shadow-sm transition-all duration-200"
-            >
-              <span
-                className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold"
-                style={{ backgroundColor: '#232e4e10', color: '#232e4e' }}
-              >
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm truncate" style={{ color: '#232e4e' }}>
-                  Hotels in {city.name}
-                </h3>
-                <p className="text-xs text-gray-400 mt-0.5">View hotel guide</p>
-              </div>
-              <span
-                className="shrink-0 text-sm opacity-0 group-hover:opacity-100 transition-all duration-200"
-                style={{ color: '#03989e' }}
-              >
-                →
-              </span>
-            </Link>
-          ))}
-        </div>
-
-        {(hasMore || isExpanded) && (
-          <div className="mt-6 flex justify-center gap-3">
-            {hasMore && (
-              <button
-                onClick={() => setVisibleCount(c => c + increment)}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-                style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
-              >
-                Show more destinations ↓
-              </button>
-            )}
-            {isExpanded && (
-              <button
-                onClick={() => setVisibleCount(initialCount)}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
-                style={{ borderColor: '#e5e7eb', color: '#9ca3af', backgroundColor: 'white' }}
-              >
-                Collapse ↑
-              </button>
-            )}
-          </div>
-        )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div key={i} className="h-16 rounded-2xl bg-gray-100 animate-pulse" />
+        ))}
       </div>
     )
   }
+
+  return (
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        {visible.map((city, i) => (
+          <Link
+            key={city.slug}
+            href={`/hotels/${city.slug}`}
+            className="group flex items-center gap-4 px-5 py-4 rounded-2xl border border-gray-100 bg-white hover:border-teal-200 hover:shadow-sm transition-all duration-200"
+          >
+            <span
+              className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold"
+              style={{ backgroundColor: '#232e4e10', color: '#232e4e' }}
+            >
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-sm truncate" style={{ color: '#232e4e' }}>
+                Hotels in {city.name}
+              </h3>
+              <p className="text-xs text-gray-400 mt-0.5">View hotel guide</p>
+            </div>
+            <span
+              className="shrink-0 text-sm opacity-0 group-hover:opacity-100 transition-all duration-200"
+              style={{ color: '#03989e' }}
+            >
+              →
+            </span>
+          </Link>
+        ))}
+      </div>
+
+      {(hasMore || isExpanded) && (
+        <div className="mt-6 flex justify-center gap-3">
+          {hasMore && (
+            <button
+              onClick={() => setVisibleCount(c => c + increment)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
+              style={{ borderColor: '#232e4e', color: '#232e4e', backgroundColor: 'white' }}
+            >
+              Show more destinations ↓
+            </button>
+          )}
+          {isExpanded && (
+            <button
+              onClick={() => setVisibleCount(initialCount)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl text-sm font-semibold border transition-all hover:shadow-sm"
+              style={{ borderColor: '#e5e7eb', color: '#9ca3af', backgroundColor: 'white' }}
+            >
+              Collapse ↑
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
 
   return (
     <main className="min-h-screen bg-white">
@@ -1444,9 +1448,9 @@ export default function HotelsPageClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {[
-              { emoji: '🌍', title: 'Global coverage', body: 'Search thousands of destinations worldwide via Booking.com, from major capitals to small coastal towns.' },
+              { emoji: '🌍', title: 'Global coverage', body: 'Search thousands of destinations worldwide, from major capitals to small coastal towns.' },
               { emoji: '💸', title: 'No hidden fees', body: 'You pay the price shown. Timms Travel never adds extra charges on top of your booking.' },
-              { emoji: '⚡', title: 'Live availability', body: 'Click through to see real-time prices, room availability and guest reviews on Booking.com instantly.' },
+              { emoji: '⚡', title: 'Live availability', body: 'Click through to see real-time prices, room availability and guest reviews instantly.' },
             ].map(({ emoji, title, body }) => (
               <div key={title} className="rounded-2xl bg-white border border-gray-100 p-6 shadow-sm">
                 <div className="text-3xl mb-3">{emoji}</div>
@@ -1461,7 +1465,7 @@ export default function HotelsPageClient() {
               Finding the right hotel should feel simple. Timms Travel is designed to help you cut through the noise and discover places to stay that genuinely suit your trip - whether you are planning a weekend break, a family holiday or a long haul adventure.
             </p>
             <p>
-              For major destinations, we highlight a selection of hotels that travellers consistently love. These curated suggestions save you time and give you a head start when choosing where to stay. If you are heading somewhere less familiar, you can still search globally and find hotels in thousands of locations via Booking.com.
+              For major destinations, we highlight a selection of hotels that travellers consistently love. These curated suggestions save you time and give you a head start when choosing where to stay. If you are heading somewhere less familiar, you can still search globally and find hotels in thousands of locations.
             </p>
             <p>
               Timms Travel is proudly built in the United Kingdom and created with travellers in mind. We focus on transparency, simplicity and genuine value.
@@ -1498,20 +1502,20 @@ export default function HotelsPageClient() {
       </section>
 
       {/* ── POPULAR DESTINATIONS ── */}
-      <section className="py-16 px-6 bg-white border-t border-gray-100">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-8">
-            <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Hotel guides</p>
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
-              Popular destinations
-            </h2>
-            <p className="text-gray-400 text-sm mt-1">
-              In-depth hotel guides for the world's most searched cities.
-            </p>
-          </div>
-          <PopularDestinationsGrid />
-        </div>
-      </section>
+<section className="py-16 px-6 bg-white border-t border-gray-100">
+  <div className="max-w-5xl mx-auto">
+    <div className="mb-8">
+      <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Hotel guides</p>
+      <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#232e4e' }}>
+        Popular destinations
+      </h2>
+      <p className="text-gray-400 text-sm mt-1">
+        In-depth hotel guides for the world's most searched cities.
+      </p>
+    </div>
+    <PopularDestinationsGrid />
+  </div>
+</section>
 
       <Footer />
     </main>
