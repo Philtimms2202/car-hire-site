@@ -75,6 +75,11 @@ export default function Footer() {
                   Time Zone Converter
                 </a>
               </li>
+               <li>
+                <a href="/tools/currency-converter" className="hover:text-dark transition">
+                  Currency Converter
+                </a>
+              </li>
             </ul>
           </div>
           

@@ -5,7 +5,7 @@ import Footer from '@/app/components/Footer'
 
 export const metadata: Metadata = {
   title: 'Free Travel Tools | Timms Travel',
-  description: 'Flight time calculator, packing checklist, holiday budget planner and time zone converter. Plan your next trip with confidence.',
+  description: 'Flight time calculator, packing checklist, holiday budget planner, time zone converter and currency converter. Plan your next trip with confidence.',
   alternates: { canonical: 'https://timmstravel.com/tools' },
 }
 
@@ -38,6 +38,13 @@ const TOOLS = [
     description: 'Convert times between your home city and your destination. Includes jet lag advice based on the time difference.',
     tags: ['Time zones', 'Jet lag', 'World clock'],
   },
+  {
+    slug: 'currency-converter',
+    emoji: '💱',
+    title: 'Currency converter',
+    description: 'Convert between global currencies with daily exchange rates, then see average local prices for beer, meals and dining out around the world.',
+    tags: ['Exchange rates', 'Cost of living', 'Global'],
+  },
 ]
 
 const RELATED = [
@@ -65,7 +72,7 @@ export default function ToolsPage() {
             Plan your trip with confidence
           </h1>
           <p className="text-base md:text-lg text-teal-50 max-w-2xl mx-auto leading-relaxed">
-            Free tools built for travellers. From working out how long your flight is to packing the right things and budgeting for every part of your trip.
+            Free tools built for travellers. From working out how long your flight is to packing the right things, budgeting for every part of your trip and converting your money.
           </p>
         </div>
       </section>
@@ -114,10 +121,10 @@ export default function ToolsPage() {
             Everything in one place
           </h2>
           <p className="text-gray-600 leading-relaxed text-[15px] mb-4">
-            Planning a trip involves a lot of moving parts -figuring out how long the journey takes, what to pack, how much to budget and how to deal with the time difference when you land. These tools are designed to make that easier, without needing to switch between a dozen different websites or apps.
+            Planning a trip involves a lot of moving parts -figuring out how long the journey takes, what to pack, how much to budget, how to deal with the time difference when you land, and what your money is actually worth once you're there. These tools are designed to make that easier, without needing to switch between a dozen different websites or apps.
           </p>
           <p className="text-gray-600 leading-relaxed text-[15px]">
-            All four tools run entirely in your browser -nothing is stored, no account needed. Just open them, fill in your details and get on with planning.
+            All five tools run entirely in your browser -nothing is stored, no account needed. Just open them, fill in your details and get on with planning.
           </p>
         </div>
       </section>

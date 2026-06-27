@@ -27,6 +27,8 @@ const staticUrls = [
   "/tools/packing-checklist",
   "/tools/budget-planner",
   "/tools/time-zone-converter",
+  "/tools/currency-converter",
+
 ]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
