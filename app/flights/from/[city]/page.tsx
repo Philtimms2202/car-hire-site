@@ -1,4 +1,6 @@
 import { getCityHubs, getCityHubBySlug } from '@/lib/airports';
+import { getDistanceKm, estimateFlightDurationLabel } from '@/lib/geo';
+import { getFlightHubAiContent } from '@/lib/getFlightHubAiContent';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -6,6 +8,7 @@ import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import CityFlightSearch from './CityFlightSearch';
 import CityFlightsInteractive from './CityFlightsInteractive';
+import FlightHubAiContent from '@/app/components/flights/FlightHubAiContent';
 
 export async function generateStaticParams() {
   const hubs = getCityHubs();
@@ -29,7 +32,7 @@ export async function generateMetadata({
   const airportNames = hub.airports.map((a) => a.iata_code).join(', ');
 
   return {
-    title: `Find Flights from ${hub.city} | Timms Travel`,
+    title: `Cheap Flights from ${hub.city} | Compare Deals - Timms Travel`,
     description: `Compare cheap flights from ${hub.city} (${airportNames}) to destinations worldwide. Find the best deals with Timms Travel.`,
     alternates: {
       canonical: `https://timmstravel.com/flights/from/${hub.slug}`,
@@ -84,6 +87,18 @@ export default async function FlightsFromCityPage({
   const airportNames = hub.airports
     .map((a) => `${a.name} (${a.iata_code})`)
     .join(', ');
+
+  // Real distances/durations for the top 5 destinations, used to ground the AI content
+  const topDestinations = destinations.slice(0, 5).map((d) => {
+    const distanceKm = getDistanceKm(hub.latitude, hub.longitude, d.latitude, d.longitude);
+    return {
+      city: d.city,
+      distanceKm,
+      durationLabel: estimateFlightDurationLabel(distanceKm),
+    };
+  });
+
+  const cachedAiContent = await getFlightHubAiContent(hub.slug, 'from');
 
   const faqs = [
     {
@@ -145,6 +160,68 @@ export default async function FlightsFromCityPage({
         destinations={searchDestinations}
       />
 
+      {/* ── AI-GENERATED SEO CONTENT (unique per city, cached in Sanity) ── */}
+      <FlightHubAiContent
+        citySlug={hub.slug}
+        cityName={hub.city}
+        countryName={hub.country}
+        direction="from"
+        airportNames={hub.airports.map((a) => a.name)}
+        topDestinations={topDestinations}
+        cachedIntroText={cachedAiContent?.introText}
+        cachedGoodToKnow={cachedAiContent?.goodToKnow}
+        cachedTravelerTip={cachedAiContent?.travelerTip}
+      />
+
+      {/* ── TRAVEL TIPS ── */}
+      <section className="py-16 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
+            Travel tips for flying from {hub.city}
+          </h2>
+          <p className="text-center text-gray-500 mb-10">
+            A few things worth knowing before you book.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {TRAVEL_TIPS.map((tip) => (
+              <div
+                key={tip.title}
+                className="flex gap-4 bg-gray-50 rounded-2xl p-6 border border-gray-100"
+              >
+                <span className="text-3xl shrink-0">{tip.icon}</span>
+                <div>
+                  <p className="font-bold text-gray-800 mb-1">{tip.title}</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">{tip.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section className="py-16 px-6 bg-gray-50 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10" style={{ color: '#232e4e' }}>
+            Frequently asked questions
+          </h2>
+          <div className="space-y-3">
+            {faqs.map(({ q, a }) => (
+              <details
+                key={q}
+                className="group border border-gray-100 rounded-2xl bg-white px-5 py-4 cursor-pointer"
+              >
+                <summary className="font-semibold text-sm list-none flex items-center justify-between gap-4" style={{ color: '#232e4e' }}>
+                  {q}
+                  <span className="shrink-0 text-gray-400 group-open:rotate-45 transition-transform duration-200 text-lg leading-none">+</span>
+                </summary>
+                <p className="mt-3 text-sm text-gray-500 leading-relaxed">{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── POPULAR DESTINATIONS ── */}
       <section className="py-16 px-6 bg-white border-t border-gray-100">
         <div className="max-w-5xl mx-auto">
@@ -193,80 +270,6 @@ export default async function FlightsFromCityPage({
                 </Link>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── SEO TEXT ── */}
-      <section className="py-16 px-6 bg-gray-50 border-t border-gray-100">
-        <div className="max-w-3xl mx-auto text-gray-600 leading-relaxed space-y-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-6" style={{ color: '#232e4e' }}>
-            Flying from {hub.city}
-          </h2>
-          <p>
-            Looking for cheap flights from {hub.city}? Timms Travel compares fares
-            across hundreds of airlines departing {airportNames}, so you can find
-            the best price without hunting across multiple sites.
-          </p>
-          <p>
-            Whether you're planning a weekend break, a long-haul adventure, or a
-            business trip, our search brings together real-time fares so you can
-            compare and book in minutes — with flexible one-way, return, and
-            multi-city options.
-          </p>
-          <p>
-            Prices from {hub.city} vary throughout the year, so it's worth
-            adjusting your travel dates by a day or two if you can — even small
-            changes can make a noticeable difference to the fare.
-          </p>
-        </div>
-      </section>
-
-      {/* ── TRAVEL TIPS ── */}
-      <section className="py-16 px-6 bg-white border-t border-gray-100">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
-            Travel tips for flying from {hub.city}
-          </h2>
-          <p className="text-center text-gray-500 mb-10">
-            A few things worth knowing before you book.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {TRAVEL_TIPS.map((tip) => (
-              <div
-                key={tip.title}
-                className="flex gap-4 bg-gray-50 rounded-2xl p-6 border border-gray-100"
-              >
-                <span className="text-3xl shrink-0">{tip.icon}</span>
-                <div>
-                  <p className="font-bold text-gray-800 mb-1">{tip.title}</p>
-                  <p className="text-sm text-gray-500 leading-relaxed">{tip.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section className="py-16 px-6 bg-gray-50 border-t border-gray-100">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10" style={{ color: '#232e4e' }}>
-            Frequently asked questions
-          </h2>
-          <div className="space-y-3">
-            {faqs.map(({ q, a }) => (
-              <details
-                key={q}
-                className="group border border-gray-100 rounded-2xl bg-white px-5 py-4 cursor-pointer"
-              >
-                <summary className="font-semibold text-sm list-none flex items-center justify-between gap-4" style={{ color: '#232e4e' }}>
-                  {q}
-                  <span className="shrink-0 text-gray-400 group-open:rotate-45 transition-transform duration-200 text-lg leading-none">+</span>
-                </summary>
-                <p className="mt-3 text-sm text-gray-500 leading-relaxed">{a}</p>
-              </details>
-            ))}
           </div>
         </div>
       </section>

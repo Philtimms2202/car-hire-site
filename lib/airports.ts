@@ -15,11 +15,13 @@ type Airport = {
 };
 
 export type CityHub = {
-  slug: string;          // used in the URL, e.g. "london"
+  slug: string;
   city: string;
   country: string;
-  airports: Airport[];   // all airports serving this city
-  primaryIata: string;   // the busiest airport's code, e.g. "LHR"
+  airports: Airport[];
+  primaryIata: string;
+  latitude: number;
+  longitude: number;
 };
 
 // Turns "London" into "london", "New York" into "new-york" — safe for URLs
@@ -83,12 +85,14 @@ export function getCityHubs(): CityHub[] {
       ? `${slugify(first.city)}-${slugify(first.country)}`
       : slugify(first.city);
 
-    hubs.push({
+hubs.push({
       slug,
       city: first.city,
       country: first.country,
       airports: sorted,
       primaryIata: first.iata_code,
+      latitude: first._geoloc.lat,
+      longitude: first._geoloc.lng,
     });
   }
 

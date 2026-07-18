@@ -11,6 +11,7 @@ import country from './country'
 import city from './city'
 import guideCategory from './guideCategory'
 import guide from './guide'
+import flightHubContent from './flightHubContent'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -24,5 +25,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     city,
     guideCategory,  // ← must come before guide
     guide,
+    flightHubContent,
   ],
 }
