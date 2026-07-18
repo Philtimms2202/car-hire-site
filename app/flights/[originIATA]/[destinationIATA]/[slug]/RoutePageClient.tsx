@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
+import LazyPriceBadge from '@/app/components/LazyPriceBadge'
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -35,6 +36,13 @@ type Props = {
     timeHours: number
     durationLabel: string
   } | null
+  flightPrice: {
+    price: number
+    currency: string
+    departAt: string | null
+    returnAt: string | null
+    found: boolean
+  }
 }
 
 // ─────────────────────────────────────────────
@@ -598,10 +606,13 @@ function PopularRoutesGrid({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{originIATA}</span>
-            <span>→</span>
-            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{route.iata}</span>
+          <div className="flex items-center justify-between gap-2 text-sm text-gray-500 mb-4">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{originIATA}</span>
+              <span>→</span>
+              <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{route.iata}</span>
+            </div>
+            <LazyPriceBadge origin={originIATA} destination={route.iata} />
           </div>
 
           <button
@@ -689,10 +700,6 @@ function SeoTextBlock({
   )
 }
 
-// ─────────────────────────────────────────────
-// MAIN PAGE
-// ─────────────────────────────────────────────
-
 export default function RoutePageClient({
   originIATA,
   destinationIATA,
@@ -701,6 +708,7 @@ export default function RoutePageClient({
   destination,
   sanityCities,
   flightInfo,
+  flightPrice,
 }: Props) {
   const originName = resolveCityName(originIATA, origin)
   const destinationName = resolveCityName(destinationIATA, destination)
@@ -739,6 +747,20 @@ export default function RoutePageClient({
           </p>
         )}
 
+        {flightPrice.found && (
+          <p className="mb-2">
+            <span
+              className="inline-block font-bold text-2xl px-5 py-2 rounded-2xl"
+              style={{ backgroundColor: '#03989e', color: '#fff' }}
+            >
+              From £{flightPrice.price}
+            </span>
+            <span className="block text-xs text-gray-400 mt-2">
+              Live price, per person · found recently
+            </span>
+          </p>
+        )}
+
         <p className="text-gray-400 mb-10 max-w-xl mx-auto">
           Compare airlines, dates and prices in seconds. Book with confidence.
         </p>
@@ -750,7 +772,7 @@ export default function RoutePageClient({
           destinationName={destinationName}
         />
       </section>
-
+      
       {/* FLIGHT TIMES */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto">

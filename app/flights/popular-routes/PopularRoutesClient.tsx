@@ -4,13 +4,13 @@ import { useState, useMemo } from 'react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 import type { RegionGroup, OriginGroup, RouteLink } from './page'
-
+import LazyPriceBadge from '@/app/components/LazyPriceBadge'
 type Props = {
   regionGroups: RegionGroup[]
   totalRoutes: number
 }
 
-// ─────────────────────────────────────────────
+/// ─────────────────────────────────────────────
 // ROUTE CARD
 // ─────────────────────────────────────────────
 function RouteCard({ route }: { route: RouteLink }) {
@@ -42,12 +42,16 @@ function RouteCard({ route }: { route: RouteLink }) {
           </span>
         </span>
       </div>
-      <span
-        className="text-xs font-semibold shrink-0 ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
-        style={{ color: '#03989e' }}
-      >
-        View →
-      </span>
+
+      <div className="flex items-center gap-3 shrink-0 ml-2">
+        <LazyPriceBadge origin={route.originIATA} destination={route.destIATA} />
+        <span
+          className="text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{ color: '#03989e' }}
+        >
+          View →
+        </span>
+      </div>
     </a>
   )
 }

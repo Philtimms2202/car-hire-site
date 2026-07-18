@@ -26,6 +26,7 @@ const GlobeIcon = () => (
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [localeOpen, setLocaleOpen] = useState(false)
+  const [flightsOpen, setFlightsOpen] = useState(false)
   const [moreOpen, setMoreOpen] = useState(false)
   const [hydrated, setHydrated] = useState(false)
 
@@ -37,13 +38,17 @@ export default function Navbar() {
 
   const menuLinks = [
     { label: 'Locations', href: '/locations/continents' },
-    { label: 'Flights', href: '/flights' },
     { label: 'Hotels', href: '/hotels' },
     { label: 'Experiences', href: '/experiences' },
     { label: 'Car Hire', href: '/car-hire' },
     { label: 'Blog', href: '/blog' },
     { label: 'About', href: '/about' },
     { label: 'Contact Us', href: '/contact' },
+  ]
+
+  const flightLinks = [
+    { label: 'Search Flights', href: '/flights' },
+    { label: 'Flight Deals', href: '/deals' },
   ]
 
   const moreLinks = [
@@ -73,10 +78,49 @@ export default function Navbar() {
           />
         </a>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6">
+        {/* 💡 Desktop Menu (Swapped from md:flex to lg:flex to trigger mobile view earlier) */}
+        <div className="hidden lg:flex items-center gap-5 xl:gap-6">
 
-          {menuLinks.map(link => (
+          {/* Locations Link */}
+          <a
+            href="/locations/continents"
+            className="font-medium hover:opacity-75 transition"
+            style={{ color: '#232e4e' }}
+          >
+            Locations
+          </a>
+
+          {/* Flights Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                setFlightsOpen(prev => !prev)
+                setMoreOpen(false)
+              }}
+              className="font-medium hover:opacity-75 transition flex items-center gap-1"
+              style={{ color: '#232e4e' }}
+            >
+              Flights ▾
+            </button>
+
+            {flightsOpen && (
+              <div className="absolute left-0 mt-2 bg-white shadow-xl border rounded-xl p-4 w-48 z-50">
+                {flightLinks.map(link => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="block py-2 px-2 rounded hover:bg-gray-100 transition text-sm font-medium"
+                    style={{ color: '#232e4e' }}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Rest of the links */}
+          {menuLinks.slice(1).map(link => (
             <a
               key={link.href}
               href={link.href}
@@ -90,7 +134,10 @@ export default function Navbar() {
           {/* More Dropdown */}
           <div className="relative">
             <button
-              onClick={() => setMoreOpen(prev => !prev)}
+              onClick={() => {
+                setMoreOpen(prev => !prev)
+                setFlightsOpen(false)
+              }}
               className="font-medium hover:opacity-75 transition"
               style={{ color: '#232e4e' }}
             >
@@ -103,7 +150,7 @@ export default function Navbar() {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="block py-2 px-2 rounded hover:bg-gray-100 transition"
+                    className="block py-2 px-2 rounded hover:bg-gray-100 transition text-sm font-medium"
                     style={{ color: '#232e4e' }}
                   >
                     {link.label}
@@ -123,11 +170,11 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Hamburger — hidden until hydration */}
+        {/* 💡 Mobile Hamburger Toggle (Swapped from md:hidden to lg:hidden) */}
         {hydrated && (
           <button
             onClick={() => setMenuOpen(prev => !prev)}
-            className="md:hidden flex flex-col gap-1.5 p-2"
+            className="lg:hidden flex flex-col gap-1.5 p-2"
             aria-label="Toggle menu"
           >
             <span className={`block h-0.5 w-6 bg-[#232e4e] transition-all will-change-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
@@ -137,9 +184,9 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Desktop Locale Dropdown */}
+      {/* Desktop Locale Dropdown (Swapped from md:block to lg:block) */}
       {localeOpen && (
-        <div className="hidden md:block absolute right-6 top-20 bg-white shadow-xl border rounded-xl p-6 w-72 z-50">
+        <div className="hidden lg:block absolute right-6 top-20 bg-white shadow-xl border rounded-xl p-6 w-72 z-50">
           <h3 className="font-semibold mb-2" style={{ color: '#232e4e' }}>Language</h3>
           <select
             value={language}
@@ -171,10 +218,46 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* Mobile Menu */}
+      {/* 💡 Mobile Menu Container (Swapped from md:hidden to lg:hidden) */}
       {menuOpen && (
-        <div className="md:hidden mt-4 flex flex-col gap-4 pb-4 border-t pt-4" style={{ borderColor: '#e5e7eb' }}>
-          {menuLinks.map(link => (
+        <div className="lg:hidden mt-4 flex flex-col gap-4 pb-4 border-t pt-4" style={{ borderColor: '#e5e7eb' }}>
+          
+          <a
+            href="/locations/continents"
+            className="font-medium hover:opacity-75 transition"
+            style={{ color: '#232e4e' }}
+          >
+            Locations
+          </a>
+
+          {/* Mobile Flights Dropdown */}
+          <div>
+            <button
+              onClick={() => setFlightsOpen(prev => !prev)}
+              className="font-medium w-full text-left py-2 flex justify-between items-center"
+              style={{ color: '#232e4e' }}
+            >
+              <span>Flights</span>
+              <span>{flightsOpen ? '▴' : '▾'}</span>
+            </button>
+
+            {flightsOpen && (
+              <div className="ml-4 mt-1 flex flex-col gap-2 border-l-2 border-teal-600 pl-3">
+                {flightLinks.map(link => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="font-medium py-1 text-sm hover:opacity-75 transition"
+                    style={{ color: '#232e4e' }}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {menuLinks.slice(1).map(link => (
             <a
               key={link.href}
               href={link.href}
@@ -189,19 +272,20 @@ export default function Navbar() {
           <div>
             <button
               onClick={() => setMoreOpen(prev => !prev)}
-              className="font-medium w-full text-left py-2"
+              className="font-medium w-full text-left py-2 flex justify-between items-center"
               style={{ color: '#232e4e' }}
             >
-              More ▾
+              <span>More</span>
+              <span>{moreOpen ? '▴' : '▾'}</span>
             </button>
 
             {moreOpen && (
-              <div className="ml-4 mt-2 flex flex-col gap-2">
+              <div className="ml-4 mt-1 flex flex-col gap-2 border-l-2 border-gray-300 pl-3">
                 {moreLinks.map(link => (
                   <a
                     key={link.href}
                     href={link.href}
-                    className="font-medium hover:opacity-75 transition"
+                    className="font-medium py-1 text-sm hover:opacity-75 transition"
                     style={{ color: '#232e4e' }}
                   >
                     {link.label}
@@ -212,7 +296,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Locale Selector */}
-          <div className="mt-4">
+          <div className="mt-4 border-t pt-4" style={{ borderColor: '#e5e7eb' }}>
             <h3 className="font-semibold mb-2" style={{ color: '#232e4e' }}>Language</h3>
             <select
               value={language}

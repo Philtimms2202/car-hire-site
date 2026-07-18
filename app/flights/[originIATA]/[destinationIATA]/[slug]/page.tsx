@@ -6,6 +6,7 @@ import {
   getRouteFlightInfo,
   formatFlightDuration,
 } from '@/lib/flight-utils'
+import { getCheapestFlight } from '@/lib/travelpayouts'
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -221,9 +222,10 @@ export async function generateMetadata({ params }: { params: Promise<RouteParams
 export default async function RoutePage({ params }: { params: Promise<RouteParams> }) {
   const { originIATA, destinationIATA, slug } = await params
 
-  const [origin, destination] = await Promise.all([
+  const [origin, destination, flightPrice] = await Promise.all([
     getCityByIATA(originIATA),
     getCityByIATA(destinationIATA),
+    getCheapestFlight(originIATA, destinationIATA),
   ])
 
   // Deterministic flight info (distance + duration)
@@ -241,6 +243,7 @@ export default async function RoutePage({ params }: { params: Promise<RouteParam
       destination={destination}
       sanityCities={sanityCities}
       flightInfo={flightInfo}
+      flightPrice={flightPrice}
     />
   )
 }

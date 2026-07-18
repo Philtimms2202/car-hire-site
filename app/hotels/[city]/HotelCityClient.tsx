@@ -85,7 +85,11 @@ type Props = {
 
   aiHighlightsIntro?: string | null
   aiHighlightCards?: HighlightCard[]
+
+  heroPhoto?: UnsplashPhoto | null
+  neighbourhoodPhotos?: (UnsplashPhoto | null)[]
 }
+
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -265,7 +269,9 @@ export default function HotelCityClient(props: Props) {
     aiSafety, aiTransport, aiLocalTips,
     aiHowManyDays, aiDigitalNomads, aiAreasToAvoid,
     aiFaqs, aiHighlightsIntro, aiHighlightCards,
+    heroPhoto, neighbourhoodPhotos,   // ← ADD THESE
   } = props
+
 
   const bookingUrl = buildBookingDeepLink(cityName, countryName)
 

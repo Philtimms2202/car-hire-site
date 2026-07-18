@@ -5,31 +5,41 @@ const BASE_URL = "https://timmstravel.com"
 export async function GET() {
   const now = new Date().toISOString()
 
-const staticUrls = [
-  "/",               
-  "/locations",
-  "/flights",
-  "/hotels",
-  "/experiences",
-  "/car-hire",
-  "/blog",
-  "/about",
-  "/contact",
+  const staticUrls = [
+    "/",              
+    "/locations",
+    "/flights",
+    
+    // ─── Flight Deals Vault ────────────────
+    "/deals", 
+    "/deals/under-50",
+    "/deals/europe-under-50",
+    "/deals/summer-deals",
+    "/deals/top-city-breaks",
+    "/deals/last-minute-deals",
+    "/deals/christmas-deals",
+    "/deals/ski-deals",
 
-  "/other-services",
-  "/other-services/esims",
-  "/other-services/travel-insurance",
-  "/other-services/airport-transfers",
+    "/hotels",
+    "/experiences",
+    "/car-hire",
+    "/blog",
+    "/about",
+    "/contact",
 
-  // ─── Travel Tools ─────────────────────
-  "/tools",
-  "/tools/flight-time-calculator",
-  "/tools/packing-checklist",
-  "/tools/budget-planner",
-  "/tools/time-zone-converter",
-  "/tools/currency-converter",
+    "/other-services",
+    "/other-services/esims",
+    "/other-services/travel-insurance",
+    "/other-services/airport-transfers",
 
-]
+    // ─── Travel Tools ─────────────────────
+    "/tools",
+    "/tools/flight-time-calculator",
+    "/tools/packing-checklist",
+    "/tools/budget-planner",
+    "/tools/time-zone-converter",
+    "/tools/currency-converter",
+  ]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

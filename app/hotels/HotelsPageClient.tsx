@@ -12,6 +12,7 @@ import CarSearch from '@/app/components/Search/CarSearch'
 import { client } from '@/sanity/lib/client'
 import NextImage from 'next/image'
 
+
 // ---------------------------------------------
 // TYPES
 // ---------------------------------------------
