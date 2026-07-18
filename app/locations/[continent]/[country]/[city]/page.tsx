@@ -6,6 +6,7 @@ import Navbar from '../../../../components/Navbar'
 import Footer from '../../../../components/Footer'
 import Link from 'next/link'
 import CityPageClient from './CityPageClient'
+import { getCityHubByName } from '@/lib/airports'
 
 export const revalidate = false
 
@@ -141,6 +142,8 @@ export default async function CityPage({ params }: any) {
     )
   }
 
+const flightHub = getCityHubByName(cityDoc.name)
+
   return (
     <CityPageClient
       cityId={cityDoc._id}
@@ -158,6 +161,8 @@ export default async function CityPage({ params }: any) {
       aiHighlightsIntro={cityDoc.aiHighlightsIntro}
       aiHighlightCards={cityDoc.aiHighlightCards}
       aiAboutFallback={cityDoc.aiAboutFallback}
+      flightsFromSlug={flightHub?.slug ?? null}
+      flightsToSlug={flightHub?.slug ?? null}
     />
   )
 }

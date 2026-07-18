@@ -28,6 +28,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${base}/sitemap-flights-regional.xml`,
       lastModified: now,
+    },
+    {
+      url: `${base}/sitemap-flights-from.xml`,
+      lastModified: now,
+    },
+    {
+      url: `${base}/sitemap-flights-to.xml`,
+      lastModified: now,
     }
   ]
 }

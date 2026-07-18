@@ -71,6 +71,7 @@ const faqSchema = {
       },
     },
     {
+      
       '@type': 'Question',
       name: 'Does Timms Travel offer travel insurance?',
       acceptedAnswer: {

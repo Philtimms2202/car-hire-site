@@ -34,6 +34,8 @@ type Props = {
   aiHighlightsIntro?: string | null
   aiHighlightCards?: HighlightCard[]
   aiAboutFallback?: string | null
+  flightsFromSlug?: string | null
+  flightsToSlug?: string | null
 }
 
 // ─── Internal link pills ──────────────────────────────────────────────────────
@@ -115,7 +117,7 @@ function QuickLinkCard({
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 export default function CityPageClient(props: Props) {
-  const {
+const {
     cityId,
     cityName,
     citySlug,
@@ -130,6 +132,8 @@ export default function CityPageClient(props: Props) {
     aiHighlightsIntro,
     aiHighlightCards,
     aiAboutFallback,
+    flightsFromSlug,
+    flightsToSlug,
   } = props
 
   const [activeTab, setActiveTab] = useState<'flights' | 'hotels' | 'experiences' | 'cars'>('flights')
@@ -255,7 +259,7 @@ export default function CityPageClient(props: Props) {
         />
       </Suspense>
 
-      {/* ── QUICK LINKS ───────────────────────────────────────────────── */}
+{/* ── QUICK LINKS ───────────────────────────────────────────────── */}
       <section className="py-10 px-6 bg-white border-t border-gray-100">
         <div className="max-w-5xl mx-auto">
           <p
@@ -264,32 +268,59 @@ export default function CityPageClient(props: Props) {
           >
             Plan your trip
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <QuickLinkCard
-              href={thingsToDoHref}
-              emoji="🗺️"
-              title="Things to do"
-              description={`Browse tours, activities and day trips in ${cityName}.`}
-            />
-            <QuickLinkCard
-              href={hotelsHref}
-              emoji="🏨"
-              title="Hotels"
-              description={`Find the best areas and hotels to stay in ${cityName}.`}
-            />
-            <QuickLinkCard
-              href="/flights"
-              emoji="✈️"
-              title="Flights"
-              description={`Search and compare flights to ${cityName}.`}
-            />
-            <QuickLinkCard
-              href="/other-services/airport-transfers"
-              emoji="🚐"
-              title="Airport transfers"
-              description={`Pre-book your transfer from the airport to ${cityName}.`}
-            />
-          </div>
+          {(() => {
+            const cardCount = 3 + 1 + (flightsFromSlug ? 1 : 0)
+            const gridClass =
+              cardCount === 5
+                ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4'
+                : 'grid grid-cols-2 md:grid-cols-4 gap-4'
+
+            return (
+              <div className={gridClass}>
+                <QuickLinkCard
+                  href={thingsToDoHref}
+                  emoji="🗺️"
+                  title="Things to do"
+                  description={`Browse tours, activities and day trips in ${cityName}.`}
+                />
+                <QuickLinkCard
+                  href={hotelsHref}
+                  emoji="🏨"
+                  title="Hotels"
+                  description={`Find the best areas and hotels to stay in ${cityName}.`}
+                />
+                {flightsToSlug ? (
+                  <QuickLinkCard
+                    href={`/flights/to/${flightsToSlug}`}
+                    emoji="✈️"
+                    title={`Flights to ${cityName}`}
+                    description={`Compare cheap flights to ${cityName} from anywhere.`}
+                  />
+                ) : (
+                  <QuickLinkCard
+                    href="/flights"
+                    emoji="✈️"
+                    title="Flights"
+                    description={`Search and compare flights to ${cityName}.`}
+                  />
+                )}
+                {flightsFromSlug && (
+                  <QuickLinkCard
+                    href={`/flights/from/${flightsFromSlug}`}
+                    emoji="🛫"
+                    title={`Flights from ${cityName}`}
+                    description={`Compare cheap flights departing ${cityName}.`}
+                  />
+                )}
+                <QuickLinkCard
+                  href="/other-services/airport-transfers"
+                  emoji="🚐"
+                  title="Airport transfers"
+                  description={`Pre-book your transfer from the airport to ${cityName}.`}
+                />
+              </div>
+            )
+          })()}
         </div>
       </section>
 
