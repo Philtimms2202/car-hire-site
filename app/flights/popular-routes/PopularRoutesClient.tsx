@@ -69,6 +69,30 @@ function OriginBlock({ origin }: { origin: OriginGroup }) {
         >
           {origin.iata}
         </div>
+{/* Internal links */}
+<div className="flex flex-wrap gap-2 mb-4">
+  <a
+    href={`/flights/from/${origin.city
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')}`}
+    className="text-xs font-semibold text-[#03989e] hover:underline"
+  >
+    All Flights from {origin.city}
+  </a>
+
+  <a
+    href={`/flights/to/${origin.city
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')}`}
+    className="text-xs font-semibold text-[#03989e] hover:underline"
+  >
+    All Flights to {origin.city}
+  </a>
+</div>
         <div>
           <p className="font-bold text-gray-900">{origin.city}</p>
           <p className="text-xs text-gray-400">{origin.country}</p>
