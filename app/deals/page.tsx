@@ -6,7 +6,7 @@ import { buildMetadata } from '@/app/metadata'
 
 export async function generateMetadata() {
   return buildMetadata({
-    title: 'Curated Travel Deal Vaults | Timms Travel',
+    title: 'The Best Travel Deals | Timms Travel',
     description: 'Explore live curated travel deal vaults. Real-time flight pricing tickers sorted by budget, destinations, and seasons.',
     alternates: { canonical: 'https://timmstravel.com/deals' }
   })
@@ -29,13 +29,13 @@ export default function DealsDashboard() {
             Curated Flight & Travel Deals
           </h1>
           <p className="text-base md:text-xl text-teal-50 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
-            Real-time price drops from the global travel index. Handpicked parameters engineered for your ideal vacation style without the endless searching.
+            Real-time price updates with deals on flights, ensuring you get the best experience for your money. Handpicked parameters engineered for your ideal vacation style without the endless searching.
           </p>
           <div className="p-3 inline-flex items-center rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-xs md:text-sm font-semibold tracking-wide text-teal-100">
             ⚡ Live pricing tickers updating constantly
           </div>
           <p className="text-xs text-teal-200/80 mt-6 max-w-md mx-auto italic">
-            We want to be upfront: Timms Travel uses affiliate links. If you book a place through our links, we might earn a small commission at completely zero extra cost to you.
+            At Timms Travel, we use affiliate links. If you book a place through our links, we might earn a small commission at completely zero extra cost to you.
           </p>
         </div>
       </section>
@@ -46,7 +46,7 @@ export default function DealsDashboard() {
           <div className="text-center mb-12">
             <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Explore Collections</p>
             <h2 id="directory-heading" className="text-3xl font-bold" style={{ color: '#232e4e' }}>
-              Browse Special Deal Vaults
+              Browse Special Deal Categories
             </h2>
             <p className="text-gray-500 mt-2 max-w-md mx-auto text-sm">
               Live pricing tickers segmented into tailored collections by budget, region, and season.
