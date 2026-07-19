@@ -3,11 +3,12 @@ import Footer from '../components/Footer'
 import Link from 'next/link'
 import { DEAL_CATEGORIES } from '@/data/dealCategories'
 import { buildMetadata } from '@/app/metadata'
+import TravelPayoutsSearch from '../components/TravelPayoutsSearch'
 
 export async function generateMetadata() {
   return buildMetadata({
     title: 'The Best Travel Deals | Timms Travel',
-    description: 'Explore live curated travel deal vaults. Real-time flight pricing tickers sorted by budget, destinations, and seasons.',
+    description: 'Explore live travel deals. Real-time flight pricing tickers sorted by budget, destinations, and seasons.',
     alternates: { canonical: 'https://timmstravel.com/deals' }
   })
 }
@@ -26,7 +27,7 @@ export default function DealsDashboard() {
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-6xl md:text-7xl mb-6 animate-bounce duration-1000">✈️</div>
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-none">
-            Curated Flight & Travel Deals
+            The Best Flight & Travel Deals
           </h1>
           <p className="text-base md:text-xl text-teal-50 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
             Real-time price updates with deals on flights, ensuring you get the best experience for your money. Handpicked parameters engineered for your ideal vacation style without the endless searching.
@@ -39,6 +40,7 @@ export default function DealsDashboard() {
           </p>
         </div>
       </section>
+
 
       {/* ── CATEGORIES DIRECTORY GRID ─────────────────────────────────── */}
       <section className="py-16 px-6 bg-white" aria-labelledby="directory-heading">
@@ -74,6 +76,19 @@ export default function DealsDashboard() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+            {/* ── LIVE SEARCH ───────────────────────────────────────────────── */}
+      <section className="py-16 px-6 bg-gray-50" aria-labelledby="live-search-heading">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 id="live-search-heading" className="text-2xl md:text-3xl font-bold mb-2" style={{ color: '#232e4e' }}>
+            Search for Flights
+          </h2>
+          <p className="text-gray-500 mb-8">
+            Prefer to search directly? Find live prices below, or browse our curated deal collections underneath.
+          </p>
+          <TravelPayoutsSearch />
         </div>
       </section>
 

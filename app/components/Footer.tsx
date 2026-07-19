@@ -32,8 +32,8 @@ export default function Footer() {
               <a href="/" className="hover:text-dark transition">Home</a>
               <a href="/locations" className="hover:text-dark transition">Locations</a>
 
-              <a href="/locations/continents" className="hover:text-dark transition">Continents</a>
               <a href="/flights" className="hover:text-dark transition">Flights</a>
+              <a href="/deals" className="hover:text-dark transition">Special Offers</a>
 
               <a href="/hotels" className="hover:text-dark transition">Hotels</a>
               <a href="/experiences" className="hover:text-dark transition">Experiences</a>
@@ -46,7 +46,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Travel Tools (NEW COLUMN) */}
+          {/* Travel Tools */}
           <div>
             <h3 className="text-dark font-semibold mb-4">Travel Tools</h3>
             <ul className="flex flex-col gap-2 text-sm">

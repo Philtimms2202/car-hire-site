@@ -12,6 +12,7 @@ import CarSearch from '@/app/components/Search/CarSearch'
 import airports from '@/data/airports.json'
 import NextImage from 'next/image'
 import { buildTrackedKiwiUrl } from '@/lib/kiwi'
+import TravelPayoutsSearch from './components/TravelPayoutsSearch'
 
 // -----------------------------
 // TYPES
@@ -813,6 +814,7 @@ export default function FlightsPageClient() {
             </p>
           </div>
         </section>
+        
 
         {/* ── STATS STRIP ────────────────────────────────────────────────────── */}
         <section style={{ backgroundColor: '#1a2540' }} className="py-6 px-6" aria-label="Timms Travel at a glance">

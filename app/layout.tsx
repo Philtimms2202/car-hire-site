@@ -67,6 +67,23 @@ export default function RootLayout({
           src="https://widget.getyourguide.com/dist/gyg-widget.js"
           strategy="afterInteractive"
         />
+
+        {/* ✅ TravelPayouts White Label Web — TEMPORARILY DISABLED FOR CSS CONFLICT TEST */}
+        {/* <Script
+          id="tpwl-loader"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                var script = document.createElement("script");
+                script.async = 1;
+                script.type = "module";
+                script.src = "https://tpemb.com/wl_web/main.js?wl_id=19994";
+                document.head.appendChild(script);
+              })();
+            `,
+          }}
+        /> */}
       </head>
 
       <body className="min-h-full flex flex-col">

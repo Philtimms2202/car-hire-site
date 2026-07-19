@@ -135,7 +135,7 @@ export default function DealPageClient({
               href="/deals"
               className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all border border-white/10 mb-6 text-teal-100"
             >
-              ← Back to All Vaults
+              ← Back to All Categories
             </Link>
             <h1 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-none">
               {categoryConfig.title} from {originLabel}

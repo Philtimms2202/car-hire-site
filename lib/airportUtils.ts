@@ -127,3 +127,29 @@ export function getPrimaryAirportSlugs(): { slug: string; label: string; iata: s
   }
   return result
 }
+
+// Broader list than getPrimaryAirportSlugs — used for sitemap generation.
+// All UK airports (local relevance) + top N global airports by connectivity,
+// deduped by city slug (keeping whichever has the highest links_count).
+export function getSitemapAirportSlugs(globalLimit = 150): { slug: string; iata: string }[] {
+  const globalTop = [...ALL_AIRPORTS]
+    .filter((a) => a.country?.toLowerCase() !== 'united kingdom')
+    .sort((a, b) => (b.links_count ?? 0) - (a.links_count ?? 0))
+    .slice(0, globalLimit)
+
+  const combined = [...UK_AIRPORTS, ...globalTop]
+
+  const bySlug = new Map<string, AirportItem>()
+  for (const airport of combined) {
+    const slug = slugifyCity(airport.city)
+    const existing = bySlug.get(slug)
+    if (!existing || (airport.links_count ?? 0) > (existing.links_count ?? 0)) {
+      bySlug.set(slug, airport)
+    }
+  }
+
+  return Array.from(bySlug.entries()).map(([slug, airport]) => ({
+    slug,
+    iata: airport.iata_code.toUpperCase(),
+  }))
+}

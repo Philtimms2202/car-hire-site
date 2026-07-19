@@ -36,11 +36,12 @@ export default function Navbar() {
     setHydrated(true)
   }, [])
 
+  // Re-ordered core links array to keep single source of truth structured safely
   const menuLinks = [
-    { label: 'Locations', href: '/locations/continents' },
     { label: 'Hotels', href: '/hotels' },
     { label: 'Experiences', href: '/experiences' },
     { label: 'Car Hire', href: '/car-hire' },
+    { label: 'Locations', href: '/locations/continents' },
     { label: 'Blog', href: '/blog' },
     { label: 'About', href: '/about' },
     { label: 'Contact Us', href: '/contact' },
@@ -78,19 +79,19 @@ export default function Navbar() {
           />
         </a>
 
-        {/* 💡 Desktop Menu (Swapped from md:flex to lg:flex to trigger mobile view earlier) */}
+        {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-5 xl:gap-6">
 
-          {/* Locations Link */}
+          {/* 1. Hotels */}
           <a
-            href="/locations/continents"
+            href={menuLinks[0].href}
             className="font-medium hover:opacity-75 transition"
             style={{ color: '#232e4e' }}
           >
-            Locations
+            {menuLinks[0].label}
           </a>
 
-          {/* Flights Dropdown */}
+          {/* 2. Flights Dropdown */}
           <div className="relative">
             <button
               onClick={() => {
@@ -119,8 +120,20 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Rest of the links */}
-          {menuLinks.slice(1).map(link => (
+          {/* 3, 4, 5. Experiences, Car Hire, Locations */}
+          {menuLinks.slice(1, 4).map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="font-medium hover:opacity-75 transition"
+              style={{ color: '#232e4e' }}
+            >
+              {link.label}
+            </a>
+          ))}
+
+          {/* 6. Everything Else (Blog, About, Contact Us) */}
+          {menuLinks.slice(4).map(link => (
             <a
               key={link.href}
               href={link.href}
@@ -170,7 +183,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* 💡 Mobile Hamburger Toggle (Swapped from md:hidden to lg:hidden) */}
+        {/* Mobile Hamburger Toggle */}
         {hydrated && (
           <button
             onClick={() => setMenuOpen(prev => !prev)}
@@ -184,7 +197,7 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Desktop Locale Dropdown (Swapped from md:block to lg:block) */}
+      {/* Desktop Locale Dropdown */}
       {localeOpen && (
         <div className="hidden lg:block absolute right-6 top-20 bg-white shadow-xl border rounded-xl p-6 w-72 z-50">
           <h3 className="font-semibold mb-2" style={{ color: '#232e4e' }}>Language</h3>
@@ -218,19 +231,20 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* 💡 Mobile Menu Container (Swapped from md:hidden to lg:hidden) */}
+      {/* Mobile Menu Container */}
       {menuOpen && (
         <div className="lg:hidden mt-4 flex flex-col gap-4 pb-4 border-t pt-4" style={{ borderColor: '#e5e7eb' }}>
           
+          {/* 1. Mobile Hotels */}
           <a
-            href="/locations/continents"
+            href={menuLinks[0].href}
             className="font-medium hover:opacity-75 transition"
             style={{ color: '#232e4e' }}
           >
-            Locations
+            {menuLinks[0].label}
           </a>
 
-          {/* Mobile Flights Dropdown */}
+          {/* 2. Mobile Flights Dropdown */}
           <div>
             <button
               onClick={() => setFlightsOpen(prev => !prev)}
@@ -257,7 +271,20 @@ export default function Navbar() {
             )}
           </div>
 
-          {menuLinks.slice(1).map(link => (
+          {/* 3, 4, 5. Mobile Experiences, Car Hire, Locations */}
+          {menuLinks.slice(1, 4).map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="font-medium hover:opacity-75 transition"
+              style={{ color: '#232e4e' }}
+            >
+              {link.label}
+            </a>
+          ))}
+
+          {/* 6. Mobile Everything Else */}
+          {menuLinks.slice(4).map(link => (
             <a
               key={link.href}
               href={link.href}

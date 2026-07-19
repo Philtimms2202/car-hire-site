@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { margin: 0; padding: 0; font-family: sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="tpwl-search"></div>
+  <div id="tpwl-tickets"></div>
+  <script>
+    window.TPWL_CONFIGURATION = {
+      ...window.TPWL_CONFIGURATION,
+      resultsURL: 'https://flights.timmstravel.com/',
+    };
+    (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.type = "module";
+      script.src = "https://tpemb.com/wl_web/main.js?wl_id=19994";
+      document.head.appendChild(script);
+    })();
+  </script>
+</body>
+</html>

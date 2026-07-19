@@ -60,7 +60,7 @@ export default async function DealPage({ params }: { params: Promise<DealParams>
               href="/deals"
               className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all border border-white/10 mb-6 text-teal-100"
             >
-              ← Back to All Vaults
+              ← Back to All Categories
             </Link>
             <h1 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-none">
               {categoryConfig.title}
@@ -93,7 +93,7 @@ export default async function DealPage({ params }: { params: Promise<DealParams>
                   Trending Right Now
                 </h2>
                 <p className="text-sm text-gray-500 mt-2">
-                  A sample of live drops from airports worldwide — select yours above for pricing tailored to you.
+                  A sample of live drops from airports worldwide, select yours above for pricing tailored to you.
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
