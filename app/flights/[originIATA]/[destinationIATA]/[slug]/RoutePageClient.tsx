@@ -331,7 +331,7 @@ function SearchBox({
       infants,
       cabin,
     })
-    window.open(url, '_blank')
+    window.location.assign(url)
   }
 
   return (
@@ -588,7 +588,7 @@ function PopularRoutesGrid({
       infants: 0,
       cabin: 'economy',
     })
-    window.open(url, '_blank')
+    window.location.assign(url)
   }
 
   return (

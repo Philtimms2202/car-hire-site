@@ -62,7 +62,7 @@ export default function DealCard({ deal }: { deal: TrendingDeal }) {
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <a href={widgetSearchLink} target="_blank" rel="noopener noreferrer" className="w-full text-center py-3 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 shadow-sm block" style={{ backgroundColor: '#232e4e' }}>
+        <a href={widgetSearchLink} className="w-full text-center py-3 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 shadow-sm block" style={{ backgroundColor: '#232e4e' }}>
           Check Live Fares →
         </a>
         <Link href={internalRouteLink} className="w-full text-center py-2 rounded-xl text-gray-600 hover:text-teal-700 border border-gray-200 hover:border-teal-200 bg-white font-medium text-xs transition-all block">

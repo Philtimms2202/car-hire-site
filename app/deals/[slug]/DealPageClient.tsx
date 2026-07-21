@@ -231,8 +231,6 @@ export default function DealPageClient({
                       <div className="flex flex-col gap-2">
                         <a
                           href={widgetSearchLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
                           className="w-full text-center py-3 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 shadow-sm block"
                           style={{ backgroundColor: '#232e4e' }}
                         >

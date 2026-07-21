@@ -104,7 +104,7 @@ export default function CityFlightSearch({
     cabinLabels[cabin]
   }`;
 
-  const handleSearch = () => {
+const handleSearch = () => {
     if (!originIata) return;
     const url = buildWhitelabelUrl({
       from: originIata, // Now dynamic from the user's selection
@@ -116,7 +116,7 @@ export default function CityFlightSearch({
       infants,
       cabin,
     });
-    window.open(url, '_blank');
+    window.location.assign(url);
   };
 
   return (

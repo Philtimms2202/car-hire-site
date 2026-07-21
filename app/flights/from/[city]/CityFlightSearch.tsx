@@ -116,8 +116,7 @@ export default function CityFlightSearch({
       infants,
       cabin,
     });
-    window.open(url, '_blank');
-  };
+      window.location.assign(url);};
 
   return (
     <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-4xl mx-auto text-left">

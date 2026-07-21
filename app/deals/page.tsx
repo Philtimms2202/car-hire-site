@@ -79,19 +79,6 @@ export default function DealsDashboard() {
         </div>
       </section>
 
-            {/* ── LIVE SEARCH ───────────────────────────────────────────────── */}
-      <section className="py-16 px-6 bg-gray-50" aria-labelledby="live-search-heading">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 id="live-search-heading" className="text-2xl md:text-3xl font-bold mb-2" style={{ color: '#232e4e' }}>
-            Search for Flights
-          </h2>
-          <p className="text-gray-500 mb-8">
-            Prefer to search directly? Find live prices below, or browse our curated deal collections underneath.
-          </p>
-          <TravelPayoutsSearch />
-        </div>
-      </section>
-
       <Footer />
     </main>
   )

@@ -666,17 +666,17 @@ export default function FlightsPageClient() {
     )
   }
 
-  const openRoute = (destIata: string) => {
-    if (!originAirport) { alert('Choose a departure airport first.'); return }
-    const url = buildTrackedKiwiUrl({
-      from: originAirport.iata_code,
-      to: destIata,
-      depart: todayStr(),
-      adults: 1,
-      currency: 'GBP',
-    })
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
+const openRoute = (destIata: string) => {
+  if (!originAirport) { alert('Choose a departure airport first.'); return }
+  const url = buildTrackedKiwiUrl({
+    from: originAirport.iata_code,
+    to: destIata,
+    depart: todayStr(),
+    adults: 1,
+    currency: 'GBP',
+  })
+  window.location.assign(url)
+}
 
   const haulData   = activeHaul === 'short' ? shortHaul : activeHaul === 'mid' ? midHaul : longHaul
   const haulColour = haulStyles[activeHaul]
