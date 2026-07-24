@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://timmstravel.com'),
   title: "Timms Travel | Compare Flights, Hotels, Experiences & More!",
   description:
-    "Choose from thousands of destinations, compare hotel prices, and reserve your hire car before your trip begins.",
+    "Choose from thousands of destinations, compare hotel prices, and find flights with Timms Travel.",
 };
 
 export default function RootLayout({
@@ -52,6 +52,17 @@ export default function RootLayout({
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
               })(window,document,'script','dataLayer','GTM-K4RWSHXR');
+            `,
+          }}
+        />
+
+        {/* ✅ Mailchimp Connected Site Script */}
+        <Script
+          id="mcjs"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(s)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/016d711d87ab0fa13c114b3fd/8bb82035ac754c4f8491f2d83.js");
             `,
           }}
         />
