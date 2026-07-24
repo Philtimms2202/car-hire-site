@@ -57,13 +57,11 @@ export default function RootLayout({
         />
 
         {/* ✅ Mailchimp Connected Site Script */}
-        <Script
+        {/* ✅ Mailchimp Connected Site Script (Native HTML tag for static SSR detection) */}
+        <script
           id="mcjs"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `
-              !function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(s)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/016d711d87ab0fa13c114b3fd/8bb82035ac754c4f8491f2d83.js");
-            `,
+            __html: `!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/016d711d87ab0fa13c114b3fd/8bb82035ac754c4f8491f2d83.js");`,
           }}
         />
 
