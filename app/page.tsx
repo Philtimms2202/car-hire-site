@@ -10,6 +10,7 @@ import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import FlightSearch from '@/app/components/Search/FlightSearch'
 import HotelSearch from '@/app/components/Search/HotelSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
+import TrendingFlightDeals from '@/app/components/TrendingFlightDeals'
 
 import { useState } from 'react'
 
@@ -315,31 +316,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* POPULAR EXPERIENCES */}
-      <section className="hidden md:block py-16 px-6 bg-gray-50" aria-labelledby="experiences-heading">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">Hand picked</p>
-            <h2 id="experiences-heading" className="text-3xl font-bold" style={{ color: '#232e4e' }}>
-              Popular Experiences
-            </h2>
-            <p className="text-gray-500 mt-2">
-              Top rated tours and activities from destinations around the world, bookable in minutes.
-            </p>
-          </div>
-          <div data-gyg-widget="auto" data-gyg-partner-id="P7B7GRH" aria-label="GetYourGuide experience widgets"></div>
-          <div className="text-center mt-8">
-            <Link
-              href="/experiences"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 shadow-md"
-              style={{ backgroundColor: '#03989e' }}
-            >
-              Browse All Experiences →
-            </Link>
-          </div>
-        </div>
-      </section>
-
+{/* TRENDING FLIGHT DEALS */}
+      <TrendingFlightDeals limit={6} />
+      
       {/* HOW IT WORKS */}
       <section className="py-16 px-6 bg-white" aria-labelledby="how-it-works-heading">
         <div className="max-w-6xl mx-auto">

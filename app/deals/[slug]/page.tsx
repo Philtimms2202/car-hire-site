@@ -4,8 +4,10 @@ import { buildMetadata } from '@/app/metadata'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import AirportSelector from '../../components/AirportSelector'
-import DealCard from '../../components/DealCard'
+import TeaserDealsGrid from '../../components/TeaserDealsGrid'
+import DealCategoryAiContent from '../../components/deals/DealCategoryAiContent'
 import { getTeaserDeals } from '@/lib/getDealsForSlug'
+import { getDealCategoryAiContent } from '@/lib/getDealCategoryAiContent'
 import { filterDealsForCategory } from '@/lib/filterDeals'
 import Link from 'next/link'
 
@@ -41,7 +43,9 @@ export default async function DealPage({ params }: { params: Promise<DealParams>
   if (!categoryConfig) notFound()
 
   const rawTeaserDeals = await getTeaserDeals(slug)
-  const teaserDeals = filterDealsForCategory(rawTeaserDeals, slug, categoryConfig).slice(0, 6)
+  const teaserDeals = filterDealsForCategory(rawTeaserDeals, slug, categoryConfig)
+
+  const cachedAiContent = await getDealCategoryAiContent(slug)
 
   const popularAirports = ['manchester', 'london', 'birmingham', 'edinburgh']
 
@@ -85,6 +89,19 @@ export default async function DealPage({ params }: { params: Promise<DealParams>
           </div>
         </section>
 
+        {/* ── AI-GENERATED SEO CONTENT (unique per category, cached in Sanity) ── */}
+        <DealCategoryAiContent
+          categorySlug={slug}
+          categoryTitle={categoryConfig.title}
+          categorySubtitle={categoryConfig.subtitle}
+          maxPrice={categoryConfig.maxPrice}
+          destinations={categoryConfig.destinations}
+          months={categoryConfig.months}
+          cachedIntroText={cachedAiContent?.introText}
+          cachedGoodToKnow={cachedAiContent?.goodToKnow}
+          cachedTravelerTip={cachedAiContent?.travelerTip}
+        />
+
         {teaserDeals.length > 0 && (
           <section className="py-16 px-6 bg-white">
             <div className="max-w-6xl mx-auto">
@@ -96,11 +113,7 @@ export default async function DealPage({ params }: { params: Promise<DealParams>
                   A sample of live drops from airports worldwide, select yours above for pricing tailored to you.
                 </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {teaserDeals.map((deal, idx) => (
-                  <DealCard key={idx} deal={deal} />
-                ))}
-              </div>
+              <TeaserDealsGrid deals={teaserDeals} initialCount={6} />
             </div>
           </section>
         )}
