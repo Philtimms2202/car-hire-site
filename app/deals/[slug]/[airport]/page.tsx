@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation'
 import { DEAL_CATEGORIES } from '@/data/dealCategories'
 import { buildMetadata } from '@/app/metadata'
 import { getDealsForSlug } from '@/lib/getDealsForSlug'
+import { getDealAirportAiContent } from '@/lib/getDealAirportAiContent'
 import DealPageClient from '../DealPageClient'
+import DealAirportAiContent from '../../../components/deals/DealAirportAiContent'
 import { resolveAirportSlugToIata, resolveIataToLabel, getPrimaryAirportSlugs } from '@/lib/airportUtils'
 
 type DealParams = { slug: string; airport: string }
@@ -47,6 +49,25 @@ export default async function DealAirportPage({ params }: { params: Promise<Deal
   if (!categoryConfig || !iata) notFound()
 
   const deals = await getDealsForSlug(slug, iata)
+  const airportLabel = resolveIataToLabel(iata)
+  const cachedAiContent = await getDealAirportAiContent(slug, airport)
+
+  const aiContentSection = (
+    <DealAirportAiContent
+      categorySlug={slug}
+      airportSlug={airport}
+      categoryTitle={categoryConfig.title}
+      categorySubtitle={categoryConfig.subtitle}
+      airportLabel={airportLabel}
+      originIata={iata}
+      maxPrice={categoryConfig.maxPrice}
+      destinations={categoryConfig.destinations}
+      months={categoryConfig.months}
+      cachedIntroText={cachedAiContent?.introText}
+      cachedGoodToKnow={cachedAiContent?.goodToKnow}
+      cachedTravelerTip={cachedAiContent?.travelerTip}
+    />
+  )
 
   return (
     <DealPageClient
@@ -55,6 +76,7 @@ export default async function DealAirportPage({ params }: { params: Promise<Deal
       originIata={iata}
       categoryConfig={categoryConfig}
       initialDeals={deals}
+      aiContent={aiContentSection}
     />
   )
 }

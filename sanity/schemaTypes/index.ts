@@ -12,6 +12,8 @@ import city from './city'
 import guideCategory from './guideCategory'
 import guide from './guide'
 import flightHubContent from './flightHubContent'
+import dealCategoryContent from './dealCategoryContent'
+import dealAirportContent from './dealAirportContent'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -26,5 +28,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     guideCategory,  // ← must come before guide
     guide,
     flightHubContent,
+    dealCategoryContent,
+    dealAirportContent,
   ],
 }

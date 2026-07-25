@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import AirportSelector from '../../components/AirportSelector'
@@ -28,6 +29,7 @@ type DealPageClientProps = {
     maxDaysAhead?: number
   }
   initialDeals: TrendingDeal[]
+  aiContent?: ReactNode
 }
 
 export default function DealPageClient({
@@ -36,6 +38,7 @@ export default function DealPageClient({
   originIata,
   categoryConfig,
   initialDeals,
+  aiContent,
 }: DealPageClientProps) {
   const resolveLocationLabel = (iata: string, format: 'full' | 'short' = 'short') => {
     if (!iata) return ''
@@ -250,6 +253,8 @@ export default function DealPageClient({
             )}
           </div>
         </section>
+
+        {aiContent}
       </div>
 
       <Footer />

@@ -7,6 +7,7 @@ type AirportItem = {
   country: string
   iata_code: string
   links_count?: number
+  _geoloc?: { lat: number; lng: number }
 }
 
 // Multi-airport cities where TravelPayouts expects the IATA CITY code,
@@ -72,6 +73,14 @@ export function resolveIataToLabel(iata: string): string {
   if (METACITY_OVERRIDES[code]) return METACITY_OVERRIDES[code].city
   const match = ALL_AIRPORTS.find((a) => a.iata_code?.toUpperCase() === code)
   return match?.city ?? code
+}
+
+// IATA -> coordinates, used for real distance/duration calculations
+// (e.g. deal airport content, flight hub content)
+export function getAirportCoordinates(iata: string): { lat: number; lng: number } | null {
+  const code = iata.toUpperCase().trim()
+  const match = ALL_AIRPORTS.find((a) => a.iata_code?.toUpperCase() === code)
+  return match?._geoloc ?? null
 }
 
 // Full resolver with metacity + full/short formatting — used by deal cards
