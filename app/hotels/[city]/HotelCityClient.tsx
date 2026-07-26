@@ -2,8 +2,10 @@
 
 import React, { useEffect } from 'react'
 import Link from 'next/link'
+import NextImage from 'next/image'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
+import { type UnsplashPhoto } from '@/lib/unsplash' // ← same path you used in page.tsx
 
 // ─── Booking.com Affiliate Links ────────────────────────────────────────────
 
@@ -328,9 +330,28 @@ export default function HotelCityClient(props: Props) {
 
       <Navbar />
 
-      {/* ── HERO ──────────────────────────────────────────────────────── */}
-      <section className="text-white py-24 md:py-32 px-6 text-center relative overflow-hidden"
-               style={{ background: 'linear-gradient(135deg, #022135 0%, #03989e 100%)' }}>
+{/* ── HERO ──────────────────────────────────────────────────────── */}
+      <section className="text-white py-24 md:py-32 px-6 text-center relative overflow-hidden">
+        {heroPhoto?.found ? (
+          <>
+            <NextImage
+              src={heroPhoto.url}
+              alt={heroPhoto.altDescription || `${cityName} skyline`}
+              fill
+              priority
+              className="object-cover object-center"
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: 'linear-gradient(135deg, rgba(2,33,53,0.88) 0%, rgba(3,152,158,0.75) 100%)' }}
+            />
+          </>
+        ) : (
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(135deg, #022135 0%, #03989e 100%)' }}
+          />
+        )}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
         <div className="max-w-4xl mx-auto relative z-10">
           {emoji && <div className="text-6xl md:text-7xl mb-6 animate-bounce duration-1000">{emoji}</div>}
@@ -357,6 +378,7 @@ export default function HotelCityClient(props: Props) {
             We want to be upfront: Timms Travel uses affiliate links. If you book a place through our links, we might earn a small commission at completely zero extra cost to you.
           </p>
         </div>
+
       </section>
 
       {/* ── QUICK NAV ────────────────────────────────────────────────── */}
@@ -658,8 +680,87 @@ export default function HotelCityClient(props: Props) {
         </section>
       )}
 
-      {/* ── NIGHTLIFE + FOOD ──────────────────────────────────────────── */}
-      {/* ... continuation of component layout */}
+{/* ── NIGHTLIFE + FOOD ──────────────────────────────────────────── */}
+      {(aiNightlife || aiFood) && (
+        <section className="py-16 px-6 bg-white border-t border-gray-100">
+          <div className="max-w-5xl mx-auto">
+            <SectionLabel>Eating & Drinking</SectionLabel>
+            <H2>Where to eat and where to drink</H2>
+            <Kicker>A quick reference for the areas known for their food and nightlife scenes — full detail in the neighbourhood guide above.</Kicker>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {aiFood && (
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
+                  <p className="font-bold text-sm uppercase tracking-widest mb-3" style={{ color: '#03989e' }}>Food scene</p>
+                  <ParagraphBlock text={aiFood} />
+                </div>
+              )}
+              {aiNightlife && (
+                <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
+                  <p className="font-bold text-sm uppercase tracking-widest mb-3" style={{ color: '#03989e' }}>Nightlife</p>
+                  <ParagraphBlock text={aiNightlife} />
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── PRACTICALITIES: SAFETY & TRANSPORT ──────────────────────────── */}
+      {(aiSafety || aiTransport || aiLocalTips || aiAreasToAvoid) && (
+        <section id="practicalities" className="py-16 px-6 bg-gray-50 border-t border-gray-100">
+          <div className="max-w-5xl mx-auto">
+            <SectionLabel>Practicalities</SectionLabel>
+            <H2>Safety, getting around, and local know-how</H2>
+
+            <div className="grid md:grid-cols-2 gap-6 mt-6">
+              {aiSafety && (
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <p className="font-bold text-sm mb-2" style={{ color: '#022135' }}>Safety</p>
+                  <ParagraphBlock text={aiSafety} />
+                </div>
+              )}
+              {aiTransport && (
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <p className="font-bold text-sm mb-2" style={{ color: '#022135' }}>Getting around</p>
+                  <ParagraphBlock text={aiTransport} />
+                </div>
+              )}
+              {aiLocalTips && (
+                <div className="rounded-2xl border p-6" style={{ borderColor: '#03989e', backgroundColor: 'rgba(3,152,158,0.03)' }}>
+                  <p className="font-bold text-sm mb-2" style={{ color: '#03989e' }}>A local tip</p>
+                  <ParagraphBlock text={aiLocalTips} />
+                </div>
+              )}
+              {aiAreasToAvoid && (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
+                  <p className="font-bold text-sm mb-2 text-amber-900">Areas to be mindful of</p>
+                  <div className="text-amber-900/80">
+                    <ParagraphBlock text={aiAreasToAvoid} />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── FAQS ─────────────────────────────────────────────────────── */}
+      {aiFaqs?.length ? (
+        <section id="faqs" className="py-16 px-6 bg-white border-t border-gray-100">
+          <div className="max-w-3xl mx-auto">
+            <SectionLabel>Common Questions</SectionLabel>
+            <H2>Frequently asked questions about {cityName}</H2>
+            <div className="space-y-3 mt-6">
+              {aiFaqs.map((faq, i) => (
+                <FAQItem key={i} faq={faq} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <Footer />
     </main>
   )
 }

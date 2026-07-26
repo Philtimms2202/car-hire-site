@@ -11,7 +11,7 @@ import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import { client } from '@/sanity/lib/client'
 import NextImage from 'next/image'
-
+import { useRouter } from 'next/navigation'
 
 // ---------------------------------------------
 // TYPES
@@ -395,13 +395,13 @@ function HotelPill({ hotel }: { hotel: Hotel }) {
   )
 }
 
-// ---------------------------------------------
-// CITY SEARCH
-// ---------------------------------------------
-function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
+function CitySearch() {
+  const router = useRouter()
   const cityOptions = useCityOptions()
   const [query, setQuery] = React.useState('')
   const [open, setOpen] = React.useState(false)
+  const [activeIndex, setActiveIndex] = React.useState(-1)
+  const containerRef = React.useRef<HTMLDivElement>(null)
 
   const matches = React.useMemo(() => {
     if (!query.trim()) return []
@@ -411,21 +411,47 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
       .slice(0, 8)
   }, [query, cityOptions])
 
-  const handleSelect = (option: CityOption) => {
-    setQuery(`${option.city}, ${option.country}`)
-    onSelect(option)
+  React.useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const goToCity = (option: CityOption) => {
     setOpen(false)
+    router.push(`/hotels/${getCitySlug(option.city)}`)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!open || matches.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setActiveIndex(i => (i + 1) % matches.length)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActiveIndex(i => (i - 1 + matches.length) % matches.length)
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      goToCity(matches[activeIndex >= 0 ? activeIndex : 0])
+    } else if (e.key === 'Escape') {
+      setOpen(false)
+    }
   }
 
   return (
-    <div className="relative max-w-xl mx-auto">
+    <div className="relative max-w-xl mx-auto" ref={containerRef}>
       <div className="relative">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
         <input
           type="text"
           value={query}
-          onChange={e => { setQuery(e.target.value); setOpen(true) }}
-          onFocus={() => setOpen(true)}
+          onChange={e => { setQuery(e.target.value); setOpen(true); setActiveIndex(-1) }}
+          onFocus={() => query.trim() && setOpen(true)}
+          onKeyDown={handleKeyDown}
           placeholder="Search any city or country…"
           className="w-full border border-gray-200 rounded-2xl pl-12 pr-4 py-3.5 text-sm bg-white focus:outline-none focus:ring-2 focus:border-transparent shadow-sm"
           style={{ '--tw-ring-color': '#03989e' } as React.CSSProperties}
@@ -433,12 +459,13 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
       </div>
       {open && matches.length > 0 && (
         <div className="absolute z-20 mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-xl max-h-64 overflow-auto">
-          {matches.map(option => (
+          {matches.map((option, i) => (
             <button
               key={`${option.city}-${option.country}`}
               type="button"
-              onClick={() => handleSelect(option)}
-              className="w-full text-left px-5 py-3 text-sm hover:bg-gray-50 transition-colors"
+              onClick={() => goToCity(option)}
+              onMouseEnter={() => setActiveIndex(i)}
+              className={`w-full text-left px-5 py-3 text-sm transition-colors ${activeIndex === i ? 'bg-gray-50' : 'bg-white'}`}
             >
               <span className="font-medium text-slate-800">{option.city}</span>
               <span className="text-gray-400 ml-1">{option.country}</span>
@@ -446,9 +473,16 @@ function CitySearch({ onSelect }: { onSelect: (city: CityOption) => void }) {
           ))}
         </div>
       )}
+      {open && query.trim().length >= 2 && matches.length === 0 && (
+        <div className="absolute z-20 mt-2 w-full bg-white border border-gray-100 rounded-2xl shadow-xl px-5 py-4 text-sm text-gray-500">
+          No cities found for "{query}".
+        </div>
+      )}
     </div>
   )
 }
+
+
 
 // ---------------------------------------------
 // POPULAR DESTINATIONS DROPDOWN (Sanity)
@@ -1502,7 +1536,7 @@ function PopularDestinationsGrid() {
         </div>
       </section>
 
-      {/* ── POPULAR DESTINATIONS ── */}
+{/* ── POPULAR DESTINATIONS ── */}
 <section className="py-16 px-6 bg-white border-t border-gray-100">
   <div className="max-w-5xl mx-auto">
     <div className="mb-8">
@@ -1514,6 +1548,12 @@ function PopularDestinationsGrid() {
         In-depth hotel guides for the world's most searched cities.
       </p>
     </div>
+
+    {/* ← ADD THIS */}
+    <div className="mb-10">
+      <CitySearch />
+    </div>
+
     <PopularDestinationsGrid />
   </div>
 </section>

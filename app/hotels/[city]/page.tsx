@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { client } from '@/sanity/lib/client'
 import airports from '@/data/airports.json'
 import HotelCityClient from './HotelCityClient'
+import { searchUnsplashPhoto, type UnsplashPhoto } from '@/lib/unsplash'
 
 export const revalidate = 86400
 
@@ -159,6 +160,18 @@ async function resolveCity(citySlug: string): Promise<CityData | null> {
   return getCityFromAirports(citySlug)
 }
 
+// Wraps searchUnsplashPhoto so a missing env var or a failed fetch
+// never takes the whole page down — the page should still render
+// perfectly well without photos.
+async function safeSearchUnsplashPhoto(query: string): Promise<UnsplashPhoto | null> {
+  try {
+    return await searchUnsplashPhoto(query)
+  } catch (err) {
+    console.error('UNSPLASH FETCH ERROR:', err)
+    return null
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -196,6 +209,15 @@ export default async function HotelCityPage({
 
   if (!cityData) redirect('/hotels')
 
+  const [heroPhoto, neighbourhoodPhotos] = await Promise.all([
+    safeSearchUnsplashPhoto(`${cityData.name} skyline cityscape`),
+    Promise.all(
+      (cityData.aiNeighbourhoods ?? []).map((n) =>
+        safeSearchUnsplashPhoto(`${n.name} ${cityData.name}`)
+      )
+    ),
+  ])
+
   return (
     <HotelCityClient
       cityName={cityData.name}
@@ -223,6 +245,8 @@ export default async function HotelCityPage({
       aiFaqs={cityData.aiFaqs}
       aiHighlightsIntro={cityData.aiHighlightsIntro}
       aiHighlightCards={cityData.aiHighlightCards}
+      heroPhoto={heroPhoto}
+      neighbourhoodPhotos={neighbourhoodPhotos}
     />
   )
 }
