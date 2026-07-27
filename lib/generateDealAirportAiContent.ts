@@ -15,7 +15,9 @@ export interface DealAirportFacts {
 
 export interface DealAirportAiContent {
   introText: string
+  goodToKnowHeading: string
   goodToKnow: string
+  travelerTipHeading: string
   travelerTip: string
 }
 
@@ -59,9 +61,11 @@ ${constraintFacts || `This is a general collection of deals departing ${airportL
 Return ONLY a valid JSON object — no markdown, no code fences, no preamble — with exactly these fields:
 
 {
-  "introText": "2-3 sentence intro paragraph specifically about this category of trip departing ${airportLabel}. Reference at least one specific route with its distance or flight time if provided above. Around 60-90 words.",
-  "goodToKnow": "A short practical paragraph (60-90 words) with booking advice specific to departing ${airportLabel} for this category — for example, how the flight times to the listed destinations affect trip length, or booking-window advice for this season if mentioned.",
-  "travelerTip": "A short, specific paragraph (50-70 words) giving one genuinely specific tip for someone flying this category of trip from ${airportLabel} — different in substance from the booking advice already given in goodToKnow."
+  "introText": "3-4 sentence intro paragraph specifically about this category of trip departing ${airportLabel}. Reference at least one specific route with its distance or flight time if provided above. Naturally work in phrasing a UK traveller might actually search for, such as 'flights from ${airportLabel}' or '${categoryTitle.toLowerCase()} from ${airportLabel}', without keyword stuffing or making it read like an SEO exercise. Around 100-140 words.",
+  "goodToKnowHeading": "A short 2-4 word heading for the goodToKnow paragraph, e.g. 'Flying from ${airportLabel}' or 'When to book'.",
+  "goodToKnow": "A practical paragraph (90-130 words) with booking advice specific to departing ${airportLabel} for this category — for example, how the flight times to the listed destinations affect trip length, airport-specific practicalities (e.g. terminal, parking, or route frequency if relevant), or booking-window advice for this season if mentioned.",
+  "travelerTipHeading": "A short 2-4 word heading for the travelerTip paragraph, e.g. 'One thing to check' or 'Local know-how'.",
+  "travelerTip": "A specific paragraph (70-100 words) giving one genuinely specific tip for someone flying this category of trip from ${airportLabel} — different in substance from the booking advice already given in goodToKnow."
 }
 
 Writing style — this matters as much as the content:
@@ -78,7 +82,8 @@ Writing style — this matters as much as the content:
 Content rules:
 - Every piece of content must be SPECIFIC to this category AND to ${airportLabel} specifically, not generic travel filler
 - Do not invent destination names, distances, prices, or dates beyond what is listed above
-- The content should be genuinely useful to someone browsing this category from this airport`
+- The content should be genuinely useful to someone browsing this category from this airport
+- Headings should be plain and specific, not clever or punny`
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -89,6 +94,7 @@ Content rules:
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       temperature: 0.7,
+      response_format: { type: 'json_object' },
       messages: [
         {
           role: 'system',

@@ -48,9 +48,11 @@ export default async function DealAirportPage({ params }: { params: Promise<Deal
 
   if (!categoryConfig || !iata) notFound()
 
-  const deals = await getDealsForSlug(slug, iata)
+const [deals, cachedAiContent] = await Promise.all([
+    getDealsForSlug(slug, iata),
+    getDealAirportAiContent(slug, airport),
+  ])
   const airportLabel = resolveIataToLabel(iata)
-  const cachedAiContent = await getDealAirportAiContent(slug, airport)
 
   const aiContentSection = (
     <DealAirportAiContent
@@ -64,7 +66,9 @@ export default async function DealAirportPage({ params }: { params: Promise<Deal
       destinations={categoryConfig.destinations}
       months={categoryConfig.months}
       cachedIntroText={cachedAiContent?.introText}
+      cachedGoodToKnowHeading={cachedAiContent?.goodToKnowHeading}
       cachedGoodToKnow={cachedAiContent?.goodToKnow}
+      cachedTravelerTipHeading={cachedAiContent?.travelerTipHeading}
       cachedTravelerTip={cachedAiContent?.travelerTip}
     />
   )

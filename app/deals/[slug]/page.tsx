@@ -42,10 +42,11 @@ export default async function DealPage({ params }: { params: Promise<DealParams>
 
   if (!categoryConfig) notFound()
 
-  const rawTeaserDeals = await getTeaserDeals(slug)
+const [rawTeaserDeals, cachedAiContent] = await Promise.all([
+    getTeaserDeals(slug),
+    getDealCategoryAiContent(slug),
+  ])
   const teaserDeals = filterDealsForCategory(rawTeaserDeals, slug, categoryConfig)
-
-  const cachedAiContent = await getDealCategoryAiContent(slug)
 
   const popularAirports = ['manchester', 'london', 'birmingham', 'edinburgh']
 
@@ -98,7 +99,9 @@ export default async function DealPage({ params }: { params: Promise<DealParams>
           destinations={categoryConfig.destinations}
           months={categoryConfig.months}
           cachedIntroText={cachedAiContent?.introText}
+          cachedGoodToKnowHeading={cachedAiContent?.goodToKnowHeading}
           cachedGoodToKnow={cachedAiContent?.goodToKnow}
+          cachedTravelerTipHeading={cachedAiContent?.travelerTipHeading}
           cachedTravelerTip={cachedAiContent?.travelerTip}
         />
 

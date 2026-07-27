@@ -8,7 +8,9 @@ export interface DealCategoryFacts {
 
 export interface DealCategoryAiContent {
   introText: string
+  goodToKnowHeading: string
   goodToKnow: string
+  travelerTipHeading: string
   travelerTip: string
 }
 
@@ -43,9 +45,11 @@ ${constraintFacts || 'This is a general collection without specific price, desti
 Return ONLY a valid JSON object — no markdown, no code fences, no preamble — with exactly these fields:
 
 {
-  "introText": "2-3 sentence intro paragraph for this category page, referencing the specific facts above where available (destinations, price point, or season). Around 60-90 words.",
-  "goodToKnow": "A short practical paragraph (60-90 words) with genuinely useful booking advice specific to this category — for example, best booking windows for the destinations or season mentioned, or how to make the most of a tight budget if a price cap is mentioned.",
-  "travelerTip": "A short, specific paragraph (50-70 words) giving one genuinely specific and distinct tip for someone booking this type of trip — different in substance from the booking advice already given in goodToKnow."
+  "introText": "3-4 sentence intro paragraph for this category page, referencing the specific facts above where available (destinations, price point, or season). Naturally work in phrasing a UK traveller might actually search for, such as '${categoryTitle.toLowerCase()} deals' or 'cheap flights to' a named destination, without keyword stuffing or making it read like an SEO exercise. Around 100-140 words.",
+  "goodToKnowHeading": "A short 2-4 word heading for the goodToKnow paragraph, e.g. 'Booking window' or 'When to book'.",
+  "goodToKnow": "A practical paragraph (90-130 words) with genuinely useful booking advice specific to this category — for example, best booking windows for the destinations or season mentioned, or how to make the most of a tight budget if a price cap is mentioned.",
+  "travelerTipHeading": "A short 2-4 word heading for the travelerTip paragraph, e.g. 'Local know-how' or 'One thing to check'.",
+  "travelerTip": "A specific paragraph (70-100 words) giving one genuinely specific and distinct tip for someone booking this type of trip — different in substance from the booking advice already given in goodToKnow."
 }
 
 Writing style — this matters as much as the content:
@@ -62,7 +66,8 @@ Writing style — this matters as much as the content:
 Content rules:
 - Every piece of content must be SPECIFIC to this category, not generic travel filler
 - Do not invent destination names, prices, or dates beyond what is listed above
-- The content should be genuinely useful to someone browsing this category`
+- The content should be genuinely useful to someone browsing this category
+- Headings should be plain and specific, not clever or punny`
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -70,10 +75,11 @@ Content rules:
       'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
     },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      temperature: 0.7,
-      messages: [
+      body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            temperature: 0.7,
+            response_format: { type: 'json_object' },
+            messages: [
         {
           role: 'system',
           content:

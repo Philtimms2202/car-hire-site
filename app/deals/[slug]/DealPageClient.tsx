@@ -151,6 +151,8 @@ export default function DealPageClient({
           </div>
         </section>
 
+        {aiContent}
+
         <section className="py-16 px-6 bg-white">
           <div className="max-w-6xl mx-auto">
             {deals.length === 0 ? (
@@ -253,8 +255,6 @@ export default function DealPageClient({
             )}
           </div>
         </section>
-
-        {aiContent}
       </div>
 
       <Footer />

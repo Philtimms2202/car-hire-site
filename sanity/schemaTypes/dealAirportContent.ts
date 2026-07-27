@@ -32,10 +32,20 @@ export default {
       rows: 5,
     },
     {
+      name: 'goodToKnowHeading',
+      title: 'Good To Know Heading',
+      type: 'string',
+    },
+    {
       name: 'goodToKnow',
       title: 'Good To Know',
       type: 'text',
       rows: 5,
+    },
+    {
+      name: 'travelerTipHeading',
+      title: 'Traveller Tip Heading',
+      type: 'string',
     },
     {
       name: 'travelerTip',
