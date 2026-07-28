@@ -1,6 +1,7 @@
 import Navbar from '../../../components/Navbar'
 import Footer from '../../../components/Footer'
 import { client } from '../../../../sanity/lib/client'
+import Link from 'next/link';
 
 export const revalidate = 60
 
@@ -338,6 +339,35 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         </div>
       </section>
 
+                  {/* ── ALSO DO HOTELS ───────────────────────────────────────────── */}
+      <section className="py-16 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <div
+            className="rounded-3xl p-10 md:p-14 text-center text-white relative overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #022135 0%, #03989e 100%)' }}
+          >
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div className="relative z-10">
+              <p className="text-xs font-bold tracking-widest uppercase text-teal-100 mb-2">
+                Don't Forget
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                Find Hotels in {countryName}
+              </h2>
+              <p className="text-teal-50 max-w-xl mx-auto mb-8 leading-relaxed font-light">
+                Find hotel deals in {countryName}. From boutique stays to luxury resorts, discover the best places to stay for your trip.
+              </p>
+              <Link
+                href="/hotels"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 shadow-md border border-white/20 bg-white/10 hover:bg-white/20"
+              >
+                Browse Hotel Deals →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* TRAVEL TIPS SECTION */}
       <section className="py-16 sm:py-20 px-6" style={{ backgroundColor: '#f8fafa' }}>
         <div className="max-w-4xl mx-auto">
@@ -553,12 +583,7 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         </div>
       </section>
 
-      {/* CTA */}
-      <section style={{ backgroundColor: '#232e4e' }} className="py-16 px-6 text-center text-white">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to explore {countryName}?</h2>
-        <p className="text-gray-300 mb-8 text-sm sm:text-base">Find amazing experiences and get there your way.</p>
-        <a href="/" className="btn-primary inline-block">Get started</a>
-      </section>
+    
 
       <Footer />
     </main>
