@@ -23,6 +23,51 @@ const GlobeIcon = () => (
   </svg>
 )
 
+const FacebookIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="#232e4e"
+    className="w-5 h-5"
+  >
+    <path d="M22 12.06C22 6.505 17.523 2 12 2S2 6.505 2 12.06c0 5.02 3.657 9.184 8.438 9.94v-7.03H7.898v-2.91h2.54V9.845c0-2.507 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.875h2.773l-.443 2.91h-2.33V22c4.78-.756 8.437-4.92 8.437-9.94z" />
+  </svg>
+)
+
+const InstagramIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#232e4e"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-5 h-5"
+  >
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+)
+
+const TikTokIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="#232e4e"
+    className="w-5 h-5"
+  >
+    <path d="M16.5 2h-3.2v13.3a2.9 2.9 0 1 1-2.06-2.78V9.3a6.1 6.1 0 1 0 5.26 6.05V8.44a7.6 7.6 0 0 0 4.4 1.4V6.6a4.3 4.3 0 0 1-4.4-4.3V2z" />
+  </svg>
+)
+
+const SOCIAL_LINKS = [
+  { label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61573241227532', Icon: FacebookIcon },
+  { label: 'Instagram', href: 'https://www.instagram.com/timms_travel', Icon: InstagramIcon },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@timms.travel', Icon: TikTokIcon },
+]
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [localeOpen, setLocaleOpen] = useState(false)
@@ -173,6 +218,22 @@ export default function Navbar() {
             )}
           </div>
 
+          {/* Social Icons */}
+          <div className="flex items-center gap-3 pl-1 border-l" style={{ borderColor: '#e5e7eb' }}>
+            {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="p-2 hover:bg-gray-100 rounded-lg transition"
+              >
+                <Icon />
+              </a>
+            ))}
+          </div>
+
           {/* Locale Button */}
           <button
             onClick={() => setLocaleOpen(prev => !prev)}
@@ -258,7 +319,7 @@ export default function Navbar() {
             {flightsOpen && (
               <div className="ml-4 mt-1 flex flex-col gap-2 border-l-2 border-teal-600 pl-3">
                 {flightLinks.map(link => (
-                  <a
+                <a  
                     key={link.href}
                     href={link.href}
                     className="font-medium py-1 text-sm hover:opacity-75 transition"
@@ -322,8 +383,24 @@ export default function Navbar() {
             )}
           </div>
 
+          {/* Mobile Social Icons */}
+          <div className="flex items-center gap-4 border-t pt-4" style={{ borderColor: '#e5e7eb' }}>
+            {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="p-2 hover:bg-gray-100 rounded-lg transition"
+              >
+                <Icon />
+              </a>
+            ))}
+          </div>
+
           {/* Mobile Locale Selector */}
-          <div className="mt-4 border-t pt-4" style={{ borderColor: '#e5e7eb' }}>
+          <div className="mt-2 border-t pt-4" style={{ borderColor: '#e5e7eb' }}>
             <h3 className="font-semibold mb-2" style={{ color: '#232e4e' }}>Language</h3>
             <select
               value={language}
