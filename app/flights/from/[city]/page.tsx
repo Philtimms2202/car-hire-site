@@ -173,6 +173,36 @@ export default async function FlightsFromCityPage({
         cachedTravelerTip={cachedAiContent?.travelerTip}
       />
 
+                  {/* ── ALSO DO HOTELS ───────────────────────────────────────────── */}
+            <section className="py-16 px-6 bg-white border-t border-gray-100">
+              <div className="max-w-5xl mx-auto">
+                <div
+                  className="rounded-3xl p-10 md:p-14 text-center text-white relative overflow-hidden"
+                  style={{ background: 'linear-gradient(135deg, #022135 0%, #03989e 100%)' }}
+                >
+                  <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                  <div className="relative z-10">
+                    <p className="text-xs font-bold tracking-widest uppercase text-teal-100 mb-2">
+                      Don't Forget
+                    </p>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                      Find Hotels in {hub.city}
+                    </h2>
+                    <p className="text-teal-50 max-w-xl mx-auto mb-8 leading-relaxed font-light">
+                      Sorted your flight from {hub.city}? We can also help you find hotels, from budget stays to boutique picks, with city
+                      guides and neighbourhood insights to help you choose the right place to stay.
+                    </p>
+                    <Link
+                      href="/hotels"
+                      className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 shadow-md border border-white/20 bg-white/10 hover:bg-white/20"
+                    >
+                      Search Hotel Deals →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </section>
+
       {/* ── TRAVEL TIPS ── */}
       <section className="py-16 px-6 bg-white border-t border-gray-100">
         <div className="max-w-5xl mx-auto">

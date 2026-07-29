@@ -11,7 +11,6 @@ import ExperienceSearch from '@/app/components/Search/ExperienceSearch'
 import CarSearch from '@/app/components/Search/CarSearch'
 import airports from '@/data/airports.json'
 import NextImage from 'next/image'
-import { buildTrackedKiwiUrl } from '@/lib/kiwi'
 import TravelPayoutsSearch from './components/TravelPayoutsSearch'
 
 // -----------------------------
@@ -401,31 +400,32 @@ const allRoutesIndex = [
 ]
 
 // Quick-link destination index - crawlable links to /locations/[continent]/[country]/[city]
+// and /flights/to/[city] (live pricing)
 const allDestinationsIndex = [
-  { label: 'Flights to Amsterdam',   href: '/locations/europe/netherlands/amsterdam'      },
-  { label: 'Flights to Antalya',     href: '/locations/europe/turkey/antalya'             },
-  { label: 'Flights to Bangkok',     href: '/locations/asia/thailand/bangkok'             },
-  { label: 'Flights to Barcelona',   href: '/locations/europe/spain/barcelona'            },
-  { label: 'Flights to Budapest',    href: '/locations/europe/hungary/budapest'           },
-  { label: 'Flights to Cairo',       href: '/locations/africa/egypt/cairo'                },
-  { label: 'Flights to Cape Town',   href: '/locations/africa/south-africa/cape-town'    },
-  { label: 'Flights to Dubai',       href: '/locations/middle-east/uae/dubai'            },
-  { label: 'Flights to Dublin',      href: '/locations/europe/ireland/dublin'             },
-  { label: 'Flights to Malaga',      href: '/locations/europe/spain/malaga'              },
-  { label: 'Flights to Istanbul',    href: '/locations/europe/turkey/istanbul'            },
-  { label: 'Flights to Lisbon',      href: '/locations/europe/portugal/lisbon'            },
-  { label: 'Flights to London',      href: '/locations/europe/united-kingdom/london'      },
-  { label: 'Flights to Los Angeles', href: '/locations/north-america/usa/los-angeles'    },
-  { label: 'Flights to Marrakech',   href: '/locations/africa/morocco/marrakech'          },
-  { label: 'Flights to New York',    href: '/locations/north-america/usa/new-york'        },
-  { label: 'Flights to Orlando',     href: '/locations/north-america/usa/orlando'         },
-  { label: 'Flights to Paris',       href: '/locations/europe/france/paris'               },
-  { label: 'Flights to Prague',      href: '/locations/europe/czech-republic/prague'      },
-  { label: 'Flights to Rome',        href: '/locations/europe/italy/rome'                 },
-  { label: 'Flights to Singapore',   href: '/locations/asia/singapore/singapore'          },
-  { label: 'Flights to Sydney',      href: '/locations/oceania/australia/sydney'          },
-  { label: 'Flights to Tenerife',    href: '/locations/europe/spain/tenerife'             },
-  { label: 'Flights to Tokyo',       href: '/locations/asia/japan/tokyo'                  },
+  { label: 'Flights to Amsterdam',   href: '/locations/europe/netherlands/amsterdam',      flightsHref: '/flights/to/amsterdam'   },
+  { label: 'Flights to Antalya',     href: '/locations/europe/turkey/antalya',             flightsHref: '/flights/to/antalya'     },
+  { label: 'Flights to Bangkok',     href: '/locations/asia/thailand/bangkok',             flightsHref: '/flights/to/bangkok'     },
+  { label: 'Flights to Barcelona',   href: '/locations/europe/spain/barcelona',            flightsHref: '/flights/to/barcelona'   },
+  { label: 'Flights to Budapest',    href: '/locations/europe/hungary/budapest',           flightsHref: '/flights/to/budapest'    },
+  { label: 'Flights to Cairo',       href: '/locations/africa/egypt/cairo',                flightsHref: '/flights/to/cairo'       },
+  { label: 'Flights to Cape Town',   href: '/locations/africa/south-africa/cape-town',     flightsHref: '/flights/to/cape-town'   },
+  { label: 'Flights to Dubai',       href: '/locations/middle-east/uae/dubai',             flightsHref: '/flights/to/dubai'       },
+  { label: 'Flights to Dublin',      href: '/locations/europe/ireland/dublin',             flightsHref: '/flights/to/dublin'      },
+  { label: 'Flights to Malaga',      href: '/locations/europe/spain/malaga',               flightsHref: '/flights/to/malaga'      },
+  { label: 'Flights to Istanbul',    href: '/locations/europe/turkey/istanbul',            flightsHref: '/flights/to/istanbul'    },
+  { label: 'Flights to Lisbon',      href: '/locations/europe/portugal/lisbon',            flightsHref: '/flights/to/lisbon'      },
+  { label: 'Flights to London',      href: '/locations/europe/united-kingdom/london',      flightsHref: '/flights/to/london'      },
+  { label: 'Flights to Los Angeles', href: '/locations/north-america/usa/los-angeles',     flightsHref: '/flights/to/los-angeles' },
+  { label: 'Flights to Marrakech',   href: '/locations/africa/morocco/marrakech',          flightsHref: '/flights/to/marrakech'   },
+  { label: 'Flights to New York',    href: '/locations/north-america/usa/new-york',        flightsHref: '/flights/to/new-york'    },
+  { label: 'Flights to Orlando',     href: '/locations/north-america/usa/orlando',         flightsHref: '/flights/to/orlando'     },
+  { label: 'Flights to Paris',       href: '/locations/europe/france/paris',               flightsHref: '/flights/to/paris'       },
+  { label: 'Flights to Prague',      href: '/locations/europe/czech-republic/prague',      flightsHref: '/flights/to/prague'      },
+  { label: 'Flights to Rome',        href: '/locations/europe/italy/rome',                 flightsHref: '/flights/to/rome'        },
+  { label: 'Flights to Singapore',   href: '/locations/asia/singapore/singapore',          flightsHref: '/flights/to/singapore'   },
+  { label: 'Flights to Sydney',      href: '/locations/oceania/australia/sydney',          flightsHref: '/flights/to/sydney'      },
+  { label: 'Flights to Tenerife',    href: '/locations/europe/spain/tenerife',             flightsHref: '/flights/to/tenerife'    },
+  { label: 'Flights to Tokyo',       href: '/locations/asia/japan/tokyo',                  flightsHref: '/flights/to/tokyo'       },
 ]
 
 // -----------------------------
@@ -668,14 +668,16 @@ export default function FlightsPageClient() {
 
 const openRoute = (destIata: string) => {
   if (!originAirport) { alert('Choose a departure airport first.'); return }
-  const url = buildTrackedKiwiUrl({
+  const params = new URLSearchParams({
     from: originAirport.iata_code,
     to: destIata,
     depart: todayStr(),
-    adults: 1,
-    currency: 'GBP',
+    adults: '1',
+    children: '0',
+    infants: '0',
+    cabin: 'economy',
   })
-  window.location.assign(url)
+  window.location.assign(`/flights/search?${params.toString()}`)
 }
 
   const haulData   = activeHaul === 'short' ? shortHaul : activeHaul === 'mid' ? midHaul : longHaul
@@ -833,7 +835,7 @@ const openRoute = (destIata: string) => {
           </div>
         </section>
 
-        {/* ── SHORT / MID / LONG HAUL ────────────────────────────────────────── */}
+{/* ── SHORT / MID / LONG HAUL ────────────────────────────────────────── */}
         <section className="py-16 px-6 bg-gray-50" aria-labelledby="haul-heading" id="haul">
           <div className="max-w-6xl mx-auto">
             <h2 id="haul-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
@@ -870,44 +872,64 @@ const openRoute = (destIata: string) => {
             <AirportDropdown {...dropdownProps} />
 
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-label={`${activeHaul}-haul flight destinations`}>
-              {haulData.map(dest => (
-                <li
-                  key={dest.iata}
-                  className="bg-white rounded-2xl shadow-md p-5 hover:shadow-xl transition border border-gray-100"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl" aria-hidden="true">{dest.emoji}</span>
-                      <div>
-                        <Link
-                          href={dest.href}
-                          className="font-bold text-lg leading-tight hover:underline"
-                          style={{ color: '#232e4e' }}
-                          title={`Explore ${dest.city} - flights, hotels & travel guide`}
-                        >
-                          {dest.city}
-                        </Link>
-                        <p className="text-xs text-gray-400">{dest.country}</p>
-                      </div>
-                    </div>
-                    <span className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${haulColour.badge}`}>
-                      {dest.flightTime}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-500 mb-4">{dest.priceFrom} per person</p>
-                  <button
-                    type="button"
-                    onClick={() => openRoute(dest.iata)}
-                    aria-label={`Search flights from ${originAirport?.iata_code ?? 'your airport'} to ${dest.city}`}
-                    className="text-blue-600 font-semibold hover:underline disabled:opacity-60 text-sm"
-                    disabled={!originAirport}
+              {haulData.map(dest => {
+                const flightsUrl = `/flights/to/${dest.slug}`
+                return (
+                  <li
+                    key={dest.iata}
+                    className="bg-white rounded-2xl shadow-md p-5 hover:shadow-xl transition border border-gray-100"
                   >
-                    {originAirport
-                      ? `View flights from ${originAirport.iata_code} →`
-                      : 'Choose a departure airport above'}
-                  </button>
-                </li>
-              ))}
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl" aria-hidden="true">{dest.emoji}</span>
+                        <div>
+                          <Link
+                            href={flightsUrl}
+                            className="font-bold text-lg leading-tight hover:underline"
+                            style={{ color: '#232e4e' }}
+                            title={`Flights to ${dest.city} - live prices`}
+                          >
+                            {dest.city}
+                          </Link>
+                          <p className="text-xs text-gray-400">{dest.country}</p>
+                        </div>
+                      </div>
+                      <span className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${haulColour.badge}`}>
+                        {dest.flightTime}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500 mb-1">{dest.priceFrom} per person</p>
+                    <p className="text-xs text-gray-400 flex gap-2 mb-3">
+                      <Link
+                        href={flightsUrl}
+                        className="hover:underline text-blue-600 font-medium"
+                        title={`Flights to ${dest.city} - live prices`}
+                      >
+                        View All Flights to {dest.city} →
+                      </Link>
+                      <span aria-hidden="true">·</span>
+                      <Link
+                        href={dest.href}
+                        className="hover:underline text-teal-600 font-medium"
+                        title={`Explore ${dest.city} - flights, hotels & travel guide`}
+                      >
+                        Destination guide →
+                      </Link>
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => openRoute(dest.iata)}
+                      aria-label={`Search flights from ${originAirport?.iata_code ?? 'your airport'} to ${dest.city}`}
+                      className="text-blue-600 font-semibold hover:underline disabled:opacity-60 text-sm"
+                      disabled={!originAirport}
+                    >
+                      {originAirport
+                        ? `View flights from ${originAirport.iata_code} →`
+                        : 'Choose a departure airport above'}
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </section>
@@ -994,7 +1016,7 @@ const openRoute = (destIata: string) => {
           </div>
         </section>
 
-        {/* ── FEATURED DESTINATIONS ──────────────────────────────────────────── */}
+{/* ── FEATURED DESTINATIONS ──────────────────────────────────────────── */}
         <section className="py-16 px-6 bg-gray-50" aria-labelledby="featured-heading" id="featured-destinations">
           <div className="max-w-6xl mx-auto">
             <h2 id="featured-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
@@ -1006,23 +1028,32 @@ const openRoute = (destIata: string) => {
 
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-label="Featured travel destinations">
               {featuredDestinations.map(dest => {
-                const url = `/locations/${dest.continent}/${dest.country}/${dest.slug}`
+                const guideUrl = `/locations/${dest.continent}/${dest.country}/${dest.slug}`
+                const flightsUrl = `/flights/to/${dest.slug}`
                 return (
                   <li key={dest.iata} className="bg-white rounded-2xl shadow-md p-5 hover:shadow-xl transition">
                     <div className="flex items-center gap-3 mb-3">
                       <span className="text-3xl" aria-hidden="true">{dest.emoji}</span>
                       <div>
                         <Link
-                          href={url}
+                          href={flightsUrl}
                           className="font-bold text-lg block hover:underline"
                           style={{ color: '#232e4e' }}
                           title={dest.description}
                         >
                           {dest.city}
                         </Link>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-gray-400 flex gap-2">
                           <Link
-                            href={url}
+                            href={flightsUrl}
+                            className="hover:underline text-blue-600 font-medium"
+                            title={`Flights to ${dest.city} - live prices`}
+                          >
+                            Flights to {dest.city} →
+                          </Link>
+                          <span aria-hidden="true">·</span>
+                          <Link
+                            href={guideUrl}
                             className="hover:underline text-teal-600 font-medium"
                             title={`${dest.city} travel guide - things to do, hotels & flights`}
                           >
@@ -1047,7 +1078,7 @@ const openRoute = (destIata: string) => {
               })}
             </ul>
 
-            {/* ── ALL DESTINATIONS INDEX ── */}
+{/* ── ALL DESTINATIONS INDEX ── */}
             <div className="mt-14 border-t border-gray-100 pt-10">
               <h3 className="text-xl font-bold mb-5 text-center" style={{ color: '#232e4e' }}>
                 Browse All Destinations
@@ -1055,11 +1086,11 @@ const openRoute = (destIata: string) => {
               <nav aria-label="All flight destinations directory">
                 <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                   {allDestinationsIndex.map(dest => (
-                    <li key={dest.href}>
+                    <li key={dest.flightsHref}>
                       <Link
-                        href={dest.href}
+                        href={dest.flightsHref}
                         className="block text-sm text-blue-700 hover:text-blue-900 hover:underline py-1 px-2 rounded transition-colors"
-                        title={`${dest.label} - travel guide, hotels & best prices`}
+                        title={`${dest.label} - live prices`}
                       >
                         {dest.label}
                       </Link>
@@ -1071,7 +1102,7 @@ const openRoute = (destIata: string) => {
           </div>
         </section>
 
-        {/* ── DESTINATIONS BY SEASON ─────────────────────────────────────────── */}
+{/* ── DESTINATIONS BY SEASON ─────────────────────────────────────────── */}
         <section className="py-16 px-6 bg-white" aria-labelledby="seasonal-heading" id="destinations-by-season">
           <div className="max-w-6xl mx-auto">
             <h2 id="seasonal-heading" className="text-3xl font-bold text-center mb-2" style={{ color: '#232e4e' }}>
@@ -1089,17 +1120,18 @@ const openRoute = (destIata: string) => {
 
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {items.map(dest => {
-                    const url = `/locations/${dest.continent}/${dest.country}/${dest.slug}`
+                    const guideUrl = `/locations/${dest.continent}/${dest.country}/${dest.slug}`
+                    const flightsUrl = `/flights/to/${dest.slug}`
                     return (
                       <li
                         key={dest.iata}
                         className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-lg transition"
                       >
                         <Link
-                          href={url}
+                          href={flightsUrl}
                           className="font-bold text-xl mb-2 block hover:underline"
                           style={{ color: '#232e4e' }}
-                          title={`${dest.city} in ${season} - travel guide & cheap flights`}
+                          title={`Flights to ${dest.city} in ${season} - live prices`}
                         >
                           {dest.city}
                         </Link>
@@ -1123,7 +1155,14 @@ const openRoute = (destIata: string) => {
                               : 'Choose a departure airport above'}
                           </button>
                           <Link
-                            href={url}
+                            href={flightsUrl}
+                            className="text-blue-600 text-sm font-medium hover:underline"
+                            title={`Flights to ${dest.city} - live prices`}
+                          >
+                            View All Flights to {dest.city} →
+                          </Link>
+                          <Link
+                            href={guideUrl}
                             className="text-teal-600 text-sm font-medium hover:underline"
                             title={`${dest.city} ${season} travel guide`}
                           >
@@ -1138,6 +1177,36 @@ const openRoute = (destIata: string) => {
             ))}
           </div>
         </section>
+
+              {/* ── ALSO DO HOTELS ───────────────────────────────────────────── */}
+      <section className="py-16 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <div
+            className="rounded-3xl p-10 md:p-14 text-center text-white relative overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #022135 0%, #03989e 100%)' }}
+          >
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div className="relative z-10">
+              <p className="text-xs font-bold tracking-widest uppercase text-teal-100 mb-2">
+                Don't Forget
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                We Do Hotels Too
+              </h2>
+              <p className="text-teal-50 max-w-xl mx-auto mb-8 leading-relaxed font-light">
+                Sorted your flight? We also cover hotels worldwide, from budget stays to boutique picks, with city
+                guides and neighbourhood insights to help you choose the right place to stay.
+              </p>
+              <Link
+                href="/hotels"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl text-white font-semibold text-sm transition-all hover:opacity-90 shadow-md border border-white/20 bg-white/10 hover:bg-white/20"
+              >
+                Browse Hotel Deals →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
         {/* ── FLIGHT TIPS / FAQ ──────────────────────────────────────────────── */}
         <section className="py-16 px-6" style={{ backgroundColor: '#f0f4ff' }} aria-labelledby="tips-heading" id="flight-tips">
