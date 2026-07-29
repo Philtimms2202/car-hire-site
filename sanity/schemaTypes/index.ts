@@ -14,6 +14,8 @@ import guide from './guide'
 import flightHubContent from './flightHubContent'
 import dealCategoryContent from './dealCategoryContent'
 import dealAirportContent from './dealAirportContent'
+import table from './table'
+
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -30,5 +32,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     flightHubContent,
     dealCategoryContent,
     dealAirportContent,
+    table,
   ],
 }
