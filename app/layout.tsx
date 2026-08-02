@@ -4,6 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import { LocaleProvider } from '@/context/localeContext';
 import AdBanner from '@/app/components/AdBanner';
+import GlobalMobileStickyBar from 'app/components/GlobalMobileStickyBar';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,7 +57,6 @@ export default function RootLayout({
           }}
         />
 
-        {/* ✅ Mailchimp Connected Site Script */}
         {/* ✅ Mailchimp Connected Site Script (Native HTML tag for static SSR detection) */}
         <script
           id="mcjs"
@@ -97,11 +97,17 @@ export default function RootLayout({
 
       <body className="min-h-full flex flex-col">
         <LocaleProvider>
-          {children}
+          {/* Main Content Wrapper - pb-20 prevents sticky mobile bars from covering page footer */}
+          <div className="flex-1 pb-20 md:pb-0">
+            {children}
+          </div>
         </LocaleProvider>
 
-        {/* Sticky footer ad banner - sitewide, least intrusive placement */}
+        {/* Sticky footer ad banner - sitewide */}
         <AdBanner />
+
+        {/* Sitewide Mobile Sticky CTA Bar */}
+        <GlobalMobileStickyBar />
       </body>
     </html>
   );
