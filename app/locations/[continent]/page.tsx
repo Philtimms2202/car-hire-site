@@ -6,13 +6,23 @@
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import { client } from '../../../sanity/lib/client'
+import Link from 'next/link'
+import JsonLd from '../../components/JsonLd'
 
 export const revalidate = 60
 
+type PageParams = Promise<{ continent: string }>
+
+interface CountryItem {
+  name: string
+  emoji: string
+  countrySlug: string
+}
+
 // -----------------------------
-// Metadata
+// Metadata Generator
 // -----------------------------
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: PageParams }) {
   const { continent } = await params
 
   const data = await client.fetch(
@@ -41,18 +51,22 @@ export async function generateMetadata({ params }: any) {
 // -----------------------------
 // Fetch all countries in this continent
 // -----------------------------
-async function getCountries(continentSlug: string) {
-  return await client.fetch(
-    `*[
-      _type == "country" &&
-      continent->slug.current == $continentSlug
-    ] | order(name asc) {
-      name,
-      emoji,
-      "countrySlug": slug.current
-    }`,
-    { continentSlug }
-  )
+async function getCountries(continentSlug: string): Promise<CountryItem[]> {
+  try {
+    return await client.fetch(
+      `*[
+        _type == "country" &&
+        continent->slug.current == $continentSlug
+      ] | order(name asc) {
+        name,
+        emoji,
+        "countrySlug": slug.current
+      }`,
+      { continentSlug }
+    )
+  } catch {
+    return []
+  }
 }
 
 // -----------------------------
@@ -61,7 +75,7 @@ async function getCountries(continentSlug: string) {
 export default async function ContinentPage({
   params,
 }: {
-  params: Promise<{ continent: string }>
+  params: PageParams
 }) {
   const { continent } = await params
 
@@ -80,6 +94,32 @@ export default async function ContinentPage({
 
   const continentName = continentDoc?.name || continent
   const continentEmoji = continentDoc?.emoji || '🌍'
+  const basePath = `/locations/${continent}`
+
+  // -----------------------------
+  // Structured Data (JSON-LD)
+  // -----------------------------
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'All destinations', item: 'https://timmstravel.com/locations' },
+      { '@type': 'ListItem', position: 2, name: continentName, item: `https://timmstravel.com${basePath}` },
+    ],
+  }
+
+  const continentEntitySchema = {
+    '@context': 'https://schema.org',
+    '@type': ['TouristDestination', 'Continent'],
+    name: continentName,
+    description: `Discover top attractions, tours, and activities across ${continentName}.`,
+    url: `https://timmstravel.com${basePath}`,
+    containsPlace: countries.map((country) => ({
+      '@type': 'Country',
+      name: country.name,
+      url: `https://timmstravel.com${basePath}/${country.countrySlug}`,
+    })),
+  }
 
   if (!countries || countries.length === 0) {
     return (
@@ -89,13 +129,13 @@ export default async function ContinentPage({
           <h1 className="text-3xl font-bold mb-4" style={{ color: '#232e4e' }}>
             No Countries Found
           </h1>
-          <a
+          <Link
             href="/locations"
             style={{ color: '#2f797c' }}
             className="font-semibold hover:opacity-75 transition"
           >
             ← Back to Locations
-          </a>
+          </Link>
         </div>
         <Footer />
       </main>
@@ -105,6 +145,8 @@ export default async function ContinentPage({
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
+      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={continentEntitySchema} />
 
       {/* Hero */}
       <section
@@ -133,10 +175,10 @@ export default async function ContinentPage({
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {countries.map((country: any) => (
-              <a
+            {countries.map((country) => (
+              <Link
                 key={country.countrySlug}
-                href={`/locations/${continent}/${country.countrySlug}`}
+                href={`${basePath}/${country.countrySlug}`}
                 className="card text-center hover:shadow-xl transition cursor-pointer"
               >
                 <div className="text-4xl mb-2">{country.emoji}</div>
@@ -149,18 +191,18 @@ export default async function ContinentPage({
                 <p className="text-xs mt-1" style={{ color: '#2f797c' }}>
                   View cities
                 </p>
-              </a>
+              </Link>
             ))}
           </div>
 
           <div className="mt-8">
-            <a
+            <Link
               href="/locations/continents"
               style={{ color: '#2f797c' }}
               className="font-semibold hover:opacity-75 transition"
             >
               ← Back to all continents
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -176,9 +218,9 @@ export default async function ContinentPage({
         <p className="text-gray-300 mb-8">
           Find amazing experiences and get there your way.
         </p>
-        <a href="/" className="btn-primary inline-block">
+        <Link href="/" className="btn-primary inline-block">
           Get Started
-        </a>
+        </Link>
       </section>
 
       <Footer />

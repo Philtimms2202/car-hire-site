@@ -1,12 +1,13 @@
 import Navbar from '../../../components/Navbar'
 import Footer from '../../../components/Footer'
 import { client } from '../../../../sanity/lib/client'
-import Link from 'next/link';
+import Link from 'next/link'
+import JsonLd from '../../../components/JsonLd'
 
 export const revalidate = 60
 
 // -----------------------------
-// Fetch country data
+// Data Fetching Functions
 // -----------------------------
 async function getCountryData(countrySlug: string) {
   return client.fetch(
@@ -38,22 +39,30 @@ async function getCountryData(countrySlug: string) {
   )
 }
 
-// -----------------------------
-// Fetch cities
-// -----------------------------
-async function getCities(continentSlug: string, countrySlug: string) {
+interface CityData {
+  city: string
+  emoji: string
+  citySlug: string
+  countrySlug: string
+  continentSlug: string
+  country?: string
+  countryEmoji?: string
+}
+
+async function getCities(continentSlug: string, countrySlug: string): Promise<CityData[]> {
   try {
     return await client.fetch(
-      `*[_type == "location" && continentSlug.current == $continentSlug && countrySlug.current == $countrySlug] 
-        | order(city asc) {
-          city,
-          country,
-          countryEmoji,
-          emoji,
-          "citySlug": slug.current,
-          "countrySlug": countrySlug.current,
-          "continentSlug": continentSlug.current
-        }`,
+      `*[
+        _type == "city" &&
+        country->slug.current == $countrySlug &&
+        country->continent->slug.current == $continentSlug
+      ] | order(name asc) {
+        "city": name,
+        emoji,
+        "citySlug": slug.current,
+        "countrySlug": country->slug.current,
+        "continentSlug": country->continent->slug.current
+      }`,
       { continentSlug, countrySlug }
     )
   } catch {
@@ -62,11 +71,12 @@ async function getCities(continentSlug: string, countrySlug: string) {
 }
 
 // -----------------------------
-// Metadata
+// Metadata Generator
 // -----------------------------
-export async function generateMetadata({ params }: any) {
-  const resolved = await params
-  const { continent, country } = resolved
+type PageParams = Promise<{ continent: string; country: string }>
+
+export async function generateMetadata({ params }: { params: PageParams }) {
+  const { continent, country } = await params
 
   const countryData = await getCountryData(country)
   const countryName = countryData?.name || country
@@ -81,7 +91,7 @@ export async function generateMetadata({ params }: any) {
 }
 
 // -----------------------------
-// Tip Card Component
+// Helper UI Components
 // -----------------------------
 function TipCard({
   icon,
@@ -96,7 +106,9 @@ function TipCard({
 }) {
   return (
     <div
-      className={`flex gap-4 p-5 rounded-xl border border-gray-100 bg-white transition hover:shadow-md${wide ? ' md:col-span-2' : ''}`}
+      className={`flex gap-4 p-5 rounded-xl border border-gray-100 bg-white transition hover:shadow-md ${
+        wide ? 'md:col-span-2' : ''
+      }`}
     >
       <div
         className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-xl"
@@ -114,9 +126,6 @@ function TipCard({
   )
 }
 
-// -----------------------------
-// FAQ Item Component
-// -----------------------------
 function FaqItem({ question, answer }: { question: string; answer: React.ReactNode }) {
   return (
     <details className="group border border-gray-100 rounded-xl bg-white overflow-hidden transition hover:shadow-sm">
@@ -138,10 +147,6 @@ function FaqItem({ question, answer }: { question: string; answer: React.ReactNo
   )
 }
 
-// -----------------------------
-// Structured Text Component
-// Parses bullet-point format from AI: opening line, • bullets, closing line
-// -----------------------------
 function StructuredText({ text }: { text: string }) {
   if (!text) return null
 
@@ -166,10 +171,6 @@ function StructuredText({ text }: { text: string }) {
   )
 }
 
-// -----------------------------
-// Content Card Component
-// Used for extended AI-generated sections
-// -----------------------------
 function ContentCard({
   icon,
   title,
@@ -198,11 +199,10 @@ function ContentCard({
 }
 
 // -----------------------------
-// PAGE
+// MAIN PAGE COMPONENT
 // -----------------------------
-export default async function CountryPage({ params }: { params: Promise<{ continent: string; country: string }> }) {
-  const resolved = await params
-  const { continent, country } = resolved
+export default async function CountryPage({ params }: { params: PageParams }) {
+  const { continent, country } = await params
 
   if (!continent || !country) {
     return (
@@ -210,9 +210,9 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         <Navbar />
         <div className="text-center py-24 px-6">
           <h1 className="text-3xl font-bold mb-4" style={{ color: '#232e4e' }}>Invalid Route</h1>
-          <a href="/locations" style={{ color: '#2f797c' }} className="font-semibold hover:opacity-75 transition">
+          <Link href="/locations" style={{ color: '#2f797c' }} className="font-semibold hover:opacity-75 transition">
             Back to all continents
-          </a>
+          </Link>
         </div>
         <Footer />
       </main>
@@ -236,7 +236,7 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
   const tippingCulture = countryData?.tippingCulture || 'Information not available.'
   const visaInfo = countryData?.visaInfo || 'Visa requirements vary by nationality.'
 
-  // Extended AI fields
+  // Extended fields
   const bestTimeToVisit = countryData?.bestTimeToVisit || null
   const safetyOverview = countryData?.safetyOverview || null
   const localLaws = countryData?.localLaws || null
@@ -250,41 +250,78 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
 
   const basePath = `/locations/${continent}/${country}`
 
+  // -----------------------------
+  // Structured Data (JSON-LD)
+  // -----------------------------
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'All destinations', item: 'https://timmstravel.com/locations' },
+      { '@type': 'ListItem', position: 2, name: continent, item: `https://timmstravel.com/locations/${continent}` },
+      { '@type': 'ListItem', position: 3, name: countryName, item: `https://timmstravel.com${basePath}` },
+    ],
+  }
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `What is the capital of ${countryName}?`,
+        acceptedAnswer: { '@type': 'Answer', text: `The capital city of ${countryName} is ${capital}.` },
+      },
+      {
+        '@type': 'Question',
+        name: `What language is spoken in ${countryName}?`,
+        acceptedAnswer: { '@type': 'Answer', text: `The main languages spoken are ${languages}.` },
+      },
+      {
+        '@type': 'Question',
+        name: `What currency is used in ${countryName}?`,
+        acceptedAnswer: { '@type': 'Answer', text: `${countryName} uses the ${currency}.` },
+      },
+      {
+        '@type': 'Question',
+        name: `How many people live in ${countryName}?`,
+        acceptedAnswer: { '@type': 'Answer', text: `The population is approximately ${population}.` },
+      },
+    ],
+  }
+
+  const countryEntitySchema = {
+    '@context': 'https://schema.org',
+    '@type': ['TouristDestination', 'Country'],
+    name: countryName,
+    description: `Discover the best experiences, attractions, and travel information for ${countryName}.`,
+    url: `https://timmstravel.com${basePath}`,
+    ...(countryData?.iso2 && { identifier: countryData.iso2 }),
+    containsPlace: cities.map((city) => ({
+      '@type': 'City',
+      name: city.city,
+      url: `https://timmstravel.com${basePath}/${city.citySlug}`,
+    })),
+  }
+
   if (!cities || cities.length === 0) {
     return (
       <main className="min-h-screen bg-white">
         <Navbar />
         <div className="text-center py-24 px-6">
           <h1 className="text-3xl font-bold mb-4" style={{ color: '#232e4e' }}>No Cities Found</h1>
-          <a
+          <Link
             href={`/locations/${continent}`}
             style={{ color: '#2f797c' }}
             className="font-semibold hover:opacity-75 transition capitalize"
           >
             Back to {continent}
-          </a>
+          </Link>
         </div>
         <Footer />
       </main>
     )
   }
-
-  const cityCards = cities.map((city: any) => {
-    const href = `${basePath}/${city.citySlug}`
-    return (
-      <a
-        key={city.citySlug}
-        href={href}
-        className="group flex flex-col items-center text-center p-5 rounded-xl border border-gray-100 bg-white hover:shadow-md hover:border-gray-200 transition cursor-pointer"
-      >
-        <div className="text-4xl mb-3">{city.emoji}</div>
-        <p className="font-semibold text-sm" style={{ color: '#232e4e' }}>{city.city}</p>
-        <p className="text-xs mt-1 group-hover:opacity-80 transition" style={{ color: '#2f797c' }}>
-          Get ready to explore →
-        </p>
-      </a>
-    )
-  })
 
   const hasExtendedContent =
     bestTimeToVisit ||
@@ -301,6 +338,9 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
+      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={faqSchema} />
+      <JsonLd data={countryEntitySchema} />
 
       {/* Hero */}
       <section style={{ backgroundColor: '#232e4e' }} className="text-white py-20 px-6 text-center">
@@ -311,7 +351,7 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         </p>
       </section>
 
-      {/* Cities */}
+      {/* Cities Section */}
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: '#232e4e' }}>
@@ -320,26 +360,40 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
           <p className="text-gray-500 mb-10 text-sm sm:text-base">Select a city to explore experiences and adventures.</p>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-            {cityCards}
+            {cities.map((city) => (
+              <Link
+                key={city.citySlug}
+                href={`${basePath}/${city.citySlug}`}
+                className="group flex flex-col items-center text-center p-5 rounded-xl border border-gray-100 bg-white hover:shadow-md hover:border-gray-200 transition cursor-pointer"
+              >
+                <div className="text-4xl mb-3">{city.emoji}</div>
+                <p className="font-semibold text-sm" style={{ color: '#232e4e' }}>
+                  {city.city}
+                </p>
+                <p className="text-xs mt-1 group-hover:opacity-80 transition" style={{ color: '#2f797c' }}>
+                  Get ready to explore →
+                </p>
+              </Link>
+            ))}
           </div>
 
           <div className="mt-8 flex flex-wrap gap-2 items-center text-sm">
-            <a href="/locations/continents" style={{ color: '#2f797c' }} className="hover:opacity-75 transition">
+            <Link href="/locations" style={{ color: '#2f797c' }} className="hover:opacity-75 transition">
               All Continents
-            </a>
+            </Link>
             <span className="text-gray-300">›</span>
-            <a
+            <Link
               href={`/locations/${continent}`}
               style={{ color: '#2f797c' }}
               className="hover:opacity-75 transition capitalize"
             >
               {continent}
-            </a>
+            </Link>
           </div>
         </div>
       </section>
 
-                  {/* ── ALSO DO HOTELS ───────────────────────────────────────────── */}
+      {/* Hotels Banner */}
       <section className="py-16 px-6 bg-white border-t border-gray-100">
         <div className="max-w-5xl mx-auto">
           <div
@@ -368,7 +422,7 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         </div>
       </section>
 
-      {/* TRAVEL TIPS SECTION */}
+      {/* Travel Tips Section */}
       <section className="py-16 sm:py-20 px-6" style={{ backgroundColor: '#f8fafa' }}>
         <div className="max-w-4xl mx-auto">
           <div className="mb-10">
@@ -407,7 +461,7 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         </div>
       </section>
 
-      {/* EXTENDED GUIDE SECTION */}
+      {/* Extended Guide Section */}
       {hasExtendedContent && (
         <section className="py-16 sm:py-20 px-6 bg-white">
           <div className="max-w-4xl mx-auto">
@@ -469,7 +523,7 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         </section>
       )}
 
-      {/* AIRPORTS & NEIGHBOURS SECTION */}
+      {/* Airports & Nearby Countries Section */}
       {hasLocationContent && (
         <section className="py-16 sm:py-20 px-6" style={{ backgroundColor: '#f8fafa' }}>
           <div className="max-w-4xl mx-auto">
@@ -550,7 +604,7 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
         </section>
       )}
 
-      {/* FAQ SECTION */}
+      {/* FAQ Section */}
       <section className="py-16 sm:py-20 px-6 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="mb-10">
@@ -582,8 +636,6 @@ export default async function CountryPage({ params }: { params: Promise<{ contin
           </div>
         </div>
       </section>
-
-    
 
       <Footer />
     </main>

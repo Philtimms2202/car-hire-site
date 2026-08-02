@@ -5,14 +5,17 @@ import { redirect } from 'next/navigation'
 import Navbar from '../../../../components/Navbar'
 import Footer from '../../../../components/Footer'
 import Link from 'next/link'
+import JsonLd from '../../../../components/JsonLd'
 import CityPageClient from './CityPageClient'
 import { getCityHubByName } from '@/lib/airports'
 
 export const revalidate = false
 
+type PageParams = Promise<{ continent: string; country: string; city: string }>
+
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: PageParams }) {
   const { continent, country, city } = await params
 
   const data = await client.fetch(
@@ -31,12 +34,12 @@ export async function generateMetadata({ params }: any) {
     { continent, country, city }
   )
 
-  const cityName    = data?.name || city
+  const cityName = data?.name || city
   const countryName = data?.country?.name || country
   const desc =
     data?.metaDescription ||
-    data?.heroDescription  ||
-    data?.aiIntro          ||
+    data?.heroDescription ||
+    data?.aiIntro ||
     `Looking to visit ${cityName}, ${countryName}? View the top attractions, tours, travel tips and local experiences.`
 
   return {
@@ -110,7 +113,7 @@ async function findCorrectLocation(countrySlug: string, citySlug: string) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function CityPage({ params }: any) {
+export default async function CityPage({ params }: { params: PageParams }) {
   const { continent, country, city } = await params
   const cityDoc = await getCity(continent, country, city)
 
@@ -142,27 +145,62 @@ export default async function CityPage({ params }: any) {
     )
   }
 
-const flightHub = getCityHubByName(cityDoc.name)
+  const cityName = cityDoc.name
+  const countryName = cityDoc.country?.name || country
+  const continentName = cityDoc.country?.continent?.name || continent
+  const basePath = `/locations/${continent}/${country}/${cityDoc.slug}`
+
+  // ─── Structured Data (JSON-LD) ──────────────────────────────────────────────
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'All destinations', item: 'https://timmstravel.com/locations' },
+      { '@type': 'ListItem', position: 2, name: continentName, item: `https://timmstravel.com/locations/${continent}` },
+      { '@type': 'ListItem', position: 3, name: countryName, item: `https://timmstravel.com/locations/${continent}/${country}` },
+      { '@type': 'ListItem', position: 4, name: cityName, item: `https://timmstravel.com${basePath}` },
+    ],
+  }
+
+  const cityEntitySchema = {
+    '@context': 'https://schema.org',
+    '@type': ['TouristDestination', 'City'],
+    name: cityName,
+    description: cityDoc.metaDescription || cityDoc.heroDescription || cityDoc.aiIntro || `Discover top attractions, tours, and activities in ${cityName}, ${countryName}.`,
+    url: `https://timmstravel.com${basePath}`,
+    containedInPlace: {
+      '@type': 'Country',
+      name: countryName,
+      url: `https://timmstravel.com/locations/${continent}/${country}`,
+    },
+  }
+
+  const flightHub = getCityHubByName(cityDoc.name)
 
   return (
-    <CityPageClient
-      cityId={cityDoc._id}
-      cityName={cityDoc.name}
-      citySlug={cityDoc.slug}
-      countryName={cityDoc.country?.name}
-      countrySlug={cityDoc.country?.slug}
-      continentName={cityDoc.country?.continent?.name}
-      continentSlug={continent}
-      emoji={cityDoc.emoji}
-      airport={cityDoc.airport}
-      heroDescription={cityDoc.heroDescription}
-      mainContent={cityDoc.mainContent}
-      aiIntro={cityDoc.aiIntro}
-      aiHighlightsIntro={cityDoc.aiHighlightsIntro}
-      aiHighlightCards={cityDoc.aiHighlightCards}
-      aiAboutFallback={cityDoc.aiAboutFallback}
-      flightsFromSlug={flightHub?.slug ?? null}
-      flightsToSlug={flightHub?.slug ?? null}
-    />
+    <>
+      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={cityEntitySchema} />
+      <CityPageClient
+        cityId={cityDoc._id}
+        cityName={cityDoc.name}
+        citySlug={cityDoc.slug}
+        countryName={cityDoc.country?.name}
+        countrySlug={cityDoc.country?.slug}
+        continentName={cityDoc.country?.continent?.name}
+        continentSlug={continent}
+        emoji={cityDoc.emoji}
+        airport={cityDoc.airport}
+        heroDescription={cityDoc.heroDescription}
+        mainContent={cityDoc.mainContent}
+        aiIntro={cityDoc.aiIntro}
+        aiHighlightsIntro={cityDoc.aiHighlightsIntro}
+        aiHighlightCards={cityDoc.aiHighlightCards}
+        aiAboutFallback={cityDoc.aiAboutFallback}
+        flightsFromSlug={flightHub?.slug ?? null}
+        flightsToSlug={flightHub?.slug ?? null}
+      />
+    </>
   )
 }
