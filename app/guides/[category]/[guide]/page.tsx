@@ -9,6 +9,8 @@ import { getGuideBySlug, getAllGuideSlugs } from '@/lib/sanity.queries'
 import { categories } from '@/lib/categories'
 import type { Metadata } from 'next'
 
+export const revalidate = 60
+
 type Props = {
   params: Promise<{ category: string; guide: string }>
 }
