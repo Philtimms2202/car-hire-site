@@ -6,5 +6,5 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true, // fast, cached, public
+  useCdn: false, // 👈 Bypasses the blocked CDN endpoint (api.sanity.io vs apicdn.sanity.io)
 })
