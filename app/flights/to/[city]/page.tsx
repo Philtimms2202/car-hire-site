@@ -10,12 +10,14 @@ import CityFlightSearchTo from './CityFlightSearchTo';
 import CityFlightsInteractiveTo from './CityFlightsInteractiveTo';
 import FlightHubAiContent from '@/app/components/flights/FlightHubAiContent';
 
+// ── PAGE CACHE REVALIDATION (7 DAYS) ─────────────────────────
+export const revalidate = 604800;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const hubs = getCityHubs();
   return hubs.slice(0, 500).map((hub) => ({ city: hub.slug }));
 }
-
-export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
@@ -172,7 +174,7 @@ export default async function FlightsToCityPage({
         cachedTravelerTip={cachedAiContent?.travelerTip}
       />
 
-            {/* ── ALSO DO HOTELS ───────────────────────────────────────────── */}
+      {/* ── ALSO DO HOTELS ───────────────────────────────────────────── */}
       <section className="py-16 px-6 bg-white border-t border-gray-100">
         <div className="max-w-5xl mx-auto">
           <div
