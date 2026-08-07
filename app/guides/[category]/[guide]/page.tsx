@@ -9,7 +9,8 @@ import { getGuideBySlug, getAllGuideSlugs } from '@/lib/sanity.queries'
 import { categories } from '@/lib/categories'
 import type { Metadata } from 'next'
 
-export const revalidate = 3600
+// ── PAGE CACHE REVALIDATION (7 DAYS) ─────────────────────────
+export const revalidate = 604800
 
 type Props = {
   params: Promise<{ category: string; guide: string }>
