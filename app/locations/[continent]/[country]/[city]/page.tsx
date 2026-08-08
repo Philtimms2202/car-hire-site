@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: PageParams }) {
     `Looking to visit ${cityName}, ${countryName}? View the top attractions, tours, travel tips and local experiences.`
 
   return {
-    title: `${cityName}, ${countryName} | Things To Do, Tours & Travel Guide`,
+    title: `${cityName}, ${countryName}  Travel Guide`,
     description: desc,
     alternates: {
       canonical: `https://timmstravel.com/locations/${continent}/${country}/${city}`,

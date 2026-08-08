@@ -9,6 +9,14 @@ export type Category = {
 
 export const categories: Category[] = [
   {
+    title: 'Destination Guides',
+    slug: 'destination-guides',
+    description: 'In-depth city, country, and regional travel guides covering top attractions, itineraries, local secrets, and essential travel tips.',
+    emoji: '📍',
+    metaTitle: 'Destination Guides & City Travel Travel Tips | Timms Travel',
+    metaDescription: 'Explore comprehensive city and country destination guides. Discover top sights, itineraries, local tips, and hotel recommendations for destinations worldwide.',
+  },
+  {
     title: 'Aviation & Flight Science',
     slug: 'aviation-flight-science',
     description: 'Understand how aircraft work, how flights are operated and what happens behind the scenes every time you fly.',
@@ -19,7 +27,7 @@ export const categories: Category[] = [
   {
     title: 'Travel Planning & Logistics',
     slug: 'travel-planning-logistics',
-    description: 'Everything you need to plan a trip properly — from choosing destinations to building itineraries and managing bookings.',
+    description: 'Everything you need to plan a trip properly, from choosing destinations to building itineraries and managing bookings.',
     emoji: '🗺️',
     metaTitle: 'Travel Planning & Logistics Guides | Timms Travel',
     metaDescription: 'Plan your trip with confidence. Our travel planning guides cover itineraries, booking strategies, packing and everything in between.',
@@ -35,7 +43,7 @@ export const categories: Category[] = [
   {
     title: 'Hotels & Accommodation',
     slug: 'hotels-accommodation',
-    description: 'How to find, compare and book the right place to stay — from budget hostels and boutique hotels to serviced apartments and resorts.',
+    description: 'How to find, compare and book the right place to stay, from budget hostels and boutique hotels to serviced apartments and resorts.',
     emoji: '🏨',
     metaTitle: 'Hotels & Accommodation Guides | Timms Travel',
     metaDescription: 'Find the right place to stay every time. Our accommodation guides cover hotels, hostels, apartments and resorts across every budget.',
@@ -43,7 +51,7 @@ export const categories: Category[] = [
   {
     title: 'Transport & Navigation',
     slug: 'transport-navigation',
-    description: 'Getting around once you arrive — trains, buses, taxis, car hire, airport transfers and navigating unfamiliar cities with confidence.',
+    description: 'Getting around once you arrive, trains, buses, taxis, car hire, airport transfers and navigating unfamiliar cities with confidence.',
     emoji: '🚆',
     metaTitle: 'Transport & Navigation Guides | Timms Travel',
     metaDescription: 'Navigate any destination with ease. Guides on trains, buses, taxis, car hire, airport transfers and getting around abroad.',
@@ -51,7 +59,7 @@ export const categories: Category[] = [
   {
     title: 'Travel Gear & Tech',
     slug: 'travel-gear-tech',
-    description: 'The kit, gadgets and apps that make travel easier, lighter and more connected — from luggage and packing cubes to eSIMs and travel cameras.',
+    description: 'The kit, gadgets and apps that make travel easier, lighter and more connected, from luggage and packing cubes to eSIMs and travel cameras.',
     emoji: '🎒',
     metaTitle: 'Travel Gear & Tech Guides | Timms Travel',
     metaDescription: 'Pack smarter and travel better. Guides on luggage, travel gadgets, packing essentials, eSIMs, apps and the tech worth taking on your trip.',

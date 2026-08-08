@@ -196,7 +196,7 @@ const {
         <div className="max-w-4xl mx-auto">
           {emoji && <div className="text-6xl mb-4">{emoji}</div>}
           <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-            Things to do in {cityName}
+            {cityName} Travel Guide
           </h1>
           <p className="text-base md:text-lg text-teal-50 max-w-2xl mx-auto mb-10 leading-relaxed">
             {heroText}

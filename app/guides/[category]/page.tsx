@@ -4,12 +4,37 @@ import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 import JsonLd from '@/app/components/JsonLd'
 import BreadcrumbNav from '@/app/components/BreadcrumbNav'
-import { getGuideCategoryBySlug, getGuidesByCategory } from '@/lib/sanity.queries'
+import { getGuidesByCategory } from '@/lib/sanity.queries'
 import { categories } from '@/lib/categories'
+import { client } from '@/sanity/lib/client'
+import CityGuidesGrid from './CityGuidesGrid'
 import type { Metadata } from 'next'
 
 type Props = {
   params: Promise<{ category: string }>
+}
+
+// Fetch cities from Sanity specifically for destination guides.
+// Cached for 24h — city data barely changes, and this was previously
+// querying Sanity live on every request with no caching at all.
+async function getDestinationCities() {
+  try {
+    return await client.fetch(
+      `*[_type == "city"] | order(name asc) {
+        _id,
+        name,
+        "slug": slug.current,
+        emoji,
+        "countryName": country->name,
+        "countrySlug": country->slug.current,
+        "continentSlug": country->continent->slug.current
+      }`,
+      {},
+      { next: { revalidate: 86400, tags: ["cities"] } }
+    )
+  } catch {
+    return []
+  }
 }
 
 export async function generateStaticParams() {
@@ -18,7 +43,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category: categorySlug } = await params
-  const category = await getGuideCategoryBySlug(categorySlug)
+  const category = categories.find((c) => c.slug === categorySlug)
+
   if (!category) return {}
 
   return {
@@ -46,12 +72,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params }: Props) {
   const { category: categorySlug } = await params
 
-  const [category, guides] = await Promise.all([
-    getGuideCategoryBySlug(categorySlug),
-    getGuidesByCategory(categorySlug),
-  ])
-
+  // 1. Find the category from local lib/categories.ts
+  const category = categories.find((c) => c.slug === categorySlug)
   if (!category) notFound()
+
+  const isDestinationGuides = categorySlug === 'destination-guides'
+
+  // 2. Fetch written articles and city hubs concurrently
+  const [guides, cities] = await Promise.all([
+    getGuidesByCategory(categorySlug).catch(() => []),
+    isDestinationGuides ? getDestinationCities() : Promise.resolve([]),
+  ])
 
   const collectionPageSchema = {
     '@context': 'https://schema.org',
@@ -111,68 +142,76 @@ export default async function CategoryPage({ params }: Props) {
         />
       </div>
 
-      {/* GUIDES GRID */}
+      {/* CONTENT SECTIONS */}
       <section className="py-16 px-6" aria-labelledby="guides-heading">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-xs font-bold tracking-widest uppercase text-teal-600 mb-1">
-              {guides.length} guides
-            </p>
-            <h2
-              id="guides-heading"
-              className="text-3xl font-bold"
-              style={{ color: '#232e4e' }}
-            >
-              All {category.title} Guides
-            </h2>
-            <p className="text-gray-500 mt-3 max-w-xl mx-auto leading-relaxed">
-              Practical, honest guides written with no filler, giving you just the information you actually need.
-            </p>
-          </div>
+        <div className="max-w-6xl mx-auto space-y-16">
+          
+          {/* SECTION 1: WRITTEN GUIDES FROM SANITY */}
+          {guides && guides.length > 0 && (
+            <div>
+              <div className="text-center mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#232e4e]">
+                  Featured Articles & Destination Tips
+                </h2>
+                <p className="text-gray-500 text-sm mt-1">
+                  In-depth editorial articles and travel guides.
+                </p>
+              </div>
 
-          {guides.length === 0 ? (
+              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {guides.map((guide: any) => (
+                  <li key={guide.slug} className="list-none">
+                    <Link
+                      href={`/guides/${category.slug}/${guide.slug}`}
+                      className="group flex flex-col h-full rounded-2xl border border-gray-100 bg-gray-50 p-6 hover:shadow-md hover:border-teal-200 transition-all"
+                    >
+                      <h3 className="font-bold text-lg mb-2 text-[#232e4e] group-hover:text-teal-600 transition-colors">
+                        {guide.title}
+                      </h3>
+                      {guide.excerpt && (
+                        <p className="text-sm text-gray-500 leading-relaxed flex-1">
+                          {guide.excerpt}
+                        </p>
+                      )}
+                      <div className="flex items-center justify-between mt-4">
+                        {guide.readingTime && (
+                          <span className="text-xs text-gray-400">{guide.readingTime} min read</span>
+                        )}
+                        <span className="text-xs font-bold text-teal-600 group-hover:underline ml-auto">
+                          Read guide →
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* SECTION 2: CITY LOCATION HUBS */}
+          {isDestinationGuides && cities && cities.length > 0 && (
+            <div>
+              <div className="text-center mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#232e4e]">
+                  Explore City Destination Guides
+                </h2>
+                <p className="text-gray-500 text-sm mt-1">
+                  Browse complete travel hubs across {cities.length} global destinations.
+                </p>
+              </div>
+
+              <CityGuidesGrid cities={cities} />
+            </div>
+          )}
+
+          {/* FALLBACK WHEN NO CONTENT EXISTS */}
+          {!isDestinationGuides && (!guides || guides.length === 0) && (
             <div className="text-center py-20 text-gray-400">
               <p className="text-lg">Guides coming soon.</p>
               <p className="text-sm mt-2">Check back shortly — we are adding new content regularly.</p>
             </div>
-          ) : (
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {guides.map((guide: any) => (
-                <li key={guide.slug} className="list-none">
-                  <Link
-                    href={`/guides/${category.slug}/${guide.slug}`}
-                    className="group flex flex-col h-full rounded-2xl border border-gray-100 bg-gray-50 p-7 hover:shadow-lg hover:border-teal-200 transition-all"
-                    title={guide.title}
-                  >
-                    <h3
-                      className="font-bold text-lg mb-3 group-hover:text-[#03989e] transition-colors leading-snug"
-                      style={{ color: '#232e4e' }}
-                    >
-                      {guide.title}
-                    </h3>
-                    {guide.excerpt && (
-                      <p className="text-sm text-gray-500 leading-relaxed flex-1">
-                        {guide.excerpt}
-                      </p>
-                    )}
-                    <div className="flex items-center justify-between mt-5">
-                      {guide.readingTime && (
-                        <span className="text-xs text-gray-400">
-                          {guide.readingTime} min read
-                        </span>
-                      )}
-                      <span
-                        className="text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity ml-auto"
-                        style={{ color: '#03989e' }}
-                      >
-                        Read guide →
-                      </span>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
           )}
+
         </div>
       </section>
 

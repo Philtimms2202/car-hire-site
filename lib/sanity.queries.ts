@@ -12,7 +12,9 @@ export async function getAllGuideCategories() {
       emoji,
       metaTitle,
       metaDescription
-    }`
+    }`,
+    {},
+    { next: { revalidate: 86400, tags: ['guideCategories'] } }
   )
 }
 
@@ -27,7 +29,8 @@ export async function getGuideCategoryBySlug(slug: string) {
       metaTitle,
       metaDescription
     }`,
-    { slug }
+    { slug },
+    { next: { revalidate: 86400, tags: [`guideCategory-${slug}`] } }
   )
 }
 
@@ -35,16 +38,18 @@ export async function getGuideCategoryBySlug(slug: string) {
 
 export async function getGuidesByCategory(categorySlug: string) {
   return client.fetch(
-    `*[_type == "guide" && category->slug.current == $categorySlug] | order(_createdAt asc) {
+    `*[_type == "guide" && category->slug.current == $categorySlug] | order(_createdAt desc) {
       _id,
       title,
       "slug": slug.current,
       excerpt,
       readingTime,
+      "mainImage": mainImage.asset->url,
       "categorySlug": category->slug.current,
       "categoryTitle": category->title
     }`,
-    { categorySlug }
+    { categorySlug },
+    { next: { revalidate: 86400, tags: [`guides-${categorySlug}`] } }
   )
 }
 
@@ -64,7 +69,8 @@ export async function getGuideBySlug(categorySlug: string, guideSlug: string) {
       "categoryTitle": category->title,
       "categoryEmoji": category->emoji
     }`,
-    { categorySlug, guideSlug }
+    { categorySlug, guideSlug },
+    { next: { revalidate: 86400, tags: [`guide-${categorySlug}-${guideSlug}`] } }
   )
 }
 
@@ -73,6 +79,8 @@ export async function getAllGuideSlugs() {
     `*[_type == "guide"] {
       "guideSlug": slug.current,
       "categorySlug": category->slug.current
-    }`
+    }`,
+    {},
+    { next: { revalidate: 86400, tags: ['guideSlugs'] } }
   )
 }
