@@ -15,6 +15,11 @@ const client = createClient({
   useCdn: true,
 })
 
+// Cache this page's data for 24h — continent/country data barely changes,
+// and this was previously querying Sanity live on every request with no
+// caching at all.
+export const revalidate = 86400
+
 export const metadata = {
   title: {
     default: "Timms Travel | Continents",
@@ -27,13 +32,15 @@ export const metadata = {
 }
 
 export default async function ContinentsPage() {
-  const countries = await client.fetch(`
-    *[_type == "location"]{
+  const countries = await client.fetch(
+    `*[_type == "country"]{
       continent,
       "continentSlug": continentSlug.current,
       continentEmoji
-    }
-  `)
+    }`,
+    {},
+    { next: { revalidate: 86400, tags: ["countries"] } }
+  )
 
   const continents = Array.from(
     new Map(
