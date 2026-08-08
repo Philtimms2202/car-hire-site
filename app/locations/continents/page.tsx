@@ -1,7 +1,3 @@
-// ============================================
-// CONTINENTS LIST PAGE - app/locations/continents/page.tsx
-// ============================================
-
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import { createClient } from '@sanity/client'
@@ -15,10 +11,7 @@ const client = createClient({
   useCdn: true,
 })
 
-// Cache this page's data for 24h — continent/country data barely changes,
-// and this was previously querying Sanity live on every request with no
-// caching at all.
-export const revalidate = 86400
+export const revalidate = 86400.
 
 export const metadata = {
   title: {
@@ -34,9 +27,9 @@ export const metadata = {
 export default async function ContinentsPage() {
   const countries = await client.fetch(
     `*[_type == "country"]{
-      continent,
-      "continentSlug": continentSlug.current,
-      continentEmoji
+      "continent": continent->name,
+      "continentSlug": continent->slug.current,
+      "continentEmoji": continent->emoji
     }`,
     {},
     { next: { revalidate: 86400, tags: ["countries"] } }
