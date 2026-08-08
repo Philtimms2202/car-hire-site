@@ -1,5 +1,10 @@
 import { client } from "@/sanity/lib/client"
 
+// Cache this route handler's output for 24h — city data barely changes,
+// and this was previously re-querying Sanity live on every sitemap
+// crawl/request with no caching at all.
+export const revalidate = 86400
+
 const BASE_URL = "https://timmstravel.com"
 
 const MAJOR_HUBS = [
@@ -70,12 +75,14 @@ const MAJOR_HUBS = [
 ]
 
 export async function GET() {
-  const cities = await client.fetch(`
-    *[_type == "city" && defined(primaryIATA)]{
+  const cities = await client.fetch(
+    `*[_type == "city" && defined(primaryIATA)]{
       "slug": slug.current,
       primaryIATA
-    }
-  `)
+    }`,
+    {},
+    { next: { revalidate: 86400, tags: ["cities"] } }
+  )
 
   const hubs = cities.filter((c: any) =>
     MAJOR_HUBS.includes(c.primaryIATA)

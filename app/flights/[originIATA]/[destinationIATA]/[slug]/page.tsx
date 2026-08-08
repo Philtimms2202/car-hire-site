@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { buildMetadata } from '@/app/metadata'
 import RoutePageClient from './RoutePageClient'
 import { client } from '@/sanity/lib/client'
@@ -35,8 +36,14 @@ type City = {
 
 // ─────────────────────────────────────────────
 // SANITY LOOKUP
+// Cached for 24h — city data barely changes, and this was
+// previously firing a live, uncached query on every single
+// request (this route's page views blew through the entire
+// monthly CDN quota). Wrapped in React's cache() too, so the
+// two calls in generateMetadata() and RoutePage() for the same
+// IATA within one request collapse into a single fetch.
 // ─────────────────────────────────────────────
-async function getCityByIATA(iata?: string): Promise<City | null> {
+const getCityByIATA = cache(async (iata?: string): Promise<City | null> => {
   if (!iata) return null
 
   const query = `
@@ -54,8 +61,12 @@ async function getCityByIATA(iata?: string): Promise<City | null> {
     }
   `
 
-  return client.fetch(query, { iata })
-}
+  return client.fetch(
+    query,
+    { iata },
+    { next: { revalidate: 86400, tags: [`city-${iata.toUpperCase()}`] } }
+  )
+})
 
 // ─────────────────────────────────────────────
 // FALLBACK IATA → CITY MAPPING

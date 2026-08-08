@@ -9,7 +9,8 @@ import { client } from '../../../sanity/lib/client'
 import Link from 'next/link'
 import JsonLd from '../../components/JsonLd'
 
-export const revalidate = 60
+// ── PAGE CACHE REVALIDATION (7 DAYS) ─────────────────────────
+export const revalidate = 604800
 
 type PageParams = Promise<{ continent: string }>
 
@@ -17,6 +18,20 @@ interface CountryItem {
   name: string
   emoji: string
   countrySlug: string
+}
+
+// -----------------------------
+// Pre-generate static paths for continents
+// -----------------------------
+export async function generateStaticParams() {
+  try {
+    const continents = await client.fetch<Array<{ slug: string }>>(
+      `*[_type == "continent" && defined(slug.current)]{ "slug": slug.current }`
+    )
+    return continents.map((c) => ({ continent: c.slug }))
+  } catch {
+    return []
+  }
 }
 
 // -----------------------------
