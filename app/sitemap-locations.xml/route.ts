@@ -1,27 +1,34 @@
 import { client } from '../../sanity/lib/client'
 
+export const revalidate = 86400
+
 const BASE_URL = 'https://timmstravel.com'
 
 export async function GET() {
-  // Fetch all locations from Sanity
-  const locations = await client.fetch(`
-    *[_type == "location"]{
-      "continentSlug": continentSlug.current,
-      "countrySlug": countrySlug.current,
+  // FIXED: was querying _type == "location" — a deprecated/leftover schema
+  // with flat continentSlug/countrySlug fields. Your live data is
+  // _type == "city", referenced to country -> continent, same structure
+  // used by the actual location page routes.
+  const cities = await client.fetch(
+    `*[_type == "city" && defined(slug.current) && defined(country->slug.current) && defined(country->continent->slug.current)]{
       "citySlug": slug.current,
+      "countrySlug": country->slug.current,
+      "continentSlug": country->continent->slug.current,
       _updatedAt
-    }
-  `)
+    }`,
+    {},
+    { next: { revalidate: 86400, tags: ['cities'] } }
+  )
 
   const now = new Date().toISOString()
 
   // Unique continents
-  const continents = [...new Set(locations.map((l: any) => l.continentSlug))]
+  const continents = [...new Set(cities.map((c: any) => c.continentSlug))]
 
   // Unique continent/country combinations
   const countries = [
     ...new Map(
-      locations.map((l: any) => [`${l.continentSlug}/${l.countrySlug}`, l])
+      cities.map((c: any) => [`${c.continentSlug}/${c.countrySlug}`, c])
     ).values()
   ] as any[]
 
@@ -34,27 +41,27 @@ export async function GET() {
     })),
 
     // Country pages
-    ...countries.map(l => ({
-      loc: `${BASE_URL}/locations/${l.continentSlug}/${l.countrySlug}`,
-      lastmod: new Date(l._updatedAt).toISOString(),
+    ...countries.map(c => ({
+      loc: `${BASE_URL}/locations/${c.continentSlug}/${c.countrySlug}`,
+      lastmod: new Date(c._updatedAt).toISOString(),
     })),
 
     // City pages
-    ...locations.map(l => ({
-      loc: `${BASE_URL}/locations/${l.continentSlug}/${l.countrySlug}/${l.citySlug}`,
-      lastmod: new Date(l._updatedAt).toISOString(),
+    ...cities.map(c => ({
+      loc: `${BASE_URL}/locations/${c.continentSlug}/${c.countrySlug}/${c.citySlug}`,
+      lastmod: new Date(c._updatedAt).toISOString(),
     })),
 
     // Things-to-do pages
-    ...locations.map(l => ({
-      loc: `${BASE_URL}/locations/${l.continentSlug}/${l.countrySlug}/${l.citySlug}/things-to-do`,
-      lastmod: new Date(l._updatedAt).toISOString(),
+    ...cities.map(c => ({
+      loc: `${BASE_URL}/locations/${c.continentSlug}/${c.countrySlug}/${c.citySlug}/things-to-do`,
+      lastmod: new Date(c._updatedAt).toISOString(),
     })),
 
-    // ⭐ NEW: Hotels city pages
-    ...locations.map(l => ({
-      loc: `${BASE_URL}/hotels/${l.citySlug}`,
-      lastmod: new Date(l._updatedAt).toISOString(),
+    // Hotels city pages
+    ...cities.map(c => ({
+      loc: `${BASE_URL}/hotels/${c.citySlug}`,
+      lastmod: new Date(c._updatedAt).toISOString(),
     })),
   ]
 

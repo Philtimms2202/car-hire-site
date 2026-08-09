@@ -30,26 +30,13 @@ const guide = {
       rows: 3,
     },
     {
+      // FIXED: was a plain array of "block" only, so Studio never offered
+      // an option to insert images or tables. This now points at the same
+      // shared blockContent type your blog posts already use, which
+      // includes block, image, and table array members.
       name: 'content',
       title: 'Content',
-      type: 'array',
-      of: [
-        {
-          type: 'block',
-          styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'H2', value: 'h2' },
-            { title: 'H3', value: 'h3' },
-            { title: 'H4', value: 'h4' },
-          ],
-          marks: {
-            decorators: [
-              { title: 'Strong', value: 'strong' },
-              { title: 'Emphasis', value: 'em' },
-            ],
-          },
-        },
-      ],
+      type: 'blockContent',
     },
     {
       name: 'metaTitle',
