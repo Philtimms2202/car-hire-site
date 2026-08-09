@@ -4,39 +4,48 @@ import { client } from '../../../../sanity/lib/client'
 import Link from 'next/link'
 import JsonLd from '../../../components/JsonLd'
 
-export const revalidate = 60
+// ── PAGE CACHE REVALIDATION (7 DAYS) ─────────────────────────
+// FIXED: was 60 seconds — country data (capital, population, currency,
+// visa info etc) barely ever changes, so this was re-fetching from Sanity
+// on almost every single request. Matches the continent page's 7-day cache.
+export const revalidate = 604800
 
 // -----------------------------
 // Data Fetching Functions
 // -----------------------------
 async function getCountryData(countrySlug: string) {
-  return client.fetch(
-    `*[_type == "country" && slug.current == $slug][0]{
-      name,
-      capital,
-      population,
-      languages,
-      currency,
-      flag,
-      iso2,
-      plugType,
-      drivingSide,
-      emergencyNumber,
-      tippingCulture,
-      visaInfo,
-      bestTimeToVisit,
-      safetyOverview,
-      localLaws,
-      costOfTravel,
-      transportBasics,
-      vaccinations,
-      internetConnectivity,
-      timeZone,
-      mainAirports,
-      neighbouringCountries
-    }`,
-    { slug: countrySlug }
-  )
+  try {
+    return await client.fetch(
+      `*[_type == "country" && slug.current == $slug][0]{
+        name,
+        capital,
+        population,
+        languages,
+        currency,
+        flag,
+        iso2,
+        plugType,
+        drivingSide,
+        emergencyNumber,
+        tippingCulture,
+        visaInfo,
+        bestTimeToVisit,
+        safetyOverview,
+        localLaws,
+        costOfTravel,
+        transportBasics,
+        vaccinations,
+        internetConnectivity,
+        timeZone,
+        mainAirports,
+        neighbouringCountries
+      }`,
+      { slug: countrySlug },
+      { next: { revalidate: 604800, tags: [`country-${countrySlug}`] } }
+    )
+  } catch {
+    return null
+  }
 }
 
 interface CityData {
@@ -63,7 +72,8 @@ async function getCities(continentSlug: string, countrySlug: string): Promise<Ci
         "countrySlug": country->slug.current,
         "continentSlug": country->continent->slug.current
       }`,
-      { continentSlug, countrySlug }
+      { continentSlug, countrySlug },
+      { next: { revalidate: 604800, tags: [`cities-${countrySlug}`] } }
     )
   } catch {
     return []

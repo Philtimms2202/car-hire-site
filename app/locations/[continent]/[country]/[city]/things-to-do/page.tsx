@@ -33,6 +33,9 @@ type CityAI = {
 }
 
 // ── Fetch location document (for city name, country, emoji etc) ──────────────
+// FIXED: was querying _type == "location" with flat continentSlug/countrySlug
+// fields that don't exist on your schema. Your data is _type == "city" with
+// a nested country->continent-> reference chain, same as the main city page.
 async function getLocation(
   continentSlug: string,
   countrySlug: string,
@@ -40,19 +43,22 @@ async function getLocation(
 ): Promise<LocationData | null> {
   try {
     const data = await client.fetch(
-      `*[_type == "location"
-        && continentSlug.current == $continentSlug
-        && countrySlug.current == $countrySlug
-        && slug.current == $citySlug][0]{
+      `*[
+        _type == "city" &&
+        slug.current == $citySlug &&
+        country->slug.current == $countrySlug &&
+        country->continent->slug.current == $continentSlug
+      ][0]{
         _id,
-        city,
-        country,
+        "city": name,
+        "country": country->name,
         emoji,
-        "citySlug":      slug.current,
-        "countrySlug":   countrySlug.current,
-        "continentSlug": continentSlug.current
+        "citySlug": slug.current,
+        "countrySlug": country->slug.current,
+        "continentSlug": country->continent->slug.current
       }`,
-      { continentSlug, countrySlug, citySlug }
+      { continentSlug, countrySlug, citySlug },
+      { next: { revalidate: 86400, tags: [`city-${citySlug}`] } }
     )
     return data ?? null
   } catch {
@@ -76,7 +82,8 @@ async function getCityAI(citySlug: string): Promise<CityAI> {
         ttdLocalTips,
         ttdFaqs
       }`,
-      { citySlug }
+      { citySlug },
+      { next: { revalidate: 86400, tags: [`city-ai-${citySlug}`] } }
     )
     return data ?? {}
   } catch {
