@@ -36,7 +36,7 @@ export async function generateMetadata({
   const airportNames = hub.airports.map((a) => a.iata_code).join(', ');
 
   return {
-    title: `Cheap Flights from ${hub.city}${primaryIata} | Compare Routes`,
+    title: `Find Cheap Flights from ${hub.city}${primaryIata} | Timms Travel`,
     description: `Compare cheap flights from ${hub.city} (${airportNames}) to destinations worldwide. Find the best deals with Timms Travel.`,
     alternates: {
       canonical: `https://timmstravel.com/flights/from/${hub.slug}`,
