@@ -31,10 +31,12 @@ export async function generateMetadata({
     return {};
   }
 
+  // ── FIX: Define primaryIata safely ─────────────────────────
+  const primaryIata = hub.primaryIata ? ` (${hub.primaryIata})` : '';
   const airportNames = hub.airports.map((a) => a.iata_code).join(', ');
 
   return {
-    title: `Cheap Flights from ${hub.city} | Compare Deals - Timms Travel`,
+    title: `Cheap Flights from ${hub.city}${primaryIata} | Compare Routes`,
     description: `Compare cheap flights from ${hub.city} (${airportNames}) to destinations worldwide. Find the best deals with Timms Travel.`,
     alternates: {
       canonical: `https://timmstravel.com/flights/from/${hub.slug}`,
