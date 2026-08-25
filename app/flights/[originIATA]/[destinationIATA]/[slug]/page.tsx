@@ -35,19 +35,13 @@ type City = {
 }
 
 // ─────────────────────────────────────────────
-// SANITY LOOKUP
-// Cached for 24h — city data barely changes, and this was
-// previously firing a live, uncached query on every single
-// request (this route's page views blew through the entire
-// monthly CDN quota). Wrapped in React's cache() too, so the
-// two calls in generateMetadata() and RoutePage() for the same
-// IATA within one request collapse into a single fetch.
+// SANITY LOOKUP (Cached)
 // ─────────────────────────────────────────────
 const getCityByIATA = cache(async (iata?: string): Promise<City | null> => {
   if (!iata) return null
 
   const query = `
-    *[_type == "city" && primaryIATA == $iata][0]{
+    *[_type == "city" && (primaryIATA == $iata || $iata in alternateIATAs)][0]{
       name,
       slug,
       country->{ name, slug },
@@ -63,16 +57,41 @@ const getCityByIATA = cache(async (iata?: string): Promise<City | null> => {
 
   return client.fetch(
     query,
-    { iata },
+    { iata: iata.toUpperCase() },
     { next: { revalidate: 86400, tags: [`city-${iata.toUpperCase()}`] } }
   )
 })
 
 // ─────────────────────────────────────────────
-// FALLBACK IATA → CITY MAPPING
-// (Used when Sanity is missing data)
+// EXPANDED IATA → CITY MAPPING (Includes GSC High-Impression Airports)
 // ─────────────────────────────────────────────
 const IATA_CITIES: Record<string, { city: string; country: string }> = {
+  // High-Volume US & Regional GSC Keywords
+  RDM: { city: 'Redmond / Bend', country: 'USA' },
+  BOS: { city: 'Boston', country: 'USA' },
+  PIE: { city: 'St. Petersburg / Clearwater', country: 'USA' },
+  SRQ: { city: 'Sarasota', country: 'USA' },
+  MSY: { city: 'New Orleans', country: 'USA' },
+  CTG: { city: 'Cartagena', country: 'Colombia' },
+  CWB: { city: 'Curitiba', country: 'Brazil' },
+  ATL: { city: 'Atlanta', country: 'USA' },
+  MCO: { city: 'Orlando', country: 'USA' },
+  LAX: { city: 'Los Angeles', country: 'USA' },
+  JFK: { city: 'New York', country: 'USA' },
+  EWR: { city: 'New York', country: 'USA' },
+  MIA: { city: 'Miami', country: 'USA' },
+  ORD: { city: 'Chicago', country: 'USA' },
+  SFO: { city: 'San Francisco', country: 'USA' },
+  LAS: { city: 'Las Vegas', country: 'USA' },
+  DFW: { city: 'Dallas-Fort Worth', country: 'USA' },
+  RUH: { city: 'Riyadh', country: 'Saudi Arabia' },
+  MEX: { city: 'Mexico City', country: 'Mexico' },
+  PAR: { city: 'Paris', country: 'France' },
+  SCK: { city: 'Stockton', country: 'USA' },
+  TRC: { city: 'Torreón', country: 'Mexico' },
+  DLG: { city: 'Dillingham', country: 'USA' },
+  
+  // UK & Europe
   LHR: { city: 'London', country: 'United Kingdom' },
   LGW: { city: 'London', country: 'United Kingdom' },
   STN: { city: 'London', country: 'United Kingdom' },
@@ -123,6 +142,8 @@ const IATA_CITIES: Record<string, { city: string; country: string }> = {
   AYT: { city: 'Antalya', country: 'Turkey' },
   IST: { city: 'Istanbul', country: 'Turkey' },
   SAW: { city: 'Istanbul', country: 'Turkey' },
+  
+  // Asia & Rest of World
   DXB: { city: 'Dubai', country: 'UAE' },
   AUH: { city: 'Abu Dhabi', country: 'UAE' },
   DOH: { city: 'Doha', country: 'Qatar' },
@@ -135,15 +156,6 @@ const IATA_CITIES: Record<string, { city: string; country: string }> = {
   CPT: { city: 'Cape Town', country: 'South Africa' },
   JNB: { city: 'Johannesburg', country: 'South Africa' },
   SID: { city: 'Cape Verde', country: 'Cape Verde' },
-  JFK: { city: 'New York', country: 'USA' },
-  EWR: { city: 'New York', country: 'USA' },
-  LAX: { city: 'Los Angeles', country: 'USA' },
-  MCO: { city: 'Orlando', country: 'USA' },
-  MIA: { city: 'Miami', country: 'USA' },
-  ORD: { city: 'Chicago', country: 'USA' },
-  SFO: { city: 'San Francisco', country: 'USA' },
-  LAS: { city: 'Las Vegas', country: 'USA' },
-  BOS: { city: 'Boston', country: 'USA' },
   YYZ: { city: 'Toronto', country: 'Canada' },
   YVR: { city: 'Vancouver', country: 'Canada' },
   CUN: { city: 'Cancún', country: 'Mexico' },
@@ -183,12 +195,14 @@ const resolveCountryFromIATA = (iata: string, sanityCity: City | null) =>
   sanityCity?.country?.name ?? IATA_CITIES[iata.toUpperCase()]?.country
 
 // ─────────────────────────────────────────────
-// METADATA
+// METADATA GENERATION
 // ─────────────────────────────────────────────
 export async function generateMetadata({ params }: { params: Promise<RouteParams> }) {
   const { originIATA, destinationIATA, slug } = await params
+  const originUpper = originIATA?.toUpperCase()
+  const destUpper = destinationIATA?.toUpperCase()
 
-  if (!originIATA || !destinationIATA) {
+  if (!originUpper || !destUpper) {
     return buildMetadata({
       title: 'Cheap Flights | Timms Travel',
       description: 'Compare and book cheap flights worldwide with Timms Travel.',
@@ -196,22 +210,27 @@ export async function generateMetadata({ params }: { params: Promise<RouteParams
   }
 
   const [origin, destination] = await Promise.all([
-    getCityByIATA(originIATA),
-    getCityByIATA(destinationIATA),
+    getCityByIATA(originUpper),
+    getCityByIATA(destUpper),
   ])
 
-  const originName = resolveNameFromIATA(originIATA, origin)
-  const destinationName = resolveNameFromIATA(destinationIATA, destination)
-  const originCountry = resolveCountryFromIATA(originIATA, origin)
-  const destinationCountry = resolveCountryFromIATA(destinationIATA, destination)
+  const originName = resolveNameFromIATA(originUpper, origin)
+  const destinationName = resolveNameFromIATA(destUpper, destination)
+  const originCountry = resolveCountryFromIATA(originUpper, origin)
+  const destinationCountry = resolveCountryFromIATA(destUpper, destination)
 
-  const title = `Direct Flights from ${originName} to ${destinationName} | Timms Travel`
+  // Calculate flight info to check if route is non-stop or connecting
+  const flightInfo = getRouteFlightInfo(originUpper, destUpper)
+  const flightTypeLabel = flightInfo?.isDirect ? 'Direct Flights' : 'Flights'
+
+  // Title inclusion of IATA codes directly targets queries like "rdm to bos" & "cwb to jfk"
+  const title = `${flightTypeLabel} from ${originName} (${originUpper}) to ${destinationName} (${destUpper}) | Timms Travel`
 
   const description =
     destination?.metaDescription ??
-    `Find cheap flights from ${originName}${originCountry ? `, ${originCountry}` : ''} to ${destinationName}${destinationCountry ? `, ${destinationCountry}` : ''}. Compare airlines and book securely with our trusted partner.`
+    `Book cheap flights from ${originName} (${originUpper}) to ${destinationName} (${destUpper}). Compare flight times, airlines, and low fares from ${originCountry ?? 'origin'} to ${destinationCountry ?? 'destination'}.`
 
-  const canonical = `https://timmstravel.com/flights/${originIATA}/${destinationIATA}/${slug}`
+  const canonical = `https://timmstravel.com/flights/${originUpper}/${destUpper}/${slug}`
 
   return buildMetadata({
     title,
@@ -228,27 +247,29 @@ export async function generateMetadata({ params }: { params: Promise<RouteParams
 }
 
 // ─────────────────────────────────────────────
-// PAGE (SERVER COMPONENT)
+// PAGE COMPONENT
 // ─────────────────────────────────────────────
 export default async function RoutePage({ params }: { params: Promise<RouteParams> }) {
   const { originIATA, destinationIATA, slug } = await params
+  const originUpper = originIATA?.toUpperCase()
+  const destUpper = destinationIATA?.toUpperCase()
 
   const [origin, destination, flightPrice] = await Promise.all([
-    getCityByIATA(originIATA),
-    getCityByIATA(destinationIATA),
-    getCheapestFlight(originIATA, destinationIATA),
+    getCityByIATA(originUpper),
+    getCityByIATA(destUpper),
+    getCheapestFlight(originUpper, destUpper),
   ])
 
-  // Deterministic flight info (distance + duration)
-  const flightInfo = getRouteFlightInfo(originIATA, destinationIATA)
+  // Deterministic flight info (distance + duration + direct status)
+  const flightInfo = getRouteFlightInfo(originUpper, destUpper)
 
   // Fetch all cities with IATA codes from Sanity
   const sanityCities = await getSanityCities()
 
   return (
     <RoutePageClient
-      originIATA={originIATA}
-      destinationIATA={destinationIATA}
+      originIATA={originUpper}
+      destinationIATA={destUpper}
       slug={slug}
       origin={origin}
       destination={destination}
